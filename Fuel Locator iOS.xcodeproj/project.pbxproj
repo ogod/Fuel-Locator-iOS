@@ -1,0 +1,593 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55CC2099BD7500540B5B /* AppDelegate.swift */; };
+		775C55CF2099BD7500540B5B /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55CE2099BD7500540B5B /* FirstViewController.swift */; };
+		775C55D12099BD7500540B5B /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55D02099BD7500540B5B /* SecondViewController.swift */; };
+		775C55D42099BD7500540B5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775C55D22099BD7500540B5B /* Main.storyboard */; };
+		775C55D62099BD9200540B5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775C55D52099BD9200540B5B /* Assets.xcassets */; };
+		775C55D92099BD9200540B5B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775C55D72099BD9200540B5B /* LaunchScreen.storyboard */; };
+		775C55E42099BD9300540B5B /* Fuel_Locator_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55E32099BD9300540B5B /* Fuel_Locator_iOSTests.swift */; };
+		775C55EF2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55EE2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		775C55E02099BD9300540B5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 775C55C12099BD7500540B5B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 775C55C82099BD7500540B5B;
+			remoteInfo = "Fuel Locator iOS";
+		};
+		775C55EB2099BD9300540B5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 775C55C12099BD7500540B5B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 775C55C82099BD7500540B5B;
+			remoteInfo = "Fuel Locator iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		775C55C92099BD7500540B5B /* Fuel Locator iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fuel Locator iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		775C55CC2099BD7500540B5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		775C55CE2099BD7500540B5B /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		775C55D02099BD7500540B5B /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		775C55D32099BD7500540B5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		775C55D52099BD9200540B5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		775C55D82099BD9200540B5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		775C55DA2099BD9200540B5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		775C55DF2099BD9300540B5B /* Fuel Locator iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Fuel Locator iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		775C55E32099BD9300540B5B /* Fuel_Locator_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fuel_Locator_iOSTests.swift; sourceTree = "<group>"; };
+		775C55E52099BD9300540B5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		775C55EA2099BD9300540B5B /* Fuel Locator iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Fuel Locator iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		775C55EE2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fuel_Locator_iOSUITests.swift; sourceTree = "<group>"; };
+		775C55F02099BD9300540B5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		775C55C62099BD7500540B5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		775C55DC2099BD9300540B5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		775C55E72099BD9300540B5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		775C55C02099BD7500540B5B = {
+			isa = PBXGroup;
+			children = (
+				775C55CB2099BD7500540B5B /* Fuel Locator iOS */,
+				775C55E22099BD9300540B5B /* Fuel Locator iOSTests */,
+				775C55ED2099BD9300540B5B /* Fuel Locator iOSUITests */,
+				775C55CA2099BD7500540B5B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		775C55CA2099BD7500540B5B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				775C55C92099BD7500540B5B /* Fuel Locator iOS.app */,
+				775C55DF2099BD9300540B5B /* Fuel Locator iOSTests.xctest */,
+				775C55EA2099BD9300540B5B /* Fuel Locator iOSUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		775C55CB2099BD7500540B5B /* Fuel Locator iOS */ = {
+			isa = PBXGroup;
+			children = (
+				775C55CC2099BD7500540B5B /* AppDelegate.swift */,
+				775C55CE2099BD7500540B5B /* FirstViewController.swift */,
+				775C55D02099BD7500540B5B /* SecondViewController.swift */,
+				775C55D22099BD7500540B5B /* Main.storyboard */,
+				775C55D52099BD9200540B5B /* Assets.xcassets */,
+				775C55D72099BD9200540B5B /* LaunchScreen.storyboard */,
+				775C55DA2099BD9200540B5B /* Info.plist */,
+			);
+			path = "Fuel Locator iOS";
+			sourceTree = "<group>";
+		};
+		775C55E22099BD9300540B5B /* Fuel Locator iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				775C55E32099BD9300540B5B /* Fuel_Locator_iOSTests.swift */,
+				775C55E52099BD9300540B5B /* Info.plist */,
+			);
+			path = "Fuel Locator iOSTests";
+			sourceTree = "<group>";
+		};
+		775C55ED2099BD9300540B5B /* Fuel Locator iOSUITests */ = {
+			isa = PBXGroup;
+			children = (
+				775C55EE2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift */,
+				775C55F02099BD9300540B5B /* Info.plist */,
+			);
+			path = "Fuel Locator iOSUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		775C55C82099BD7500540B5B /* Fuel Locator iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 775C55F32099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOS" */;
+			buildPhases = (
+				775C55C52099BD7500540B5B /* Sources */,
+				775C55C62099BD7500540B5B /* Frameworks */,
+				775C55C72099BD7500540B5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Fuel Locator iOS";
+			productName = "Fuel Locator iOS";
+			productReference = 775C55C92099BD7500540B5B /* Fuel Locator iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		775C55DE2099BD9300540B5B /* Fuel Locator iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 775C55F62099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOSTests" */;
+			buildPhases = (
+				775C55DB2099BD9300540B5B /* Sources */,
+				775C55DC2099BD9300540B5B /* Frameworks */,
+				775C55DD2099BD9300540B5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				775C55E12099BD9300540B5B /* PBXTargetDependency */,
+			);
+			name = "Fuel Locator iOSTests";
+			productName = "Fuel Locator iOSTests";
+			productReference = 775C55DF2099BD9300540B5B /* Fuel Locator iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		775C55E92099BD9300540B5B /* Fuel Locator iOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 775C55F92099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOSUITests" */;
+			buildPhases = (
+				775C55E62099BD9300540B5B /* Sources */,
+				775C55E72099BD9300540B5B /* Frameworks */,
+				775C55E82099BD9300540B5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				775C55EC2099BD9300540B5B /* PBXTargetDependency */,
+			);
+			name = "Fuel Locator iOSUITests";
+			productName = "Fuel Locator iOSUITests";
+			productReference = 775C55EA2099BD9300540B5B /* Fuel Locator iOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		775C55C12099BD7500540B5B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Owen Godfrey";
+				TargetAttributes = {
+					775C55C82099BD7500540B5B = {
+						CreatedOnToolsVersion = 9.3;
+					};
+					775C55DE2099BD9300540B5B = {
+						CreatedOnToolsVersion = 9.3;
+						TestTargetID = 775C55C82099BD7500540B5B;
+					};
+					775C55E92099BD9300540B5B = {
+						CreatedOnToolsVersion = 9.3;
+						TestTargetID = 775C55C82099BD7500540B5B;
+					};
+				};
+			};
+			buildConfigurationList = 775C55C42099BD7500540B5B /* Build configuration list for PBXProject "Fuel Locator iOS" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 775C55C02099BD7500540B5B;
+			productRefGroup = 775C55CA2099BD7500540B5B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				775C55C82099BD7500540B5B /* Fuel Locator iOS */,
+				775C55DE2099BD9300540B5B /* Fuel Locator iOSTests */,
+				775C55E92099BD9300540B5B /* Fuel Locator iOSUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		775C55C72099BD7500540B5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				775C55D92099BD9200540B5B /* LaunchScreen.storyboard in Resources */,
+				775C55D62099BD9200540B5B /* Assets.xcassets in Resources */,
+				775C55D42099BD7500540B5B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		775C55DD2099BD9300540B5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		775C55E82099BD9300540B5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		775C55C52099BD7500540B5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				775C55D12099BD7500540B5B /* SecondViewController.swift in Sources */,
+				775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */,
+				775C55CF2099BD7500540B5B /* FirstViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		775C55DB2099BD9300540B5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				775C55E42099BD9300540B5B /* Fuel_Locator_iOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		775C55E62099BD9300540B5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				775C55EF2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		775C55E12099BD9300540B5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 775C55C82099BD7500540B5B /* Fuel Locator iOS */;
+			targetProxy = 775C55E02099BD9300540B5B /* PBXContainerItemProxy */;
+		};
+		775C55EC2099BD9300540B5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 775C55C82099BD7500540B5B /* Fuel Locator iOS */;
+			targetProxy = 775C55EB2099BD9300540B5B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		775C55D22099BD7500540B5B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				775C55D32099BD7500540B5B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		775C55D72099BD9200540B5B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				775C55D82099BD9200540B5B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		775C55F12099BD9300540B5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		775C55F22099BD9300540B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		775C55F42099BD9300540B5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4S7Z2785AM;
+				INFOPLIST_FILE = "Fuel Locator iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		775C55F52099BD9300540B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4S7Z2785AM;
+				INFOPLIST_FILE = "Fuel Locator iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		775C55F72099BD9300540B5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4S7Z2785AM;
+				INFOPLIST_FILE = "Fuel Locator iOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fuel Locator iOS.app/Fuel Locator iOS";
+			};
+			name = Debug;
+		};
+		775C55F82099BD9300540B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4S7Z2785AM;
+				INFOPLIST_FILE = "Fuel Locator iOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fuel Locator iOS.app/Fuel Locator iOS";
+			};
+			name = Release;
+		};
+		775C55FA2099BD9300540B5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4S7Z2785AM;
+				INFOPLIST_FILE = "Fuel Locator iOSUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Fuel Locator iOS";
+			};
+			name = Debug;
+		};
+		775C55FB2099BD9300540B5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4S7Z2785AM;
+				INFOPLIST_FILE = "Fuel Locator iOSUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Fuel Locator iOS";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		775C55C42099BD7500540B5B /* Build configuration list for PBXProject "Fuel Locator iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				775C55F12099BD9300540B5B /* Debug */,
+				775C55F22099BD9300540B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		775C55F32099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				775C55F42099BD9300540B5B /* Debug */,
+				775C55F52099BD9300540B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		775C55F62099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				775C55F72099BD9300540B5B /* Debug */,
+				775C55F82099BD9300540B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		775C55F92099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				775C55FA2099BD9300540B5B /* Debug */,
+				775C55FB2099BD9300540B5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 775C55C12099BD7500540B5B /* Project object */;
+}
