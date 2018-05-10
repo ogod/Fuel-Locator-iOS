@@ -1,0 +1,46 @@
+{
+  "images" : [
+    {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "tile",
+          "width" : 1,
+          "height" : 1
+        },
+        "cap-insets" : {
+          "bottom" : 42,
+          "top" : 14,
+          "right" : 24,
+          "left" : 34
+        }
+      },
+      "idiom" : "mac",
+      "filename" : "New Pin-1.png",
+      "scale" : "1x"
+    },
+    {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "tile",
+          "width" : 1,
+          "height" : 1
+        },
+        "cap-insets" : {
+          "bottom" : 84,
+          "top" : 28,
+          "right" : 48,
+          "left" : 69
+        }
+      },
+      "idiom" : "mac",
+      "filename" : "New Pin.png",
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
