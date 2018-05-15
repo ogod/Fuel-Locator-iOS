@@ -56,7 +56,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         datePicker.maximumDate = SettingsViewController.calendar.date(byAdding: .day, value: 1, to: Date())
         datePicker.date = MapViewController.instance?.globalDate ?? Date()
         if MapViewController.instance?.globalProduct != nil {
-            productPicker.selectRow(products.index(of: (MapViewController.instance?.globalProduct!)!)!, inComponent: 1, animated: false)
+            productPicker.selectRow(products.index(of: (MapViewController.instance?.globalProduct!)!)!, inComponent: 0, animated: false)
         }
     }
 

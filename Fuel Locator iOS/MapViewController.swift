@@ -78,6 +78,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         guard globalProduct != nil else {
             return
         }
+        displaySpinner()
         var annotations = [MKPointAnnotation]()
         for st in Station.all.values {
             if st.latitude != 0 && st.longitude != 0 {
@@ -86,6 +87,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
         self.mapView.addAnnotations(annotations)
+        removeSpinner()
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -175,11 +177,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
 
         DispatchQueue.main.async {
-            spinnerView = UIView.init(frame: view.bounds)
-            spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+            self.spinnerView = UIView.init(frame: self.view.bounds)
+            self.spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
             let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
             ai.startAnimating()
-            ai.center = spinnerView.center
+            ai.center = self.spinnerView.center
             self.spinnerView.addSubview(ai)
             self.view.addSubview(self.spinnerView)
         }
