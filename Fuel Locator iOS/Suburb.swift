@@ -12,7 +12,7 @@ import AddressBook
 import CloudKit
 import os.log
 
-class Suburb: Hashable {
+class Suburb: FLODataEntity, Hashable {
     var hashValue: Int { return ident.hashValue }
 
     static func == (lhs: Suburb, rhs: Suburb) -> Bool {
@@ -34,6 +34,28 @@ class Suburb: Hashable {
         latitude = record["latitude"] as? NSNumber ?? 0
         longitude = record["longitude"] as? NSNumber ?? 0
         radius = record["radius"] as? NSNumber ?? 0
+        if let ref = record["regions"] as? Array<CKReference> {
+            region = Set<Region>(ref.map({Region.all[Region.ident(from: $0.recordID)]!}))
+        } else if let ref = record["region"] as? CKReference {
+            region = Set<Region>(arrayLiteral: Region.all[Region.ident(from: ref.recordID)]!)
+        }
+        if let fts = record["features"] as? NSArray {
+            for f in fts {
+                if let feature = f as? String {
+                    features.append(feature)
+                }
+            }
+        }
+        if let ref = record["surround"] as? Array<CKReference> {
+            let subs = ref.map({Suburb.all[Suburb.ident(from: $0.recordID)]})
+            surround = Set<Suburb>(subs.filter({$0 != nil}).map({$0!}))
+            if subs.count != ref.count {
+                DispatchQueue.main.async {
+                    let subs = ref.map({Suburb.all[Suburb.ident(from: $0.recordID)]})
+                    self.surround = Set<Suburb>(subs.filter({$0 != nil}).map({$0!}))
+                }
+            }
+        }
         systemFields = Brand.archiveSystemFields(from: record)
     }
 
@@ -42,6 +64,7 @@ class Suburb: Hashable {
     public var longitude: NSNumber?
     public var name: String
     public var radius: NSNumber?
+    public var features: [String] = []
     public var region: Set<Region>?
     public var station: Set<Station>?
     public var surround: Set<Suburb>?
@@ -75,38 +98,6 @@ class Suburb: Hashable {
         }
     }
 
-    private static var _allSuburbs: [String: Suburb]? = nil
-
-    static var all: [String: Suburb] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allSuburbs == nil {
-                let group = DispatchGroup()
-                group.enter()
-                Suburb.fetchAll({ (sbs, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allSuburbs = [:]
-                        for suburb in sbs {
-                            self._allSuburbs![suburb.ident] = suburb
-                        }
-                    }
-                })
-                while group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Suburb Timed out")
-                }
-            }
-            return _allSuburbs ?? [:]
-        }
-    }
-
     static let lock = NSObject()
     static let geocoder = CLGeocoder()
 
@@ -120,41 +111,44 @@ class Suburb: Hashable {
     
     let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Suburb")
 
-    class func fetch(withIdent ident: String, _ completionBlock: ((Suburb?, Error?) -> Void)?) {
+    class func fetch(withIdent ident: String, _ completionBlock: @escaping (Suburb?, Error?) -> Void) {
         let pred = NSPredicate(format: "ident == %@", ident)
         let query = CKQuery(recordType: "FWSuburb", predicate: pred)
 
         do {
             Suburb.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let sub: Suburb? = (records == nil || records!.isEmpty ? nil : Suburb(record: records!.first!))
-                completionBlock?(sub, error)
+                completionBlock(sub, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(_ completionBlock: ((Set<Suburb>, Error?) -> Void)?) {
+    class func fetchAll(_ completionBlock: @escaping (Set<Suburb>, Error?) -> Void) {
         let pred = NSPredicate(value: true)
         let query = CKQuery(recordType: "FWSuburb", predicate: pred)
 
         do {
             Suburb.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let subs = Set<Suburb>(records?.map({ Suburb(record: $0) }) ?? [])
-                completionBlock?(subs, error)
+                completionBlock(subs, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension Suburb: FLODataEntity {
+    static var all = FLODataEntityAll<String, Suburb>()
+
+    var key: String {
+        return ident
+    }
+
     class func ident(from recordID: CKRecordID) -> String {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
         return String(str[index...])
-//        return String(recordID.recordName.substring(from: recordID.recordName.index(after: recordID.recordName.index(of: ":")!)))
     }
 
     class func recordId(from ident: String) -> CKRecordID {

@@ -12,7 +12,7 @@ import os.log
 
 let FWBrandUpdateNotificationKey = "FuelWatchBrandUpdateNotification"
 
-class Brand: Hashable {
+class Brand: FLODataEntity, Hashable {
     var hashValue: Int { return Int(ident) }
 
     static func == (lhs: Brand, rhs: Brand) -> Bool {
@@ -42,37 +42,34 @@ class Brand: Hashable {
     public var systemFields: Data?
     public lazy var image: UIImage = Brand.image(named: name.replacingOccurrences(of: "/", with: "-"))
 
-    private static var _allBrands: [Int16: Brand]? = nil
-
-    static var all: [Int16: Brand] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allBrands == nil {
-                let group = DispatchGroup()
-                group.enter()
-                Brand.fetchAll({ (brs, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allBrands = [:]
-                        for brand in brs {
-                            self._allBrands![brand.ident] = brand
-                        }
-                    }
-                })
-                while group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Brand Timed out")
-                }
-            }
-            return _allBrands ?? [:]
-        }
-    }
+//        get {
+//            defer { objc_sync_exit(lock) }
+//            objc_sync_enter(lock)
+//            if _allBrands == nil {
+//                let group = DispatchGroup()
+//                group.enter()
+//                Brand.fetchAll({ (brs, err) in
+//                    DispatchQueue.global().async {
+//                        defer {
+//                            group.leave()
+//                        }
+//                        guard err == nil else {
+//                            print(err!)
+//                            return
+//                        }
+//                        self._allBrands = [:]
+//                        for brand in brs {
+//                            self._allBrands![brand.ident] = brand
+//                        }
+//                    }
+//                })
+//                while group.wait(timeout: .now() + 5.0) == .timedOut {
+//                    print("Brand Timed out")
+//                }
+//            }
+//            return _allBrands ?? [:]
+//        }
+//    }
 
     static var brandImageCache: [String: UIImage] = {
         var dict = [String: UIImage]()
@@ -102,36 +99,40 @@ class Brand: Hashable {
         target.write(self.description, maxLength: 512)
     }
 
-    class func fetch(withIdent ident: Int16, _ completionBlock: ((Brand?, Error?) -> Void)?) {
+    class func fetch(withIdent ident: Int16, _ completionBlock: @escaping (Brand?, Error?) -> Void) {
         let pred = NSPredicate(format: "ident == %@", ident)
         let query = CKQuery(recordType: "FWBrand", predicate: pred)
 
         do {
             Brand.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let brand: Brand? = (records == nil || records!.isEmpty ? nil : Brand(record: records!.first!))
-                completionBlock?(brand, error)
+                completionBlock(brand, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(_ completionBlock: ((Set<Brand>, Error?) -> Void)?) {
+    class func fetchAll(_ completionBlock: @escaping (Set<Brand>, Error?) -> Void) {
         let pred = NSPredicate(value: true)
         let query = CKQuery(recordType: "FWBrand", predicate: pred)
 
         do {
             Brand.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let brands = Set<Brand>(records?.map({ Brand(record: $0) }) ?? [])
-                completionBlock?(brands, error)
+                completionBlock(brands, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension Brand: FLODataEntity {
+    static var all: FLODataEntityAll<Int16, Brand> = FLODataEntityAll<Int16, Brand>()
+
+    var key: Int16 {
+        return ident
+    }
+
     class func ident(from recordID: CKRecordID) -> Int16 {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)

@@ -18,6 +18,7 @@ class FLOCloud: NSObject {
     static let shared: FLOCloud = FLOCloud("iCloud.com.nomdejoye.Fuel-Locator-OSX")
 
     lazy var container = CKContainer(identifier: identifier)
+    let queue = DispatchQueue(label: "Cloud Query Queue")
 
     init(_ identifier: String) {
         self.identifier = identifier
@@ -127,7 +128,7 @@ class FLOCloud: NSObject {
 
     private(set) var isEnabled = false
 
-    func alertUserToEnterICloudCredentials(controller: UIViewController) {
+    func alertUserToEnterICloudCredentials(controller: UIViewController, callBack: @escaping (Bool) -> Void) {
         container.accountStatus { (status, error) in
             guard error == nil else {
                 return
@@ -139,10 +140,12 @@ class FLOCloud: NSObject {
                     "Turn iCloud Drive on. If you don't have an iCloud account, tap Create a new Apple ID.",
                                               preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                controller.present(alert, animated: true, completion: nil)
+                controller.present(alert, animated: true) {
+                    callBack(false)
+                }
             } else {
                 self.isEnabled = true
-                // Schema code
+                callBack(true)
             }
         }
     }

@@ -9,7 +9,9 @@
 import CloudKit
 import os.log
 
-protocol FLODataEntity {
+protocol FLODataEntity: Hashable {
+    associatedtype Key: Hashable
+    associatedtype Value: FLODataEntity
 
     var record: CKRecord { get set }
 
@@ -19,9 +21,49 @@ protocol FLODataEntity {
 
     func hasChanged(from record: CKRecord) -> Bool
 
+    static func fetch(withIdent ident: Key, _ completionBlock: @escaping (Value?, Error?) -> Void)
+
+    static func fetchAll(_ completionBlock: @escaping (Set<Value>, Error?) -> Void)
+
+    static var all: FLODataEntityAll<Key, Value> { get }
+
+    var key: Key { get }
+}
+
+class FLODataEntityAll<K: Hashable, V: FLODataEntity> {
+    private var _all: [K: V] = [:]
+
+    subscript(_ ident: K) -> V? {
+        guard _all.keys.contains(ident) else {
+            return nil
+        }
+        return _all[ident]
+    }
+
+    var values: Dictionary<K, V>.Values { return _all.values }
+
+    func retrieve(_ block: @escaping (Bool, Error?)->Void) {
+        _all.removeAll()
+        FLOCloud.shared.queue.async {
+            V.fetchAll({ (sts, err) in
+                FLOCloud.shared.queue.async {
+                    guard err == nil else {
+                        print(err!)
+                        block(false, err)
+                        return
+                    }
+                    self._all.merge(sts.reduce(into: [K: V](), { (dict, element) -> Void in
+                        dict[element.key as! K] = (element as! V)
+                    }), uniquingKeysWith: {$1})
+                    block(true, nil)
+                }
+            })
+        }
+    }
 }
 
 extension FLODataEntity {
+
     /// Creates an archive of system fields from a record
     ///
     /// - Parameter record: The record whose system fields are to be archived
@@ -82,7 +124,7 @@ extension FLODataEntity {
                         os_log("Error on cloud read: %@", log: logger, type: .error, error.localizedDescription)
                         DispatchQueue.main.async {
                             if let record = rec {
-                                var s = (self as FLODataEntity)
+                                var s = self
                                 s.record = record
                                 completion?(nil, true)
                             } else {
@@ -108,7 +150,7 @@ extension FLODataEntity {
                                 completion?(err, false)
                                 return
                             }
-                            var s = (self as FLODataEntity)
+                            var s = self
                             s.systemFields = nil
                             let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.upload.unknownItem")
                             os_log("Error on cloud read: %@", log: logger, type: .error, error.localizedDescription)
@@ -143,7 +185,7 @@ extension FLODataEntity {
                 return
             }
             DispatchQueue.main.async {
-                var s = (self as FLODataEntity)
+                var s = self
                 s.record = record
                 completion?(nil, true)
             }
@@ -176,7 +218,7 @@ extension FLODataEntity {
                         os_log("Error on cloud read: %@", type: .error, error.localizedDescription)
                         DispatchQueue.main.async {
                             if let record = rec {
-                                var s = (self as FLODataEntity)
+                                var s = self
                                 s.record = record
                                 completion?(nil, true)
                             } else {
@@ -194,7 +236,7 @@ extension FLODataEntity {
 
                     case .unknownItem:
                         DispatchQueue.main.async {
-                            var s = (self as FLODataEntity)
+                            var s = self
                             s.systemFields = nil
                             completion?(nil, true)
                         }
@@ -221,7 +263,7 @@ extension FLODataEntity {
             }
             
             DispatchQueue.main.async {
-                var s = (self as FLODataEntity)
+                var s = self
                 s.record = record
                 completion?(nil, true)
             }

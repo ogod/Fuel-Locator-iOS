@@ -11,7 +11,7 @@ import MapKit
 import CloudKit
 import os.log
 
-class Station: Hashable {
+class Station: FLODataEntity, Hashable {
     var hashValue: Int { return tradingName.hashValue }
 
     static func == (lhs: Station, rhs: Station) -> Bool {
@@ -19,7 +19,7 @@ class Station: Hashable {
     }
 
 
-    init(tradingName: String, brand: Brand, address: String?, latitude: Double, longitude: Double, phone: String?, stationDescription: String?, siteFeatures: Set<SiteFeatures>? = nil, suburb: Suburb? = nil) {
+    init(tradingName: String, brand: Brand, address: String?, latitude: Double, longitude: Double, phone: String?, stationDescription: String?, siteFeatures: Set<String>? = nil, suburb: Suburb? = nil) {
         self.tradingName = tradingName
         self.brand = brand
         self.address = address
@@ -27,7 +27,7 @@ class Station: Hashable {
         self.longitude = longitude
         self.phone = phone
         self.stationDescription = stationDescription
-        self.siteFeatures = siteFeatures == nil ? nil : Set<SiteFeatures>(siteFeatures!)
+        self.siteFeatures = siteFeatures == nil ? nil : Set<String>(siteFeatures!)
     }
 
     init(record: CKRecord) {
@@ -52,46 +52,14 @@ class Station: Hashable {
     public var brand: Brand?
     public var priceOnDay: Set<PriceOnDay>?
     public var product: Set<Product>?
-    public var siteFeatures: Set<SiteFeatures>?
+    public var siteFeatures: Set<String>?
     public var suburb: Suburb?
     public var systemFields: Data?
-
-    private static var _allStations: [String: Station]? = nil
-
-    static var all: [String: Station] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allStations == nil {
-                let group = DispatchGroup()
-                group.enter()
-                Station.fetchAll({ (sts, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allStations = [:]
-                        for station in sts {
-                            self._allStations![station.tradingName] = station
-                        }
-                    }
-                })
-                while group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Station Timed out")
-                }
-            }
-            return _allStations ?? [:]
-        }
-    }
 
     fileprivate let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Station")
 
     var siteFeaturesList: String {
-        return siteFeatures?.reduce("", { ($0 == "" ? $0 : $0 + ", ") + $1.feature }) ?? ""
+        return siteFeatures?.reduce("", { ($0 == "" ? $0 : $0 + ", ") + $1 }) ?? ""
     }
 
     var prices: [PriceOnDay] {
@@ -126,21 +94,21 @@ class Station: Hashable {
         return "Station (\(tradingName), \(String(describing: brand)), \(String(describing: suburb)))"
     }
     
-    class func fetch(withTradingName tradingName: String, _ completionBlock: ((Station?, Error?) -> Void)?) {
+    class func fetch(withIdent tradingName: String, _ completionBlock: @escaping (Station?, Error?) -> Void) {
         let pred = NSPredicate(format: "tradingName == %@", tradingName)
         let query = CKQuery(recordType: "FWStation", predicate: pred)
 
         do {
             Station.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let stat: Station? = (records == nil || records!.isEmpty ? nil : Station(record: records!.first!))
-                completionBlock?(stat, error)
+                completionBlock(stat, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(_ completionBlock: ((Set<Station>, Error?) -> Void)?) {
+    class func fetchAll(_ completionBlock: @escaping (Set<Station>, Error?) -> Void) {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "FWStation", predicate: predicate)
 
@@ -148,15 +116,19 @@ class Station: Hashable {
             Station.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 print("Stations completed")
                 let stats = Set<Station>(records?.map({ Station(record: $0) }) ?? [])
-                completionBlock?(stats, error)
+                completionBlock(stats, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension Station: FLODataEntity {
+    static var all = FLODataEntityAll<String, Station>()
+
+    var key: String {
+        return tradingName
+    }
+
     class func tradingName(from recordID: CKRecordID) -> String {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
@@ -204,13 +176,13 @@ extension Station: FLODataEntity {
         }
         if let features = record["features"] as? Array<String> {
             for f in features {
-                if !(siteFeatures?.contains(where: { $0.feature == f }) ?? false) {
+                if !(siteFeatures?.contains(where: { $0 == f }) ?? false) {
                     return true
                 }
             }
             if let sfs = siteFeatures {
                 for sf in Array(sfs) {
-                    if !features.contains(where: { $0 == sf.feature }) {
+                    if !features.contains(where: { $0 == sf }) {
                         return true
                     }
                 }
@@ -236,7 +208,7 @@ extension Station: FLODataEntity {
                 r["brand"] = CKReference.init(record: brand!.record, action: CKReferenceAction.none)
             }
             if siteFeatures != nil {
-                r["features"] = Array<String>(siteFeatures!.map({$0.feature})) as NSArray
+                r["features"] = Array<String>(siteFeatures!.map({$0})) as NSArray
             }
             r["location"] = CLLocation(latitude: latitude, longitude: longitude)
             if phone != nil {
@@ -291,21 +263,8 @@ extension Station: FLODataEntity {
                 }
             }
             if let features = newValue["features"] as? Array<String> {
-                for f in features {
-                    if !(siteFeatures?.contains(where: { $0.feature == f }) ?? false) {
-//                        let context = PersistentStore.instance.context
-//                        let sf = SiteFeatures.create(in: context)
-                        let sf = SiteFeatures(feature: f, station: self)
-                        siteFeatures?.insert(sf)
-                    }
-                }
-                if let sfs = siteFeatures {
-                    for sf in Array(sfs) {
-                        if !features.contains(where: { $0 == sf.feature }) {
-                            siteFeatures?.remove(sf)
-                        }
-                    }
-                }
+                siteFeatures?.removeAll()
+                siteFeatures?.formUnion(features)
             }
         }
     }

@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 import os
 
-class PriceOnDay: Hashable {
+class PriceOnDay: FLODataEntity, Hashable {
     var hashValue: Int { return date.hashValue ^ (product.hashValue << 8) ^ (station.hashValue << 16)}
 
     static func == (lhs: PriceOnDay, rhs: PriceOnDay) -> Bool {
@@ -30,8 +30,8 @@ class PriceOnDay: Hashable {
         self.station = station
     }
 
-    init(record: CKRecord) {
-        let ident = PriceOnDay.ident(from: record.recordID)
+    init(record: CKRecord) throws {
+        let ident = try PriceOnDay.ident(from: record.recordID)
         date = ident.date
         product = ident.product
         station = ident.station
@@ -43,44 +43,6 @@ class PriceOnDay: Hashable {
         return price // - (station.brand?.discount * 10 ?? 0)
     }
     
-    private static var _allPrices: [String: PriceOnDay]? = nil
-
-    static var all: [String: PriceOnDay] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allPrices == nil {
-                let group = DispatchGroup()
-                group.enter()
-                PriceOnDay.fetchAll({ (prs, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allPrices = [:]
-                        for price in prs {
-                            self._allPrices![price.station.tradingName] = price
-                        }
-                    }
-                })
-                if group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Prices Timed out")
-                }
-            }
-            return _allPrices ?? [:]
-        }
-    }
-
-    static func reset() {
-        defer { objc_sync_exit(lock) }
-        objc_sync_enter(lock)
-        _allPrices = nil
-    }
-
     static let lock = NSObject()
     static let calendar = Calendar.current
     static let dateFormatter: DateFormatter = {
@@ -91,26 +53,26 @@ class PriceOnDay: Hashable {
 
     let keyRegx = try! NSRegularExpression(pattern: "^(\\d{4}-\\d+-\\d+)|(\\d+)|(.*)$")
 
-    class func fetch(withStation station: Station, _ completionBlock: ((PriceOnDay?, Error?) -> Void)?) {
+    class func fetch(withIdent tradingName: String, _ completionBlock: @escaping (PriceOnDay?, Error?) -> Void) {
         let st = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate)!
         let en = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: st)!
         let prodRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
-        let stRef = CKReference(recordID: station.recordID, action: .none)
+        let stRef = CKReference(recordID: Station.recordId(from: tradingName), action: .none)
         let pred = NSPredicate(format: "date >= %@ && date < %@ && product == %@ && station == %@",
                                st as NSDate, en as NSDate, prodRef, stRef)
         let query = CKQuery(recordType: "FWPrice", predicate: pred)
 
         do {
             PriceOnDay.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
-                let price: PriceOnDay? = (records == nil || records!.isEmpty ? nil : PriceOnDay(record: records!.first!))
-                completionBlock?(price, error)
+                let price: PriceOnDay? = (records == nil || records!.isEmpty ? nil : try? PriceOnDay(record: records!.first!))
+                completionBlock(price, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(_ completionBlock: ((Set<PriceOnDay>, Error?) -> Void)?) {
+    class func fetchAll(_ completionBlock: @escaping (Set<PriceOnDay>, Error?) -> Void) {
         let st = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate)!
         let en = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: st)!
         let prodRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
@@ -121,17 +83,23 @@ class PriceOnDay: Hashable {
         do {
             PriceOnDay.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 print("Completing prices")
-                let prices = Set<PriceOnDay>(records?.map({ PriceOnDay(record: $0) }) ?? [])
-                completionBlock?(prices, error)
+                let prices = Set<PriceOnDay>(records?.map({ try? PriceOnDay(record: $0) }).filter({$0 != nil}).map({$0!}) ?? [])
+                completionBlock(prices, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension PriceOnDay: FLODataEntity {
-    class func ident(from recordID: CKRecordID) -> (date: Date, product: Product, station: Station) {
+    static var all = FLODataEntityAll<String, PriceOnDay>()
+
+    var key: String {
+        get {
+            return station.tradingName
+        }
+    }
+
+    class func ident(from recordID: CKRecordID) throws -> (date: Date, product: Product, station: Station) {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
         let str = recordID.recordName
@@ -139,8 +107,11 @@ extension PriceOnDay: FLODataEntity {
         let part = String(str[index...]).split(separator: "|")
         let date = f.date(from: String(part[0]))!
         let product: Product = Product.all[Int16(String(part[1]))!]!
-        let station: Station = Station.all[String(part[2])]!
-        return (date: date, product: product, station: station)
+        if let station: Station = Station.all[String(part[2])] {
+            return (date: date, product: product, station: station)
+        } else {
+            throw NSError(domain: "Something", code: 1, userInfo: nil)
+        }
     }
 
     class func recordID(date: Date, product: Product, station: Station) -> CKRecordID {

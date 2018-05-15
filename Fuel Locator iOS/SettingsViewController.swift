@@ -15,6 +15,10 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         return 1
     }
 
+    @IBAction func done(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return products.count
     }
@@ -50,6 +54,10 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
 
     override func viewDidAppear(_ animated: Bool) {
         datePicker.maximumDate = SettingsViewController.calendar.date(byAdding: .day, value: 1, to: Date())
+        datePicker.date = MapViewController.instance?.globalDate ?? Date()
+        if MapViewController.instance?.globalProduct != nil {
+            productPicker.selectRow(products.index(of: (MapViewController.instance?.globalProduct!)!)!, inComponent: 1, animated: false)
+        }
     }
 
     @IBAction func MapTypeSelected(_ sender: UISegmentedControl) {

@@ -23,13 +23,21 @@ class StationAnnotation: MKPointAnnotation {
         super.init()
         coordinate = station.coordinate
         subtitle = station.tradingName
-        refresh()
+        DispatchQueue.global().async {
+            self.refresh()
+        }
     }
 
     func refresh() {
-        title = ""
         if let price: PriceOnDay = PriceOnDay.all[station.tradingName] {
-            title = StationAnnotation.format.string(from: Double(price.adjustedPrice) / 10.0 as NSNumber)
+            DispatchQueue.main.async {
+                let price = Double(price.adjustedPrice) / 10.0
+                self.title = StationAnnotation.format.string(from: price as NSNumber)
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.title = ""
+            }
         }
     }
 

@@ -17,7 +17,6 @@
 		775C55FE2099D53200540B5B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775C55FD2099D53200540B5B /* MapKit.framework */; };
 		775C56012099D57100540B5B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775C56002099D57100540B5B /* CloudKit.framework */; };
 		775C5603209DF34800540B5B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C5602209DF34800540B5B /* SettingsViewController.swift */; };
-		776E942B209EE690008AB0FC /* SiteFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9423209EE630008AB0FC /* SiteFeatures.swift */; };
 		776E942C209EE690008AB0FC /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9424209EE659008AB0FC /* Region.swift */; };
 		776E942D209EE690008AB0FC /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9425209EE673008AB0FC /* Station.swift */; };
 		776E942E209EE690008AB0FC /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9426209EE67E008AB0FC /* Statistics.swift */; };
@@ -82,7 +81,6 @@
 		775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Fuel Locator iOS.entitlements"; sourceTree = "<group>"; };
 		775C56002099D57100540B5B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		775C5602209DF34800540B5B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		776E9423209EE630008AB0FC /* SiteFeatures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteFeatures.swift; sourceTree = "<group>"; };
 		776E9424209EE659008AB0FC /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		776E9425209EE673008AB0FC /* Station.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		776E9426209EE67E008AB0FC /* Statistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
@@ -206,7 +204,6 @@
 				776E942A209EE690008AB0FC /* Product.swift */,
 				776E9428209EE689008AB0FC /* Suburb.swift */,
 				776E9424209EE659008AB0FC /* Region.swift */,
-				776E9423209EE630008AB0FC /* SiteFeatures.swift */,
 				776E9425209EE673008AB0FC /* Station.swift */,
 				776E9426209EE67E008AB0FC /* Statistics.swift */,
 				776E9429209EE68E008AB0FC /* PriceOnDay.swift */,
@@ -391,7 +388,6 @@
 				776E942E209EE690008AB0FC /* Statistics.swift in Sources */,
 				775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */,
 				776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */,
-				776E942B209EE690008AB0FC /* SiteFeatures.swift in Sources */,
 				776E943620A014D6008AB0FC /* FLOCloud.swift in Sources */,
 				776E9431209EE690008AB0FC /* PriceOnDay.swift in Sources */,
 				775C55CF2099BD7500540B5B /* MapViewController.swift in Sources */,

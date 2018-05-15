@@ -17,19 +17,38 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     static var instance: MapViewController? = nil
     static let calendar = Calendar.current
 
+    var refreshFlag = false
+
+    func refresh() {
+        guard !refreshFlag && globalProduct != nil else {
+            return
+        }
+        refreshFlag = true
+        DispatchQueue.global().async {
+            Statistics.all.retrieve({ (success, err) in
+                PriceOnDay.all.retrieve({ (success, err) in
+                    DispatchQueue.main.async {
+                        self.resetAnnotations()
+                        self.refreshFlag = false
+                    }
+                })
+            })
+        }
+    }
+
     var globalDate: Date! = nil {
         didSet {
-            print("reset for date \(globalDate)")
-            Statistics.reset()
-            PriceOnDay.reset()
+            refresh()
         }
     }
 
     var globalProduct: Product! = nil {
         didSet {
-            print("reset for product \(globalProduct?.name ?? "none")")
-            Statistics.reset()
-            PriceOnDay.reset()
+            guard globalProduct != nil else {
+                return
+            }
+            print("reset for product \(globalProduct!.name)")
+            refresh()
         }
     }
 
@@ -54,9 +73,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                            span: MKCoordinateSpan(latitudeDelta: 0.2,
                                                   longitudeDelta: 0.2))
 
-    fileprivate func addAnnotations() {
+    func resetAnnotations() {
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        guard globalProduct != nil else {
+            return
+        }
         var annotations = [MKPointAnnotation]()
-        for st in Station.all.map({ $0.value }) {
+        for st in Station.all.values {
             if st.latitude != 0 && st.longitude != 0 {
                 let annot = StationAnnotation(st)
                 annotations.append(annot)
@@ -66,16 +89,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        print("View for annotation")
         if let station = annotation as? StationAnnotation {
             var view = mapView.dequeueReusableAnnotationView(withIdentifier: "station") as? MKMarkerAnnotationView
             if view == nil {
                 view = StationMarkerAnnotationView(annotation: nil, reuseIdentifier: "station")
             }
             view?.annotation = station
-            view?.glyphImage = station.station.brand?.image
-            view?.markerTintColor = UIColor.gray
-            view?.displayPriority = .defaultHigh
            return view
         } else if let cluster = annotation as? MKClusterAnnotation {
             var view = mapView.dequeueReusableAnnotationView(withIdentifier: "cluster") as? MKMarkerAnnotationView
@@ -83,8 +102,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 view = ClusterMarkerAnnotationView(annotation: nil, reuseIdentifier: "cluster")
             }
             view?.annotation = cluster
-            view?.glyphText = "\(cluster.memberAnnotations.count)"
-            view?.markerTintColor = UIColor.darkGray
             return view
         } else {
             return nil
@@ -94,6 +111,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         mapView.register(StationMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "station")
         mapView.register(ClusterMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "cluster")
+        resetAnnotations()
     }
 
     override func viewDidLoad() {
@@ -108,22 +126,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.addSubview(button)
         NSLayoutConstraint.activate([button.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -4),
                                      button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -4)])
+        self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        self.globalProduct = Product.all[1]
 
-        FLOCloud.shared.alertUserToEnterICloudCredentials(controller: self)
-
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
-            _ = Brand.all
-            _ = Product.all
-            _ = Suburb.all
-            _ = Region.all
-            _ = Station.all
-            self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-            self.globalProduct = Product.all[1]!
-            _ = PriceOnDay.all
-            _ = Statistics.all
-            DispatchQueue.main.async {
-                self.addAnnotations()
-            }
+        FLOCloud.shared.alertUserToEnterICloudCredentials(controller: self) { (success) in
+            self.refreshData()
         }
     }
 
@@ -132,6 +139,58 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // Dispose of any resources that can be recreated.
     }
 
+    var retrieving = false
+
+    func refreshData() {
+        guard !retrieving else {
+            return
+        }
+        retrieving = true
+        displaySpinner()
+        DispatchQueue.global().async {
+            Brand.all.retrieve({ (success1, error1) in
+                Product.all.retrieve({ (success2, error2) in
+                    Region.all.retrieve({ (success3, error3) in
+                        Suburb.all.retrieve({ (success4, error4) in
+                            Station.all.retrieve({ (success5, error5) in
+                                if MapViewController.instance != nil {
+                                    MapViewController.instance!.globalProduct = Product.all[1]
+                                    MapViewController.instance!.refresh()
+                                    self.removeSpinner()
+                                    self.retrieving = false
+                                }
+                            })
+                        })
+                    })
+                })
+            })
+        }
+    }
+
+    var spinnerView: UIView! = nil
+
+    func displaySpinner() {
+        guard spinnerView == nil else {
+            return
+        }
+
+        DispatchQueue.main.async {
+            spinnerView = UIView.init(frame: view.bounds)
+            spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+            let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
+            ai.startAnimating()
+            ai.center = spinnerView.center
+            self.spinnerView.addSubview(ai)
+            self.view.addSubview(self.spinnerView)
+        }
+    }
+
+    func removeSpinner() {
+        DispatchQueue.main.async {
+            self.spinnerView.removeFromSuperview()
+            self.spinnerView = nil
+        }
+    }   
 
 }
 

@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 import os.log
 
-class Product: Hashable {
+class Product: FLODataEntity, Hashable {
     static func == (lhs: Product, rhs: Product) -> Bool {
         return lhs.ident == rhs.ident
     }
@@ -35,38 +35,6 @@ class Product: Hashable {
     public var statistics: Set<Statistics>?
     public var systemFields: Data?
 
-    private static var _allProducts: [Int16: Product]? = nil
-
-    static var all: [Int16: Product] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allProducts == nil {
-                let group = DispatchGroup()
-                group.enter()
-                Product.fetchAll({ (prs, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allProducts = [:]
-                        for product in prs {
-                            self._allProducts![product.ident] = product
-                        }
-                    }
-                })
-                while group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Product Timed out")
-                }
-            }
-            return _allProducts ?? [:]
-        }
-    }
-
     static let lock = NSObject()
 
     public var description: String {
@@ -77,36 +45,40 @@ class Product: Hashable {
         return "Product (\(ident), \(name))"
     }
 
-    class func fetch(withIdent ident: Int16, _ completionBlock: ((Product?, Error?) -> Void)?) {
+    class func fetch(withIdent ident: Int16, _ completionBlock: @escaping (Product?, Error?) -> Void) {
         let pred = NSPredicate(format: "ident == %@", ident)
         let query = CKQuery(recordType: "FWProduct", predicate: pred)
 
         do {
             Product.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let product: Product? = (records == nil || records!.isEmpty ? nil : Product(record: records!.first!))
-                completionBlock?(product, error)
+                completionBlock(product, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(_ completionBlock: ((Set<Product>, Error?) -> Void)?) {
+    class func fetchAll(_ completionBlock: @escaping (Set<Product>, Error?) -> Void) {
         let pred = NSPredicate(value: true)
         let query = CKQuery(recordType: "FWProduct", predicate: pred)
 
         do {
             Product.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let products = Set<Product>(records?.map({ Product(record: $0) }) ?? [])
-                completionBlock?(products, error)
+                completionBlock(products, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension Product: FLODataEntity {
+    static var all = FLODataEntityAll<Int16, Product>()
+
+    var key: Int16 {
+        return ident
+    }
+
     class func ident(from recordID: CKRecordID) -> Int16 {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)

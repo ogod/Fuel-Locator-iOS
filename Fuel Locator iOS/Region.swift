@@ -12,7 +12,9 @@ import AddressBook
 import CloudKit
 import os.log
 
-class Region: Hashable {
+class Region: FLODataEntity, Hashable {
+    static var all = FLODataEntityAll<Int16, Region>()
+
     static func == (lhs: Region, rhs: Region) -> Bool {
         return lhs.ident == rhs.ident
     }
@@ -41,38 +43,6 @@ class Region: Hashable {
     public var statistics: Set<Statistics>?
     public var suburb: Set<Suburb>?
     public var systemFields: Data?
-
-    private static var _allRegions: [Int16: Region]? = nil
-
-    static var all: [Int16: Region] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allRegions == nil {
-                let group = DispatchGroup()
-                group.enter()
-                Region.fetchAll({ (rgs, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allRegions = [:]
-                        for region in rgs {
-                            self._allRegions![region.ident] = region
-                        }
-                    }
-                })
-                while group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Region Timed out")
-                }
-            }
-            return _allRegions ?? [:]
-        }
-    }
 
     var location: CLLocation? {
         get {
@@ -117,36 +87,38 @@ class Region: Hashable {
         return "Region (\(ident), \(name))"
     }
 
-    class func fetch(withIdent ident: Int16, _ completionBlock: ((Region?, Error?) -> Void)?) {
+    class func fetch(withIdent ident: Int16, _ completionBlock: @escaping (Region?, Error?) -> Void) {
         let pred = NSPredicate(format: "ident == %@", ident)
         let query = CKQuery(recordType: "FWRegion", predicate: pred)
 
         do {
             Region.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let reg: Region? = (records == nil || records!.isEmpty ? nil : Region(record: records!.first!))
-                completionBlock?(reg, error)
+                completionBlock(reg, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(_ completionBlock: ((Set<Region>, Error?) -> Void)?) {
+    class func fetchAll(_ completionBlock: @escaping (Set<Region>, Error?) -> Void) {
         let pred = NSPredicate(value: true)
         let query = CKQuery(recordType: "FWRegion", predicate: pred)
 
         do {
             Region.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let regions = Set<Region>(records?.map({ Region(record: $0) }) ?? [])
-                completionBlock?(regions, error)
+                completionBlock(regions, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension Region: FLODataEntity {
+    var key: Int16 {
+        return ident
+    }
+
     class func ident(from recordID: CKRecordID) -> Int16 {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)

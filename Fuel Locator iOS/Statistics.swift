@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 import os.log
 
-class Statistics: Hashable {
+class Statistics: FLODataEntity, Hashable {
     static func == (lhs: Statistics, rhs: Statistics) -> Bool {
         return calendar.isDate(lhs.date, inSameDayAs: rhs.date) && lhs.product == rhs.product && lhs.region == rhs.region
     }
@@ -68,46 +68,6 @@ class Statistics: Hashable {
     public var maximum: NSNumber?
     public var systemFields: Data?
 
-    private static var _allStatistics: [Region: Statistics]? = nil
-
-    static var all: [Region: Statistics] {
-        get {
-            defer { objc_sync_exit(lock) }
-            objc_sync_enter(lock)
-            if _allStatistics == nil {
-                let group = DispatchGroup()
-                group.enter()
-                Statistics.fetchAll(withDate: MapViewController.instance!.globalDate, product: MapViewController.instance!.globalProduct, { (sts, err) in
-                    DispatchQueue.global().async {
-                        defer {
-                            group.leave()
-                        }
-                        guard err == nil else {
-                            print(err!)
-                            return
-                        }
-                        self._allStatistics = [:]
-                        for stats in sts {
-                            if stats.region != nil {
-                                self._allStatistics![stats.region!] = stats
-                            }
-                        }
-                    }
-                })
-                while group.wait(timeout: .now() + 5.0) == .timedOut {
-                    print("Statistics Timed out")
-                }
-            }
-            return _allStatistics ?? [:]
-        }
-    }
-
-    static func reset() {
-        defer { objc_sync_exit(lock) }
-        objc_sync_enter(lock)
-        _allStatistics = nil
-    }
-
     static let lock = NSObject()
     static let calendar = Calendar.current
     static let formatter: DateFormatter = {
@@ -116,43 +76,49 @@ class Statistics: Hashable {
         return f
     }()
 
-    class func fetch(withDate date: Date, product: Product, station: Station, _ completionBlock: ((Statistics?, Error?) -> Void)?) {
-        let sd = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+    class func fetch(withIdent ident: Int16, _ completionBlock: @escaping (Statistics?, Error?) -> Void) {
+        let sd = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate!)!
         let ed = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: sd)!
-        let pRef = CKReference(recordID: product.recordID, action: .none)
-        let sRef = CKReference(recordID: station.recordID, action: .none)
-        let pred = NSPredicate(format: "date >= %@ && date < %@ && product == %@ && station == %@", sd as NSDate, ed as NSDate, pRef, sRef)
+        let pRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
+        let sRef = CKReference(recordID: Region.all[ident]!.recordID, action: .none)
+        let pred = NSPredicate(format: "date >= %@ && date < %@ && product == %@ && region == %@", sd as NSDate, ed as NSDate, pRef, sRef)
         let query = CKQuery(recordType: "FWStatistics", predicate: pred)
 
         do {
             Statistics.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
                 let stats: Statistics? = (records == nil || records!.isEmpty ? nil : Statistics(record: records!.first!))
-                completionBlock?(stats, error)
+                completionBlock(stats, error)
             }
         } catch {
             print(error)
         }
     }
 
-    class func fetchAll(withDate date: Date, product: Product, _ completionBlock: ((Set<Statistics>, Error?) -> Void)?) {
-        let sd = Statistics.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
-        let ed = Statistics.calendar.date(byAdding: .day, value: 1, to: sd)!
-        let pRef = CKReference(recordID: product.recordID, action: .none)
+    class func fetchAll(_ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {
+        let sd = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate!)!
+        let ed = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: sd)!
+        let pRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
         let predicate = NSPredicate(format: "date >= %@ && date < %@ && product == %@", sd as NSDate, ed as NSDate, pRef)
-        let query = CKQuery(recordType: "FWPrice", predicate: predicate)
+        let query = CKQuery(recordType: "FWStatistics", predicate: predicate)
 
         do {
             Statistics.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
-                let prices = Set<Statistics>(records?.map({ Statistics(record: $0) }) ?? [])
-                completionBlock?(prices, error)
+                let stats = Set<Statistics>(records?.map({ Statistics(record: $0) }) ?? [])
+                completionBlock(stats, error)
             }
         } catch {
             print(error)
         }
     }
-}
 
-extension Statistics: FLODataEntity {
+    static var all = FLODataEntityAll<Int16, Statistics>()
+
+    var key: Int16 {
+        get {
+            return region?.ident ?? -1
+        }
+    }
+
     class func ident(from recordID: CKRecordID) -> (date: Date, product: Product, region: Region) {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"

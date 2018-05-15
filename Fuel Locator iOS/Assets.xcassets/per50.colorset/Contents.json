@@ -9,10 +9,10 @@
       "color" : {
         "color-space" : "srgb",
         "components" : {
-          "red" : "0.630",
-          "alpha" : "1.000",
-          "blue" : "0.000",
-          "green" : "0.615"
+          "red" : "0.614",
+          "alpha" : "0.900",
+          "blue" : "0.208",
+          "green" : "0.599"
         }
       }
     }
