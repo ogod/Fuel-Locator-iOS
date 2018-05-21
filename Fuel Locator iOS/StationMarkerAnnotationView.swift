@@ -8,23 +8,37 @@
 
 import UIKit
 import MapKit
+import CoreImage
 
 class StationMarkerAnnotationView: MKMarkerAnnotationView {
 
     static var calendar = Calendar.current
 
     override var annotation: MKAnnotation? {
-        willSet {
-            guard let annot = newValue as? StationAnnotation else {
+        didSet {
+            guard let annot = annotation as? StationAnnotation else {
                 return
             }
-            glyphImage = annot.station.brand?.image
+            glyphImage = annot.station.brand?.glyph
             clusteringIdentifier = "station"
             canShowCallout = true
             let mapsButton = UIButton(frame: CGRect(origin: CGPoint.zero,
                                                     size: CGSize(width: 30, height: 30)))
             mapsButton.setBackgroundImage(UIImage(named: "map_location"), for: UIControlState())
             rightCalloutAccessoryView = mapsButton
+            let detailLabel = UILabel()
+            detailLabel.numberOfLines = 0
+            detailLabel.font = detailLabel.font.withSize(12)
+            let features = annot.station.siteFeatures?.reduce("", { $0 + ($0 == "" ? "  " : "\n  ") + $1 })
+            detailLabel.text = """
+                                \(annot.station.tradingName)
+                                Brand: \(annot.station.brand?.name ?? "Unknown Brand")
+                                \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")
+                                \(annot.station.phone ?? "")
+                                \(features ?? "")
+                                """
+            detailCalloutAccessoryView = detailLabel
+            leftCalloutAccessoryView = UIImageView(image: annot.station.brand?.image)
             refresh()
         }
     }
@@ -33,57 +47,52 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
         guard let annot = annotation as? StationAnnotation else {
             return
         }
-        markerTintColor = UIColor.gray
-        displayPriority = .defaultHigh
-        DispatchQueue.global().async {
-            if let price: PriceOnDay = PriceOnDay.all[annot.station.tradingName] {
-                if annot.station.suburb?.region != nil {
-                    if let stats: Statistics = Statistics.all[(annot.station.suburb!.region!.first!.ident)] {
-                        if stats.median != nil {
-                            DispatchQueue.main.async {
-                                switch price.adjustedPrice {
-                                case 0 ..< stats.per10!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per10")
-                                    self.displayPriority = MKFeatureDisplayPriority(900)
-                                case stats.per10!.int16Value ..< stats.per20!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per20")
-                                    self.displayPriority = MKFeatureDisplayPriority(890)
-                                case stats.per20!.int16Value ..< stats.per30!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per30")
-                                    self.displayPriority = MKFeatureDisplayPriority(870)
-                                case stats.per30!.int16Value ..< stats.per40!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per40")
-                                    self.displayPriority = MKFeatureDisplayPriority(860)
-                                case stats.per40!.int16Value ..< stats.per50!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per50")
-                                    self.displayPriority = MKFeatureDisplayPriority(850)
-                                case stats.per50!.int16Value ..< stats.per60!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per60")
-                                    self.displayPriority = MKFeatureDisplayPriority(840)
-                                case stats.per60!.int16Value ..< stats.per70!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per70")
-                                    self.displayPriority = MKFeatureDisplayPriority(830)
-                                case stats.per70!.int16Value ..< stats.per80!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per80")
-                                    self.displayPriority = MKFeatureDisplayPriority(820)
-                                case stats.per80!.int16Value ..< stats.per90!.int16Value:
-                                    self.markerTintColor = UIColor(named: "per90")
-                                    self.displayPriority = MKFeatureDisplayPriority(810)
-                                case stats.per90!.int16Value ... Int16.max:
-                                    self.markerTintColor = UIColor(named: "per100")
-                                    self.displayPriority = MKFeatureDisplayPriority(800)
-                                default:
-                                    self.markerTintColor = UIColor.gray
-                                    self.displayPriority = MKFeatureDisplayPriority.defaultLow
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        switch annot.category {
+        case 1:
+            clusteringIdentifier = "per10"
+            markerTintColor = UIColor(named: "per10")
+            displayPriority = MKFeatureDisplayPriority(900)
+        case 2:
+            clusteringIdentifier = "per20"
+            markerTintColor = UIColor(named: "per20")
+            displayPriority = MKFeatureDisplayPriority(890)
+        case 3:
+            clusteringIdentifier = "per30"
+            markerTintColor = UIColor(named: "per30")
+            displayPriority = MKFeatureDisplayPriority(870)
+        case 4:
+            clusteringIdentifier = "per40"
+            markerTintColor = UIColor(named: "per40")
+            displayPriority = MKFeatureDisplayPriority(860)
+        case 5:
+            clusteringIdentifier = "per50"
+            markerTintColor = UIColor(named: "per50")
+            displayPriority = MKFeatureDisplayPriority(850)
+        case 6:
+            clusteringIdentifier = "per60"
+            markerTintColor = UIColor(named: "per60")
+            displayPriority = MKFeatureDisplayPriority(840)
+        case 7:
+            clusteringIdentifier = "per70"
+            markerTintColor = UIColor(named: "per70")
+            displayPriority = MKFeatureDisplayPriority(830)
+        case 8:
+            clusteringIdentifier = "per80"
+            markerTintColor = UIColor(named: "per80")
+            displayPriority = MKFeatureDisplayPriority(820)
+        case 9:
+            clusteringIdentifier = "per90"
+            markerTintColor = UIColor(named: "per90")
+            displayPriority = MKFeatureDisplayPriority(810)
+        case 10:
+            clusteringIdentifier = "per100"
+            markerTintColor = UIColor(named: "per100")
+            displayPriority = MKFeatureDisplayPriority(800)
+        default:
+            clusteringIdentifier = "per00"
+            markerTintColor = UIColor.lightGray
+            displayPriority = MKFeatureDisplayPriority(100)
         }
-        DispatchQueue.main.async {
-            self.setNeedsDisplay()
-        }
+        setNeedsDisplay()
     }
 }

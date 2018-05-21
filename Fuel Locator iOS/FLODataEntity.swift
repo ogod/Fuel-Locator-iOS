@@ -32,30 +32,59 @@ protocol FLODataEntity: Hashable {
 
 class FLODataEntityAll<K: Hashable, V: FLODataEntity> {
     private var _all: [K: V] = [:]
+    var queue = FLOCloud.shared.queue
+    var lock: pthread_rwlock_t
+
+    init() {
+        lock = pthread_rwlock_t()
+        let status = pthread_rwlock_init(&lock, nil)
+        assert(status == 0)
+    }
+
+    deinit {
+        let status = pthread_rwlock_destroy(&lock)
+        assert(status == 0)
+    }
 
     subscript(_ ident: K) -> V? {
-        guard _all.keys.contains(ident) else {
+        guard pthread_rwlock_tryrdlock(&lock) == 0  else {
+            return nil
+        }
+        defer { pthread_rwlock_unlock(&lock) }
+        guard _all.keys.contains(ident)  else {
             return nil
         }
         return _all[ident]
     }
 
-    var values: Dictionary<K, V>.Values { return _all.values }
+    var values: Dictionary<K, V>.Values! {
+        guard pthread_rwlock_tryrdlock(&lock) == 0  else {
+            return nil
+        }
+        defer { pthread_rwlock_unlock(&lock) }
+        return _all.values
+    }
 
     func retrieve(_ block: @escaping (Bool, Error?)->Void) {
-        _all.removeAll()
         FLOCloud.shared.queue.async {
+            pthread_rwlock_wrlock(&self.lock)
             V.fetchAll({ (sts, err) in
                 FLOCloud.shared.queue.async {
                     guard err == nil else {
                         print(err!)
-                        block(false, err)
+                        DispatchQueue.main.async {
+                            pthread_rwlock_unlock(&self.lock)
+                            block(false, err)
+                        }
                         return
                     }
-                    self._all.merge(sts.reduce(into: [K: V](), { (dict, element) -> Void in
+                    self._all = sts.reduce(into: [K: V](), { (dict, element) -> Void in
                         dict[element.key as! K] = (element as! V)
-                    }), uniquingKeysWith: {$1})
-                    block(true, nil)
+                    })
+                    DispatchQueue.main.async {
+                        pthread_rwlock_unlock(&self.lock)
+                        block(true, nil)
+                    }
                 }
             })
         }
@@ -359,7 +388,6 @@ extension FLODataEntity {
         let operation = query != nil ? CKQueryOperation(query: query!) : CKQueryOperation(cursor: cursor0!)
         operation.recordFetchedBlock = { (record) in
             results.append(record)
-            print("result found \(record.recordID)")
         }
         operation.queryCompletionBlock = { (cursor, err) in
             guard err == nil else {
@@ -423,12 +451,10 @@ extension FLODataEntity {
 
             if cursor != nil {
                 DispatchQueue.global().async {
-                    print("next cursor")
                     Self.download(fromDatabase: database, withCursor: cursor, accumulator: results, completion: completion)
                 }
             } else {
                 DispatchQueue.main.async {
-                    print("completed")
                     completion?(nil, results.count > 0 ? results : nil)
                 }
             }

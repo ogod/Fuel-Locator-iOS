@@ -18,7 +18,9 @@ class FLOCloud: NSObject {
     static let shared: FLOCloud = FLOCloud("iCloud.com.nomdejoye.Fuel-Locator-OSX")
 
     lazy var container = CKContainer(identifier: identifier)
-    let queue = DispatchQueue(label: "Cloud Query Queue")
+    let queue = DispatchQueue(label: "Cloud Query Queue",
+                              qos: .userInitiated,
+                              attributes: .concurrent)
 
     init(_ identifier: String) {
         self.identifier = identifier

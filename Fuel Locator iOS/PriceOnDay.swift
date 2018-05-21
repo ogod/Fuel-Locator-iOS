@@ -14,7 +14,7 @@ class PriceOnDay: FLODataEntity, Hashable {
     var hashValue: Int { return date.hashValue ^ (product.hashValue << 8) ^ (station.hashValue << 16)}
 
     static func == (lhs: PriceOnDay, rhs: PriceOnDay) -> Bool {
-        return true
+        return PriceOnDay.calendar.isDate(lhs.date, inSameDayAs: rhs.date) && lhs.product == rhs.product && lhs.station == rhs.station
     }
 
     public var date: Date
@@ -82,7 +82,6 @@ class PriceOnDay: FLODataEntity, Hashable {
 
         do {
             PriceOnDay.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
-                print("Completing prices")
                 let prices = Set<PriceOnDay>(records?.map({ try? PriceOnDay(record: $0) }).filter({$0 != nil}).map({$0!}) ?? [])
                 completionBlock(prices, error)
             }

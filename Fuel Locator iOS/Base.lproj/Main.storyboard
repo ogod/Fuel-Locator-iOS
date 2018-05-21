@@ -25,29 +25,95 @@
                                     <outlet property="delegate" destination="9pv-A4-QxB" id="mlw-6O-c9i"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJo-tW-hKc">
-                                <rect key="frame" x="176" y="625" width="22" height="22"/>
-                                <connections>
-                                    <segue destination="XME-oo-7vQ" kind="popoverPresentation" popoverAnchorView="EJo-tW-hKc" id="gqQ-Qo-S5T">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hMM-pF-dHv">
+                                <rect key="frame" x="319" y="28" width="48" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJo-tW-hKc">
+                                        <rect key="frame" x="12.5" y="8" width="22" height="22"/>
+                                        <connections>
+                                            <segue destination="XME-oo-7vQ" kind="popoverPresentation" popoverAnchorView="EJo-tW-hKc" id="gqQ-Qo-S5T">
+                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                            </segue>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="EJo-tW-hKc" firstAttribute="centerX" secondItem="hMM-pF-dHv" secondAttribute="centerX" id="FhP-E1-Tdq"/>
+                                    <constraint firstAttribute="height" constant="80" id="LdT-ew-tq2"/>
+                                    <constraint firstItem="EJo-tW-hKc" firstAttribute="top" secondItem="hMM-pF-dHv" secondAttribute="topMargin" id="viU-6G-otc"/>
+                                    <constraint firstAttribute="width" constant="48" id="yGc-kK-1HS"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBoundary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                        <real key="value" value="0.80000000000000004"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                        <size key="value" width="0.0" height="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKU-n6-Dxh">
+                                <rect key="frame" x="74.5" y="28" width="226" height="57"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RZd-mU-3D5">
+                                        <rect key="frame" x="8" y="4" width="210" height="49"/>
+                                        <color key="backgroundColor" red="0.99019607843137258" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <gestureRecognizers/>
+                                        <string key="text">Prices for: 22 Sept 2018
+Product: Diesel</string>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" red="0.49509803921568629" green="0.5" blue="0.5" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <size key="shadowOffset" width="0.0" height="0.0"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                        </variation>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.74339148116438358" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="RZd-mU-3D5" firstAttribute="leading" secondItem="eKU-n6-Dxh" secondAttribute="leading" constant="8" id="668-8E-6pi"/>
+                                    <constraint firstItem="RZd-mU-3D5" firstAttribute="top" secondItem="eKU-n6-Dxh" secondAttribute="top" constant="4" id="U1X-Kv-jzX"/>
+                                    <constraint firstItem="RZd-mU-3D5" firstAttribute="centerX" secondItem="eKU-n6-Dxh" secondAttribute="centerX" id="ctD-8b-pvb"/>
+                                    <constraint firstItem="RZd-mU-3D5" firstAttribute="centerX" secondItem="eKU-n6-Dxh" secondAttribute="centerX" id="epB-Cq-ou6"/>
+                                    <constraint firstItem="RZd-mU-3D5" firstAttribute="centerY" secondItem="eKU-n6-Dxh" secondAttribute="centerY" id="oXd-kG-0Vl"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBoundary" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="topMargin" secondItem="hMM-pF-dHv" secondAttribute="top" constant="-8" id="0MN-53-0hb"/>
                             <constraint firstItem="xo6-4m-A3c" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" id="51V-s0-jBq"/>
                             <constraint firstAttribute="trailing" secondItem="xo6-4m-A3c" secondAttribute="trailing" id="6k7-tv-VUv"/>
                             <constraint firstItem="xo6-4m-A3c" firstAttribute="bottom" secondItem="PQr-Ze-W5v" secondAttribute="bottom" id="EC7-Eo-dgK"/>
-                            <constraint firstItem="EJo-tW-hKc" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="Q6l-BV-JIU"/>
+                            <constraint firstItem="eKU-n6-Dxh" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="8" id="EDp-5v-TuK"/>
+                            <constraint firstItem="hMM-pF-dHv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eKU-n6-Dxh" secondAttribute="trailing" constant="8" symbolic="YES" id="GPF-lV-7Ml"/>
+                            <constraint firstItem="hMM-pF-dHv" firstAttribute="trailing" secondItem="tsR-hK-woN" secondAttribute="trailing" constant="-8" id="bGJ-ec-3su"/>
                             <constraint firstItem="xo6-4m-A3c" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" id="e27-Op-DRI"/>
-                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="bottom" secondItem="EJo-tW-hKc" secondAttribute="bottom" constant="20" id="wDm-m7-Rrs"/>
+                            <constraint firstItem="eKU-n6-Dxh" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="v6L-AB-3t6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map_location_outline" selectedImage="map_location" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="mapView" destination="xo6-4m-A3c" id="zgD-Fs-Cw9"/>
+                        <outlet property="panelView" destination="hMM-pF-dHv" id="FU2-Nk-uJs"/>
+                        <outlet property="titleLabel" destination="RZd-mU-3D5" id="ehB-0L-qYX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -165,13 +231,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ocm-b8-UKa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1688.8" y="457.42128935532236"/>
+            <point key="canvasLocation" x="2521" y="-321"/>
         </scene>
         <!--Settings-->
         <scene sceneID="cfI-HN-6pu">
             <objects>
                 <navigationController title="Settings" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="pageSheet" id="XME-oo-7vQ" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <size key="freeformSize" width="375" height="555"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jNs-cX-4BH">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -183,7 +250,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJl-s2-Wgr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.60000000000002" y="457.42128935532236"/>
+            <point key="canvasLocation" x="1674" y="-321"/>
         </scene>
     </scenes>
     <resources>

@@ -37,7 +37,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        MapViewController.instance?.refreshData()
+        switch MapViewController.instance?.status ?? .uninitialised {
+        case .ready:
+            MapViewController.instance?.refreshData()
+        case .failed:
+            let alert = UIAlertController(title: "Cloud Database", message: "The iCloud Database is not accessible. Please try again later.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            MapViewController.instance?.present(alert, animated: true, completion: {
+                abort()
+            })
+        default:
+            break
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

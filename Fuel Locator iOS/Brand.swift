@@ -41,6 +41,7 @@ class Brand: FLODataEntity, Hashable {
     public var station: Set<Station>?
     public var systemFields: Data?
     public lazy var image: UIImage = Brand.image(named: name.replacingOccurrences(of: "/", with: "-"))
+    public lazy var glyph: UIImage = Brand.glyph(named: name.replacingOccurrences(of: "/", with: "-"))
 
 //        get {
 //            defer { objc_sync_exit(lock) }
@@ -74,7 +75,11 @@ class Brand: FLODataEntity, Hashable {
     static var brandImageCache: [String: UIImage] = {
         var dict = [String: UIImage]()
         return dict
-        }()
+    }()
+    static var brandGlyphCache: [String: UIImage] = {
+        var dict = [String: UIImage]()
+        return dict
+    }()
     static let lock = NSObject()
     static let defaultImage = UIImage(named: "question_mark")!
 
@@ -89,8 +94,17 @@ class Brand: FLODataEntity, Hashable {
     class func image(named name: String) -> UIImage {
         var i = Brand.brandImageCache[name]
         if i == nil {
-            i = UIImage(named: "Brand - \(name)") ?? defaultImage
+            i = UIImage(named: "Brand Image - \(name)") ?? defaultImage
             Brand.brandImageCache[name] = i
+        }
+        return i!
+    }
+
+    class func glyph(named name: String) -> UIImage {
+        var i = Brand.brandGlyphCache[name]
+        if i == nil {
+            i = UIImage(named: "Brand Glyph - \(name)") ?? defaultImage
+            Brand.brandGlyphCache[name] = i
         }
         return i!
     }
@@ -122,8 +136,20 @@ class Brand: FLODataEntity, Hashable {
                 let brands = Set<Brand>(records?.map({ Brand(record: $0) }) ?? [])
                 completionBlock(brands, error)
             }
+        } catch FLOError.cloudDatabaseNotAvailable {
+            if MapViewController.instance != nil {
+                let alert = UIAlertController(title: "Cloud Database", message: "The iCloud Database is not accessible. Please try again later.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                MapViewController.instance?.present(alert, animated: true, completion: {
+                    abort()
+                })
+            } else {
+                print(FLOError.cloudDatabaseNotAvailable)
+                abort()
+            }
         } catch {
             print(error)
+            abort()
         }
     }
 
