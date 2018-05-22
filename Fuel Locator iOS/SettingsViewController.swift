@@ -15,6 +15,8 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         return 1
     }
 
+    @IBOutlet var brandSwitches: [UISwitch]!
+
     @IBAction func done(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -26,7 +28,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
     lazy var products = Product.all.values.sorted(by: { $0.ident < $1.ident })
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return products[row].name
+        return products[row].knownType.fullName ?? products[row].name
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -42,6 +44,17 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
 
     static let calendar = Calendar.current
     
+    @IBAction func brandDiscountSwitchSet(_ sender: UISwitch, forEvent event: UIEvent) {
+        guard let brandType = Brand.Known(rawValue: Int16(sender.tag)) else {
+            return
+        }
+        guard let brand = Brand.all[brandType.rawValue] else {
+            return
+        }
+        brand.useDiscount = sender.isOn
+        MapViewController.instance?.refresh()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,7 +62,12 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         productPicker.delegate = self
 
         datePicker.date = MapViewController.instance!.globalDate
-        // Do any additional setup after loading the view.
+
+        for sw in brandSwitches {
+            if let br = Brand.Known(rawValue: Int16(sw.tag)) {
+                sw.isOn = UserDefaults.standard.bool(forKey: br.key)
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {

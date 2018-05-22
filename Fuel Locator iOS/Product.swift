@@ -28,12 +28,88 @@ class Product: FLODataEntity, Hashable {
         systemFields = Brand.archiveSystemFields(from: record)
     }
 
+    enum Known: Int16 {
+        case unknown = 0
+        case ulp = 1
+        case premiumUnleaded = 2
+        case diesel = 4
+        case lpg = 5
+        case ron98  = 6
+        case b20Diesel = 7
+        case e10 = 8
+        case p100 = 9
+        case e85 = 10
+        case brandDiesel = 11
+
+        var name: String! {
+            switch self {
+            case .unknown:
+                return nil
+            case .ulp:
+                return "ulp"
+            case .premiumUnleaded:
+                return "pulp"
+            case .diesel:
+                return "diesel"
+            case .lpg:
+                return "lpg"
+            case .ron98:
+                return "98ron"
+            case .b20Diesel:
+                return "b20diesel"
+            case .e10:
+                return "e10"
+            case .p100:
+                return "p100"
+            case .e85:
+                return "e85"
+            case .brandDiesel:
+                return "brandDiesel"
+            }
+        }
+        var fullName: String! {
+            switch self {
+            case .unknown:
+                return nil
+            case .ulp:
+                return "Unleaded (91)"
+            case .premiumUnleaded:
+                return "Premium Unleaded (95)"
+            case .diesel:
+                return "Diesel"
+            case .lpg:
+                return "LPG"
+            case .ron98:
+                return "Ultra-premium Unleaded (98)"
+            case .b20Diesel:
+                return "20% Biodiesel"
+            case .e10:
+                return "10% Ethenol Petrol"
+            case .p100:
+                return "10% Ethenol + Ultra-premium"
+            case .e85:
+                return "85% Ethenol Petrol"
+            case .brandDiesel:
+                return "Brand Diesel"
+            }
+        }
+    }
+
     public var ident: Int16
     public var name: String
     public var priceOnDay: Set<PriceOnDay>?
     public var station: Set<Station>?
     public var statistics: Set<Statistics>?
     public var systemFields: Data?
+
+    var knownType: Known {
+        get {
+            return Known(rawValue: ident) ?? .unknown
+        }
+        set {
+            ident = newValue.rawValue
+        }
+    }
 
     static let lock = NSObject()
 

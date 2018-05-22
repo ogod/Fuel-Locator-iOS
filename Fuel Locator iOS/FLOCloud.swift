@@ -56,7 +56,7 @@ class FLOCloud: NSObject {
             self.subscriptionIslocallyCached = true
         } as (([CKSubscription]?, [String]?, Error?) -> Void)
         operation.qualityOfService = .utility
-//        self.sharedDB.add(operation)
+        try? publicDatabase().add(operation)
     }
 
     func silentPush() {
@@ -123,6 +123,15 @@ class FLOCloud: NSObject {
         } as ((CKServerChangeToken?, Bool, Error?) -> Void)
 //        self.sharedDB.add(changesOperation)
     }
+
+    var dateFromMessage: Date? = nil {
+        didSet {
+            if MapViewController.instance != nil {
+//                MapViewController.instance!.globalDate = date
+            }
+        }
+    }
+
 
     func fetchZoneChanges(_ callback: () -> Void) {
 
@@ -235,13 +244,61 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     // NSApplication delegate because that message will be sent before your application has a chance to set
     // a delegate for the NSUserNotificationCenter.
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didActivate notification: UNNotification) {
-
+        print(notification)
+//        self.dateFromMessage = 
     }
-
 
     // Sent to the delegate when the Notification Center has decided not to present your notification, for example when your application is front most. If you want the notification to be displayed anyway, return YES.
     public func userNotificationCenter(_ center: UNUserNotificationCenter, shouldPresent notification: UNNotification) -> Bool {
         return true
     }
 
+    public func setupSubscription(application: UIApplication) {
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (authorised, error) in
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            if authorised {
+                DispatchQueue.main.async {
+                    application.registerForRemoteNotifications()
+                }
+            }
+        }
+    }
+
+    func didRegisterForRemoteNotifications() {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            print("Notification settings : \(settings)")
+            guard settings.authorizationStatus == .authorized else {
+                return
+            }
+//            DispatchQueue.main.async {
+//                UIApplication.shared.registerForRemoteNotifications()
+//            }
+        }
+
+        let subscription = CKQuerySubscription(recordType: "GlobalNotification",
+                                               predicate: NSPredicate(value: true),
+                                               options: .firesOnRecordCreation)
+        let info = CKNotificationInfo()
+        info.alertBody = "Updated prices have been posted to the cloud"
+        info.shouldBadge = true
+        info.soundName = "default"
+
+        subscription.notificationInfo = info
+
+        do {
+            try publicDatabase().save(subscription, completionHandler: { (subscrip, error) in
+                guard error == nil else {
+                    print(error!)
+                    return
+                }
+                print("subscription saved successfuly")
+            })
+        } catch {
+            print(error)
+        }
+    }
 }

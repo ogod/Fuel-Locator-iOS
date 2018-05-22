@@ -40,7 +40,7 @@ class PriceOnDay: FLODataEntity, Hashable {
     }
 
     var adjustedPrice: Int16 {
-        return price // - (station.brand?.discount * 10 ?? 0)
+        return price - (station.brand?.adjustment ?? 0)
     }
     
     static let lock = NSObject()

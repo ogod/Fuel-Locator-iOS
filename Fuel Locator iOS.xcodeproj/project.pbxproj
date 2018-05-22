@@ -47,20 +47,6 @@
 			remoteGlobalIDString = 775C55C82099BD7500540B5B;
 			remoteInfo = "Fuel Locator iOS";
 		};
-		776E944820A08A12008AB0FC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 776E944320A08A11008AB0FC /* tiff-ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 042FC64B1B963FE500549A4B;
-			remoteInfo = "tiff-ios";
-		};
-		776E944A20A08A12008AB0FC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 776E944320A08A11008AB0FC /* tiff-ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 042FC6561B963FE500549A4B;
-			remoteInfo = "tiff-iosTests";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -92,7 +78,6 @@
 		776E943520A014D6008AB0FC /* FLOCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLOCloud.swift; sourceTree = "<group>"; };
 		776E943720A03842008AB0FC /* FLOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLOError.swift; sourceTree = "<group>"; };
 		776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fuel-Locator-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
-		776E944320A08A11008AB0FC /* tiff-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "tiff-ios.xcodeproj"; path = "../tiff-ios/tiff-ios.xcodeproj"; sourceTree = "<group>"; };
 		776E944C20A32283008AB0FC /* StationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationAnnotation.swift; sourceTree = "<group>"; };
 		776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMarkerAnnotationView.swift; sourceTree = "<group>"; };
 		776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMarkerAnnotationView.swift; sourceTree = "<group>"; };
@@ -187,7 +172,6 @@
 		775C55FC2099D53200540B5B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				776E944320A08A11008AB0FC /* tiff-ios.xcodeproj */,
 				775C56002099D57100540B5B /* CloudKit.framework */,
 				775C55FD2099D53200540B5B /* MapKit.framework */,
 			);
@@ -209,15 +193,6 @@
 				776E9429209EE68E008AB0FC /* PriceOnDay.swift */,
 			);
 			name = Data;
-			sourceTree = "<group>";
-		};
-		776E944420A08A11008AB0FC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				776E944920A08A12008AB0FC /* tiff_ios.framework */,
-				776E944B20A08A12008AB0FC /* tiff_iosTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,12 +298,6 @@
 			mainGroup = 775C55C02099BD7500540B5B;
 			productRefGroup = 775C55CA2099BD7500540B5B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 776E944420A08A11008AB0FC /* Products */;
-					ProjectRef = 776E944320A08A11008AB0FC /* tiff-ios.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				775C55C82099BD7500540B5B /* Fuel Locator iOS */,
@@ -337,23 +306,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		776E944920A08A12008AB0FC /* tiff_ios.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = tiff_ios.framework;
-			remoteRef = 776E944820A08A12008AB0FC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		776E944B20A08A12008AB0FC /* tiff_iosTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = tiff_iosTests.xctest;
-			remoteRef = 776E944A20A08A12008AB0FC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		775C55C72099BD7500540B5B /* Resources */ = {

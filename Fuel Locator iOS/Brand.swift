@@ -19,6 +19,94 @@ class Brand: FLODataEntity, Hashable {
         return lhs.ident == rhs.ident
     }
 
+    enum Known: Int16 {
+        case unknown = 0
+        case ampol = 2
+        case betterChoice = 3
+        case boc = 4
+        case bp = 5
+        case caltex = 6
+        case gull = 7
+        case kleenheat = 8
+        case kwikfuel = 9
+        case liberty = 10
+        case mobil = 11
+        case peak = 13
+        case shell = 14
+        case independent = 15
+        case wesco = 16
+        case caltexWoolworths = 19
+        case colesExpress = 20
+        case blackWhite = 21
+        case fuelsWest = 22
+        case united = 23
+        case eagle = 24
+        case fastfuel24_7 = 25
+        case pumaEnergy = 26
+        case vibe = 27
+        case sevenEleven = 29
+
+        var name: String! {
+            switch self {
+            case .unknown:
+                return nil
+            case .ampol:
+                return "ampol"
+            case .betterChoice:
+                return "betterChoice"
+            case .boc:
+                return "boc"
+            case .bp:
+                return "bp"
+            case .caltex:
+                return "caltex"
+            case .gull:
+                return "gull"
+            case .kleenheat:
+                return "kleenheat"
+            case .kwikfuel:
+                return "kwikfuel"
+            case .liberty:
+                return "liberty"
+            case .mobil:
+                return "mobil"
+            case .peak:
+                return "peak"
+            case .shell:
+                return "shell"
+            case .independent:
+                return "independent"
+            case .wesco:
+                return "wesco"
+            case .caltexWoolworths:
+                return "caltexWoolworths"
+            case .colesExpress:
+                return "colesExpress"
+            case .blackWhite:
+                return "blackWhite"
+            case .fuelsWest:
+                return "fuelsWest"
+            case .united:
+                return "united"
+            case .eagle:
+                return "eagle"
+            case .fastfuel24_7:
+                return "fastfuel24_7"
+            case .pumaEnergy:
+                return "pumaEnergy"
+            case .vibe:
+                return "vibe"
+            case .sevenEleven:
+                return "sevenEleven"
+            }
+        }
+        var key: String {
+            guard name != nil else {
+                return ""
+            }
+            return "Brand.\(name!).useDiscount"
+        }
+    }
 
     private let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Brand")
 
@@ -42,6 +130,28 @@ class Brand: FLODataEntity, Hashable {
     public var systemFields: Data?
     public lazy var image: UIImage = Brand.image(named: name.replacingOccurrences(of: "/", with: "-"))
     public lazy var glyph: UIImage = Brand.glyph(named: name.replacingOccurrences(of: "/", with: "-"))
+
+    public var useDiscount: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: brandIdent.key)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: brandIdent.key)
+        }
+    }
+
+    var adjustment: Int16 {
+        return useDiscount ? discount * 10 : 0
+    }
+    
+    var brandIdent: Known {
+        get {
+            return Known(rawValue: ident) ?? Known.unknown
+        }
+        set {
+            ident = newValue.rawValue
+        }
+    }
 
 //        get {
 //            defer { objc_sync_exit(lock) }
@@ -215,6 +325,7 @@ class Brand: FLODataEntity, Hashable {
 }
 
 extension Brand {
+
 //    class func updateStatic(to context: NSManagedObjectContext) {
 //        Brand.update(from: [IIElement(ident: 2, value: "Ampol")], to: context)
 //        Brand.update(from: [IIElement(ident: 3, value: "Better Choice")], to: context)

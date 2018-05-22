@@ -19,7 +19,6 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
             guard let annot = annotation as? StationAnnotation else {
                 return
             }
-            glyphImage = annot.station.brand?.glyph
             clusteringIdentifier = "station"
             canShowCallout = true
             let mapsButton = UIButton(frame: CGRect(origin: CGPoint.zero,
@@ -30,15 +29,32 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
             detailLabel.numberOfLines = 0
             detailLabel.font = detailLabel.font.withSize(12)
             let features = annot.station.siteFeatures?.reduce("", { $0 + ($0 == "" ? "  " : "\n  ") + $1 })
-            detailLabel.text = """
-                                \(annot.station.tradingName)
-                                Brand: \(annot.station.brand?.name ?? "Unknown Brand")
-                                \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")
-                                \(annot.station.phone ?? "")
-                                \(features ?? "")
-                                """
+            if let brand = annot.station.brand {
+                if brand.brandIdent == Brand.Known.independent {
+                    glyphText = "Ind"
+                    glyphImage = nil
+                    detailLabel.text = """
+                                        \(annot.station.tradingName)
+                                        \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")
+                                        \(annot.station.phone ?? "")
+                                        \(features ?? "")
+                                        """
+                    leftCalloutAccessoryView = nil
+                } else {
+                    glyphImage = brand.glyph
+                    glyphText = nil
+                    detailLabel.text = """
+                                        \(annot.station.tradingName)
+                                        Brand: \(brand.name)
+                                        \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")
+                                        \(annot.station.phone ?? "")
+                                        Discount: \(brand.useDiscount ? String(brand.discount) + "c" : "Not") active
+                                        \(features ?? "")
+                                        """
+                    leftCalloutAccessoryView = UIImageView(image: brand.image)
+                }
+            }
             detailCalloutAccessoryView = detailLabel
-            leftCalloutAccessoryView = UIImageView(image: annot.station.brand?.image)
             refresh()
         }
     }

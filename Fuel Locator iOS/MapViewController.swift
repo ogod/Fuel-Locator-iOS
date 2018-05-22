@@ -44,18 +44,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         refreshFlag = true
         titleLabel.text = """
                     Prices for: \(formatter.string(from: globalDate))
-                    Product: \(globalProduct.name)
+                    \(globalProduct.knownType.fullName ?? globalProduct.name)
                     """
         DispatchQueue.global().async {
             Statistics.all.retrieve({ (success, err) in
                 guard err == nil else {
-                    print(err!)
+                    self.dataError(err!) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                            self.refresh()
+                        }
+                    }
                     return
                 }
                 if success {
                     PriceOnDay.all.retrieve({ (success, err) in
                         guard err == nil else {
-                            print(err!)
+                            self.dataError(err!) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                                    self.refresh()
+                                }
+                            }
                             return
                         }
                         if success {
@@ -81,7 +89,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             guard globalProduct != nil else {
                 return
             }
-            print("reset for product \(globalProduct!.name)")
+            UserDefaults.standard.set(globalProduct.ident, forKey: "Product.lastUsed")
             refresh()
         }
     }
@@ -163,7 +171,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         addCompassButton()
 
         self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-        self.globalProduct = Product.all[1]
+        self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
 
         panelView.layer.shadowColor = UIColor.gray.cgColor
 
@@ -171,10 +179,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         FLOCloud.shared.alertUserToEnterICloudCredentials(controller: self) { (success) in
             guard success else {
                 self.status = .failed
+                let alert = UIAlertController(title: "iCloud CredentialsRequired", message: "This app cannot function without valid iCloud credentials", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    abort()
+                }))
                 return
             }
             self.status = .ready
-            self.refreshData()
+            self.readData()
         }
     }
 
@@ -191,39 +203,120 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         DispatchQueue.main.async {
             self.retrieving = true
+            let increment: Float = 1.0 / 1.0
+            self.displayProgressBar()
+            self.advanceProgress(progress: 1 * increment)
+            Station.all.retrieve({ (success, error) in
+                guard error == nil else {
+                    self.dataError(error!) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                            self.removeProgressBar()
+                            self.refreshData()
+                        }
+                    }
+                    return
+                }
+                if MapViewController.instance != nil {
+                    MapViewController.instance!.refresh()
+                    self.retrieving = false
+                }
+                self.removeProgressBar()
+            })
+        }
+    }
+
+    func dataError(_ error: Error, termin: @escaping ()->Void) {
+        let alert = UIAlertController(title: "Cannot Retrieve Data",
+                                      message: """
+                                                Communications failed while retrieving the setup data. Please check your settings and try again later.
+                                                \(error.localizedDescription)
+                                                """,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (a) in
+            termin()
+        }))
+        present(alert, animated: true)
+    }
+
+    func readData() {
+        guard !retrieving else {
+            return
+        }
+        DispatchQueue.main.async {
+            self.retrieving = true
             let increment: Float = 1.0 / 5.0
             self.displayProgressBar()
             self.advanceProgress(progress: 1 * increment)
-            DispatchQueue.global().async {
-                Brand.all.retrieve({ (success1, error1) in
-                    self.advanceProgress(progress: 2 * increment)
-                    DispatchQueue.global().async {
-                        Product.all.retrieve({ (success2, error2) in
-                            self.advanceProgress(progress: 3 * increment)
-                            DispatchQueue.global().async {
-                                Region.all.retrieve({ (success3, error3) in
-                                    self.advanceProgress(progress: 4 * increment)
-                                    DispatchQueue.global().async {
-                                        Suburb.all.retrieve({ (success4, error4) in
-                                            self.advanceProgress(progress: 5 * increment)
-                                            DispatchQueue.global().async {
-                                                Station.all.retrieve({ (success5, error5) in
-                                                    if MapViewController.instance != nil {
-                                                        MapViewController.instance!.globalProduct = Product.all[1]
-                                                        MapViewController.instance!.refresh()
-                                                        self.retrieving = false
-                                                    }
-                                                    self.removeProgressBar()
-                                                })
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                        })
+            Brand.all.retrieve({ (success1, error) in
+                guard error == nil else {
+                    self.dataError(error!) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                            self.retrieving = false
+                            self.removeProgressBar()
+                            self.readData()
+                        }
                     }
+                    return
+                }
+                self.advanceProgress(progress: 2 * increment)
+                Product.all.retrieve({ (success2, error) in
+                    guard error == nil else {
+                        self.dataError(error!) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                                self.retrieving = false
+                                self.removeProgressBar()
+                                self.readData()
+                            }
+                        }
+                        return
+                    }
+                    self.advanceProgress(progress: 3 * increment)
+                    Region.all.retrieve({ (success3, error) in
+                        guard error == nil else {
+                            self.dataError(error!) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                                    self.retrieving = false
+                                    self.removeProgressBar()
+                                    self.readData()
+                                }
+                            }
+                            return
+                        }
+                        self.advanceProgress(progress: 4 * increment)
+                        Suburb.all.retrieve({ (success4, error) in
+                            guard error == nil else {
+                                self.dataError(error!) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                                        self.retrieving = false
+                                        self.removeProgressBar()
+                                        self.readData()
+                                    }
+                                }
+                                return
+                            }
+                            self.advanceProgress(progress: 5 * increment)
+                            Station.all.retrieve({ (success5, error) in
+                                guard error == nil else {
+                                    self.dataError(error!) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                                            self.retrieving = false
+                                            self.removeProgressBar()
+                                            self.readData()
+                                        }
+                                    }
+                                    return
+                                }
+                                if MapViewController.instance != nil {
+                                    MapViewController.instance!.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+                                    MapViewController.instance!.refresh()
+                                    self.retrieving = false
+                                }
+                                self.removeProgressBar()
+                            })
+                        })
+                    })
                 })
-            }
+            })
         }
     }
 
