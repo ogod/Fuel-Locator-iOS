@@ -13,8 +13,8 @@ import CloudKit
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var panelView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleButton: UIButton!
+    @IBOutlet weak var titlePanelView: UIView!
 
     enum Status {
         case uninitialised
@@ -38,14 +38,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var refreshFlag = false
 
     func refresh() {
-        guard !refreshFlag && globalProduct != nil else {
+        guard !refreshFlag && globalProduct != nil && !retrieving else {
             return
         }
         refreshFlag = true
-        titleLabel.text = """
-                    Prices for: \(formatter.string(from: globalDate))
-                    \(globalProduct.knownType.fullName ?? globalProduct.name)
-                    """
+        titleButton.setTitle("""
+                                Prices for: \(formatter.string(from: globalDate))
+                                \(globalProduct.knownType.fullName ?? globalProduct.name)
+                                """, for: .normal)
         DispatchQueue.global().async {
             Statistics.all.retrieve({ (success, err) in
                 guard err == nil else {
@@ -145,18 +145,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     fileprivate func addUserTrackingButton() {
         let button = MKUserTrackingButton(mapView: mapView)
         button.translatesAutoresizingMaskIntoConstraints = false
-        panelView.addSubview(button)
-        NSLayoutConstraint.activate([button.bottomAnchor.constraint(equalTo: panelView.bottomAnchor, constant: -4),
-                                     button.centerXAnchor.constraint(equalTo: panelView.centerXAnchor)])
-    }
-
-    fileprivate func addCompassButton() {
-        let compass = MKCompassButton(mapView: mapView)
-        compass.translatesAutoresizingMaskIntoConstraints = false
-        mapView.addSubview(compass)
-        NSLayoutConstraint.activate([compass.topAnchor.constraint(equalTo: panelView.bottomAnchor, constant: 8),
-                                     compass.centerXAnchor.constraint(equalTo: panelView.centerXAnchor)])
-        mapView.showsCompass = false
+        mapView.addSubview(button)
+        NSLayoutConstraint.activate([button.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -4),
+                                     button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -4)])
     }
 
     override func viewDidLoad() {
@@ -166,14 +157,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.showsUserLocation = true
         mapView.setRegion(initialRegion, animated: true)
 
+        titleButton.titleLabel?.lineBreakMode = .byWordWrapping
+        titleButton.titleLabel?.numberOfLines = 2
+        titleButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        titleButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        titleButton.titleLabel?.minimumScaleFactor = 0.5
+        titleButton.titleLabel?.textAlignment = .center
+
+        let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        blurEffectView.frame = titlePanelView.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        titlePanelView.insertSubview(blurEffectView, at: 0)
+        titlePanelView.superview?.layer.shadowColor = UIColor.gray.cgColor
+
         registerAnnotationClasses()
         addUserTrackingButton()
-        addCompassButton()
+//        addCompassButton()
 
         self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
         self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
-
-        panelView.layer.shadowColor = UIColor.gray.cgColor
 
         status = .initialising
         FLOCloud.shared.alertUserToEnterICloudCredentials(controller: self) { (success) in
@@ -197,8 +200,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     var retrieving = false
 
-    func refreshData() {
+    func refreshData(iteration: Int = 0) {
         guard !retrieving else {
+            return
+        }
+        guard iteration < 5 else {
+            self.dataError(nil) {
+            }
             return
         }
         DispatchQueue.main.async {
@@ -211,7 +219,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     self.dataError(error!) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                             self.removeProgressBar()
-                            self.refreshData()
+                            self.refreshData(iteration: iteration + 1)
                         }
                     }
                     return
@@ -225,12 +233,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
 
-    func dataError(_ error: Error, termin: @escaping ()->Void) {
+    func dataError(_ error: Error?, termin: @escaping ()->Void) {
+        let message: String
+        if let err = error {
+            message = """
+                    Communications failed while retrieving the setup data.
+                    Please check your settings and try again later.
+                    \(err.localizedDescription)
+                    """
+        } else {
+            message = """
+                    Communications failed while retrieving the setup data.
+                    Please check your settings and try again later.
+                    """
+        }
+        print(message)
         let alert = UIAlertController(title: "Cannot Retrieve Data",
-                                      message: """
-                                                Communications failed while retrieving the setup data. Please check your settings and try again later.
-                                                \(error.localizedDescription)
-                                                """,
+                                      message: message,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (a) in
             termin()
@@ -238,8 +257,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         present(alert, animated: true)
     }
 
-    func readData() {
-        guard !retrieving else {
+    func readData(iteration: Int = 0) {
+        guard !retrieving || iteration > 0 else {
+            return
+        }
+        guard iteration < 10 else {
+            self.dataError(nil) {
+                abort()
+            }
             return
         }
         DispatchQueue.main.async {
@@ -253,7 +278,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                             self.retrieving = false
                             self.removeProgressBar()
-                            self.readData()
+                            self.readData(iteration: iteration + 1)
                         }
                     }
                     return
@@ -265,7 +290,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                             DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                                 self.retrieving = false
                                 self.removeProgressBar()
-                                self.readData()
+                                self.readData(iteration: iteration + 1)
                             }
                         }
                         return
@@ -277,7 +302,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                                     self.retrieving = false
                                     self.removeProgressBar()
-                                    self.readData()
+                                    self.readData(iteration: iteration + 1)
                                 }
                             }
                             return
@@ -289,7 +314,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                                         self.retrieving = false
                                         self.removeProgressBar()
-                                        self.readData()
+                                        self.readData(iteration: iteration + 1)
                                     }
                                 }
                                 return
@@ -301,17 +326,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                                             self.retrieving = false
                                             self.removeProgressBar()
-                                            self.readData()
+                                            self.readData(iteration: iteration + 1)
                                         }
                                     }
                                     return
                                 }
-                                if MapViewController.instance != nil {
-                                    MapViewController.instance!.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
-                                    MapViewController.instance!.refresh()
-                                    self.retrieving = false
-                                }
+                                self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+                                self.retrieving = false
                                 self.removeProgressBar()
+                                self.refresh()
                             })
                         })
                     })
@@ -324,32 +347,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var progressBar: UIProgressView! = nil
 
     func displayProgressBar() {
-        guard progressView == nil && progressBar == nil else {
-            return
-        }
-
         DispatchQueue.main.async {
-//            let blurEffect = UIBlurEffect(style: .extraLight)
-//            self.progressView = UIVisualEffectView(effect: blurEffect)
-//            self.progressBar = UIProgressView(progressViewStyle: .bar)
-//            self.progressView.frame = self.view.frame
-//            self.progressView.translatesAutoresizingMaskIntoConstraints = false
-//            self.progressBar.center = self.progressView.center
-            //self.view.insertSubview(progressView, at: 0)
-
-//            self.progressView.view.addSubview(self.progressBar)
-//            self.view.addSubview(self.progressView)
-
-//            self.view.insertSubview(blurEffectView, atIndex: 0)
-            let blurEffect = UIBlurEffect(style: .light)
-            let blurView = UIVisualEffectView(effect: blurEffect)
-            blurView.translatesAutoresizingMaskIntoConstraints = false
-            blurView.frame = self.view.frame
+            guard self.progressView == nil && self.progressBar == nil else {
+                return
+            }
 
             self.progressView = UIView.init(frame: self.view.bounds)
             self.progressView.backgroundColor = .clear
             self.progressBar = UIProgressView(progressViewStyle: .bar)
             self.progressBar.center = self.progressView.center
+
+            let blurEffect = UIBlurEffect(style: .light)
+            let blurView = UIVisualEffectView(effect: blurEffect)
+            blurView.translatesAutoresizingMaskIntoConstraints = false
+            blurView.frame = self.view.frame
 
             self.progressView.insertSubview(blurView, at: 0)
             self.progressView.addSubview(self.progressBar)
@@ -359,17 +370,24 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func advanceProgress(progress: Float) {
         DispatchQueue.main.async {
+            guard self.progressView != nil && self.progressBar != nil else {
+                return
+            }
+
             self.progressBar?.setProgress(progress, animated: true)
         }
     }
 
     func removeProgressBar() {
         DispatchQueue.main.async {
+            guard self.progressView != nil && self.progressBar != nil else {
+                return
+            }
+
             self.progressView.removeFromSuperview()
             self.progressBar = nil
             self.progressView = nil
         }
     }
-
 }
 

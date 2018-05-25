@@ -202,10 +202,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 775C55F32099BD9300540B5B /* Build configuration list for PBXNativeTarget "Fuel Locator iOS" */;
 			buildPhases = (
-				77F2EB4020AC33A300772B4B /* Increment Build */,
-				77F2EB4320AC345600772B4B /* Increment Version */,
 				775C55C52099BD7500540B5B /* Sources */,
 				775C55C62099BD7500540B5B /* Frameworks */,
+				77F2EB4020AC33A300772B4B /* Increment Build */,
+				77F2EB4320AC345600772B4B /* Increment Version */,
+				7742572920B81DEE00D21B48 /* Insert verion to Launch Screen */,
 				775C55C72099BD7500540B5B /* Resources */,
 			);
 			buildRules = (
@@ -335,6 +336,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		7742572920B81DEE00D21B48 /* Insert verion to Launch Screen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Insert verion to Launch Screen";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#   Output version & build numbers into a label on LaunchScreen.storyboard\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nversionNumber=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleShortVersionString\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nsed -i bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $versionNumber Build: $buildNumber\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"";
+		};
 		77F2EB4020AC33A300772B4B /* Increment Build */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

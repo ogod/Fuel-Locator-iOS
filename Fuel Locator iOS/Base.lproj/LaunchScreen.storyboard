@@ -40,12 +40,32 @@ Western Australia</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6Q-L4-RWi">
+                                <rect key="frame" x="133" y="610" width="108" height="12"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.0.1 Build: 261" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Vf-TL-hN8" userLabel="APP_VERSION">
+                                        <rect key="frame" x="0.0" y="0.0" width="108" height="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="7Vf-TL-hN8" firstAttribute="top" secondItem="p6Q-L4-RWi" secondAttribute="top" id="TCj-lu-jcb"/>
+                                    <constraint firstItem="7Vf-TL-hN8" firstAttribute="leading" secondItem="p6Q-L4-RWi" secondAttribute="leading" id="XoA-I4-tNy"/>
+                                    <constraint firstAttribute="trailing" secondItem="7Vf-TL-hN8" secondAttribute="trailing" id="erh-v3-7Jc"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Vf-TL-hN8" secondAttribute="bottom" id="p1j-gC-HHW"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zay-B1-HPg" secondAttribute="trailing" constant="16" id="3Rb-Ye-n9Y"/>
                             <constraint firstItem="IlX-Dw-0MI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="9hL-iK-QlO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IlX-Dw-0MI" secondAttribute="trailing" id="MiI-FU-uSZ"/>
+                            <constraint firstItem="p6Q-L4-RWi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="O2M-V0-eZG"/>
+                            <constraint firstItem="wNk-X8-PWa" firstAttribute="top" secondItem="p6Q-L4-RWi" secondAttribute="bottom" constant="4" id="Q79-pk-K56"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="IlX-Dw-0MI" secondAttribute="bottom" id="QEv-QG-wv5"/>
                             <constraint firstItem="qqe-aG-Cp9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="Yre-qN-XG0"/>
                             <constraint firstItem="wNk-X8-PWa" firstAttribute="centerX" secondItem="qqe-aG-Cp9" secondAttribute="centerX" id="ZLj-2v-h82"/>

@@ -114,7 +114,6 @@ class Station: FLODataEntity, Hashable {
 
         do {
             Station.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
-                print("Stations completed")
                 let stats = Set<Station>(records?.map({ Station(record: $0) }) ?? [])
                 completionBlock(stats, error)
             }
