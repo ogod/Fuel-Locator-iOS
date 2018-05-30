@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CloudKit
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var titleButton: UIButton!
@@ -389,5 +389,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.progressView = nil
         }
     }
+
+    @IBAction func edgePanDetected(_ sender: Any) {
+        performSegue(withIdentifier: "graph", sender: self)
+    }
+
+    @IBOutlet var edgePanRecogniser: UIScreenEdgePanGestureRecognizer!
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer == edgePanRecogniser {
+            return true
+        }
+        return false
+    }
+
 }
 

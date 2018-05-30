@@ -274,25 +274,54 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
             guard settings.authorizationStatus == .authorized else {
                 return
             }
-//            DispatchQueue.main.async {
-//                UIApplication.shared.registerForRemoteNotifications()
-//            }
         }
 
-        let subscription = CKQuerySubscription(recordType: "GlobalNotification",
+        let normalSuscription = CKQuerySubscription(recordType: "GlobalNotification",
                                                predicate: NSPredicate(value: true),
                                                options: .firesOnRecordCreation)
-        let info = CKNotificationInfo()
-        info.alertBody = "Updated prices have been posted to the cloud"
-        info.shouldBadge = true
-        info.soundName = "default"
+        let normalInfo = CKNotificationInfo()
+        normalInfo.alertBody = "Tomorrow's fuel prices have been posted."
+        normalInfo.shouldBadge = false
+        normalInfo.soundName = "default"
 
-        subscription.notificationInfo = info
+        normalSuscription.notificationInfo = normalInfo
 
         do {
-            try publicDatabase().save(subscription, completionHandler: { (subscrip, error) in
+            try publicDatabase().save(normalSuscription, completionHandler: { (subscrip, error) in
                 guard error == nil else {
-                    print(error!)
+                    switch error! {
+                    case let err as CKError where err.code == .serverRejectedRequest:
+                        break
+                    default:
+                        print(error!)
+                    }
+                    return
+                }
+                print("subscription saved successfuly")
+            })
+        } catch {
+            print(error)
+        }
+
+        let risingSubscription = CKQuerySubscription(recordType: "GlobalNotification",
+                                               predicate: NSPredicate(format: "priceRise = %@", NSNumber(integerLiteral: 1)),
+                                               options: .firesOnRecordCreation)
+        let risingInfo = CKNotificationInfo()
+        risingInfo.alertBody = "Median fuel prices are rising tomorrow!"
+        risingInfo.shouldBadge = true
+        risingInfo.soundName = "Bloom"
+
+        risingSubscription.notificationInfo = risingInfo
+
+        do {
+            try publicDatabase().save(risingSubscription, completionHandler: { (subscrip, error) in
+                guard error == nil else {
+                    switch error! {
+                    case let err as CKError where err.code == .serverRejectedRequest:
+                        break
+                    default:
+                        print(error!)
+                    }
                     return
                 }
                 print("subscription saved successfuly")
@@ -301,4 +330,5 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
             print(error)
         }
     }
+
 }

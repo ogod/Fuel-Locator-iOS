@@ -78,7 +78,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         case .ready:
             MapViewController.instance?.refreshData()
         case .failed:
-            let alert = UIAlertController(title: "Cloud Database", message: "The iCloud Database is not accessible. Please try again later.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Cloud Database",
+                                          message: "The iCloud Database is not accessible. Please try again later.",
+                                          preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             MapViewController.instance?.present(alert, animated: true, completion: {
                 abort()

@@ -30,6 +30,9 @@
 		776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E944C20A32283008AB0FC /* StationAnnotation.swift */; };
 		776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */; };
 		776E945120A32A60008AB0FC /* ClusterMarkerAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */; };
+		77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47AF20BDB15B006E50FF /* GraphView.swift */; };
+		77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294920BB829A007EE0F1 /* GraphViewController.swift */; };
+		77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294B20BB82D8007EE0F1 /* GraphBand.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = WA_STATE_POLYGON_shp.geojson; sourceTree = "<group>"; };
 		775C55C92099BD7500540B5B /* Fuel Locator iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fuel Locator iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		775C55CC2099BD7500540B5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		775C55CE2099BD7500540B5B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +85,9 @@
 		776E944C20A32283008AB0FC /* StationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationAnnotation.swift; sourceTree = "<group>"; };
 		776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMarkerAnnotationView.swift; sourceTree = "<group>"; };
 		776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMarkerAnnotationView.swift; sourceTree = "<group>"; };
+		77BC47AF20BDB15B006E50FF /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		77FA294920BB829A007EE0F1 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
+		77FA294B20BB82D8007EE0F1 /* GraphBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphBand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,16 +144,15 @@
 				775C5604209EDB1000540B5B /* Data */,
 				775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */,
 				775C55CC2099BD7500540B5B /* AppDelegate.swift */,
-				775C55CE2099BD7500540B5B /* MapViewController.swift */,
-				776E944C20A32283008AB0FC /* StationAnnotation.swift */,
-				776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */,
-				776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */,
+				77FA294620BB8168007EE0F1 /* Map View */,
 				775C5602209DF34800540B5B /* SettingsViewController.swift */,
+				77FA294820BB8249007EE0F1 /* Graph View */,
 				775C55D22099BD7500540B5B /* Main.storyboard */,
 				775C55D52099BD9200540B5B /* Assets.xcassets */,
 				775C55D72099BD9200540B5B /* LaunchScreen.storyboard */,
 				775C55DA2099BD9200540B5B /* Info.plist */,
 				776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */,
+				7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */,
 			);
 			path = "Fuel Locator iOS";
 			sourceTree = "<group>";
@@ -193,6 +199,27 @@
 				776E9429209EE68E008AB0FC /* PriceOnDay.swift */,
 			);
 			name = Data;
+			sourceTree = "<group>";
+		};
+		77FA294620BB8168007EE0F1 /* Map View */ = {
+			isa = PBXGroup;
+			children = (
+				775C55CE2099BD7500540B5B /* MapViewController.swift */,
+				776E944C20A32283008AB0FC /* StationAnnotation.swift */,
+				776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */,
+				776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */,
+			);
+			name = "Map View";
+			sourceTree = "<group>";
+		};
+		77FA294820BB8249007EE0F1 /* Graph View */ = {
+			isa = PBXGroup;
+			children = (
+				77FA294920BB829A007EE0F1 /* GraphViewController.swift */,
+				77BC47AF20BDB15B006E50FF /* GraphView.swift */,
+				77FA294B20BB82D8007EE0F1 /* GraphBand.swift */,
+			);
+			path = "Graph View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,6 +417,7 @@
 				776E942E209EE690008AB0FC /* Statistics.swift in Sources */,
 				775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */,
 				776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */,
+				77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */,
 				776E943620A014D6008AB0FC /* FLOCloud.swift in Sources */,
 				776E9431209EE690008AB0FC /* PriceOnDay.swift in Sources */,
 				775C55CF2099BD7500540B5B /* MapViewController.swift in Sources */,
@@ -401,8 +429,10 @@
 				776E942F209EE690008AB0FC /* Brand.swift in Sources */,
 				776E942D209EE690008AB0FC /* Station.swift in Sources */,
 				776E9434209EE935008AB0FC /* FLODataEntity.swift in Sources */,
+				77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */,
 				776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */,
 				775C5603209DF34800540B5B /* SettingsViewController.swift in Sources */,
+				77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

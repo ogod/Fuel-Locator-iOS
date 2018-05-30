@@ -21,8 +21,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xo6-4m-A3c">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <gestureRecognizers/>
                                 <connections>
                                     <outlet property="delegate" destination="9pv-A4-QxB" id="mlw-6O-c9i"/>
+                                    <outletCollection property="gestureRecognizers" destination="628-c9-flA" appends="YES" id="x8j-E8-bPM"/>
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ap-X6-jEW">
@@ -94,15 +96,29 @@
                             <constraint firstItem="0Io-CB-I3b" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="ugX-kL-GHQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="628-c9-flA" appends="YES" id="V8P-gH-s9c"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map_location_outline" selectedImage="map_location" id="acW-dT-cKf"/>
                     <connections>
+                        <outlet property="edgePanRecogniser" destination="628-c9-flA" id="K5g-fI-KBE"/>
                         <outlet property="mapView" destination="xo6-4m-A3c" id="zgD-Fs-Cw9"/>
                         <outlet property="titleButton" destination="EJo-tW-hKc" id="9xp-qU-hob"/>
                         <outlet property="titlePanelView" destination="jEs-8I-YLv" id="RTH-1n-1Mh"/>
+                        <segue destination="myA-D7-jsl" kind="popoverPresentation" identifier="graph" popoverAnchorView="xo6-4m-A3c" id="oRi-Ec-PyW">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="628-c9-flA">
+                    <rectEdge key="edges" left="YES" top="YES" right="YES" bottom="YES"/>
+                    <connections>
+                        <action selector="edgePanDetected:" destination="9pv-A4-QxB" id="2VH-Kc-0NW"/>
+                        <outlet property="delegate" destination="9pv-A4-QxB" id="aTq-Ce-rOQ"/>
+                    </connections>
+                </screenEdgePanGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="749.60000000000002" y="-320.68965517241384"/>
         </scene>
@@ -1058,6 +1074,47 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJl-s2-Wgr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1674" y="-321"/>
+        </scene>
+        <!--Graph-->
+        <scene sceneID="vxi-Zq-yxB">
+            <objects>
+                <viewController id="X3w-b8-CtY" customClass="GraphViewController" customModule="Fuel_Locator_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BhK-ht-nNr" customClass="GraphView" customModule="Fuel_Locator_iOS" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="qFN-HY-fac"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Graph" id="Pww-23-za2">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="2GP-uG-lvL"/>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="graphView" destination="BhK-ht-nNr" id="mqa-3L-u2G"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6pH-9V-jsM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1688.8" y="466.41679160419795"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="fip-lm-KEb">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="myA-D7-jsl" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1fZ-aR-hZB">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="X3w-b8-CtY" kind="relationship" relationship="rootViewController" id="2LP-5y-y1s"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QDD-VR-qMe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="749.60000000000002" y="466.41679160419795"/>
         </scene>
     </scenes>
     <resources>
