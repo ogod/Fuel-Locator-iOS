@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -18,9 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Paper Tile" translatesAutoresizingMaskIntoConstraints="NO" id="IlX-Dw-0MI">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fuel Location Glyph" translatesAutoresizingMaskIntoConstraints="NO" id="Zay-B1-HPg">
                                 <rect key="frame" x="16" y="20" width="343" height="627"/>
                             </imageView>
@@ -41,10 +38,10 @@ Western Australia</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6Q-L4-RWi">
-                                <rect key="frame" x="133" y="610" width="108" height="12"/>
+                                <rect key="frame" x="134" y="610" width="106.5" height="12"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.1 Build: 325" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Vf-TL-hN8" userLabel="APP_VERSION">
-                                        <rect key="frame" x="0.0" y="0.0" width="108" height="12"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.2.0 Build: 701" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Vf-TL-hN8" userLabel="APP_VERSION">
+                                        <rect key="frame" x="0.0" y="0.0" width="106.5" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -59,19 +56,15 @@ Western Australia</string>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.564611283388193" green="0.64823422400554387" blue="0.85648001269035534" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zay-B1-HPg" secondAttribute="trailing" constant="16" id="3Rb-Ye-n9Y"/>
-                            <constraint firstItem="IlX-Dw-0MI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="9hL-iK-QlO"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IlX-Dw-0MI" secondAttribute="trailing" id="MiI-FU-uSZ"/>
                             <constraint firstItem="p6Q-L4-RWi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="O2M-V0-eZG"/>
                             <constraint firstItem="wNk-X8-PWa" firstAttribute="top" secondItem="p6Q-L4-RWi" secondAttribute="bottom" constant="4" id="Q79-pk-K56"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="IlX-Dw-0MI" secondAttribute="bottom" id="QEv-QG-wv5"/>
                             <constraint firstItem="qqe-aG-Cp9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="Yre-qN-XG0"/>
                             <constraint firstItem="wNk-X8-PWa" firstAttribute="centerX" secondItem="qqe-aG-Cp9" secondAttribute="centerX" id="ZLj-2v-h82"/>
                             <constraint firstItem="Zay-B1-HPg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="b9c-xe-bxh"/>
                             <constraint firstItem="qqe-aG-Cp9" firstAttribute="centerX" secondItem="Zay-B1-HPg" secondAttribute="centerX" id="eaU-JG-0kZ"/>
-                            <constraint firstItem="IlX-Dw-0MI" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="lHX-VK-o3L"/>
                             <constraint firstItem="Zay-B1-HPg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="puc-xV-tON"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Zay-B1-HPg" secondAttribute="bottom" constant="20" id="q5A-iI-OnY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wNk-X8-PWa" secondAttribute="bottom" constant="25" id="ttM-Ov-j2R"/>
@@ -86,6 +79,5 @@ Western Australia</string>
     </scenes>
     <resources>
         <image name="Fuel Location Glyph" width="231" height="313"/>
-        <image name="Paper Tile" width="99" height="99"/>
     </resources>
 </document>

@@ -30,7 +30,12 @@
 		776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E944C20A32283008AB0FC /* StationAnnotation.swift */; };
 		776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */; };
 		776E945120A32A60008AB0FC /* ClusterMarkerAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */; };
+		777F0E2820C573CE0064FF0E /* XAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777F0E2720C573CC0064FF0E /* XAxisView.swift */; };
+		777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777F0E2920C573E40064FF0E /* YAxisView.swift */; };
+		777F0E3A20C6E5080064FF0E /* Armchair.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; };
+		777F0E3B20C6E5080064FF0E /* Armchair.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47AF20BDB15B006E50FF /* GraphView.swift */; };
+		77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47B120BE531D006E50FF /* ProgressViewController.swift */; };
 		77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294920BB829A007EE0F1 /* GraphViewController.swift */; };
 		77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294B20BB82D8007EE0F1 /* GraphBand.swift */; };
 /* End PBXBuildFile section */
@@ -50,7 +55,56 @@
 			remoteGlobalIDString = 775C55C82099BD7500540B5B;
 			remoteInfo = "Fuel Locator iOS";
 		};
+		777F0E3220C6E4430064FF0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E6D8B8B519C7274F001AD043;
+			remoteInfo = Armchair;
+		};
+		777F0E3420C6E4430064FF0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E6D8B8F919C756A4001AD043;
+			remoteInfo = ArmchairMac;
+		};
+		777F0E3620C6E4430064FF0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E6A0AF6519C9CFF400C3A7DC;
+			remoteInfo = ArmchairLocalizable;
+		};
+		777F0E3820C6E4430064FF0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E6F6159419C9FFDA00C0B51C;
+			remoteInfo = ArmchairLocalizableMac;
+		};
+		777F0E3C20C6E5090064FF0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
+			remoteInfo = Armchair;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		777F0E3E20C6E5090064FF0E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				777F0E3B20C6E5080064FF0E /* Armchair.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = WA_STATE_POLYGON_shp.geojson; sourceTree = "<group>"; };
@@ -85,7 +139,11 @@
 		776E944C20A32283008AB0FC /* StationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationAnnotation.swift; sourceTree = "<group>"; };
 		776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMarkerAnnotationView.swift; sourceTree = "<group>"; };
 		776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMarkerAnnotationView.swift; sourceTree = "<group>"; };
+		777F0E2720C573CC0064FF0E /* XAxisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XAxisView.swift; sourceTree = "<group>"; };
+		777F0E2920C573E40064FF0E /* YAxisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YAxisView.swift; sourceTree = "<group>"; };
+		777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Armchair.xcodeproj; path = ../../Armchair/Armchair.xcodeproj; sourceTree = "<group>"; };
 		77BC47AF20BDB15B006E50FF /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		77BC47B120BE531D006E50FF /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		77FA294920BB829A007EE0F1 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		77FA294B20BB82D8007EE0F1 /* GraphBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphBand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +155,7 @@
 			files = (
 				775C55FE2099D53200540B5B /* MapKit.framework in Frameworks */,
 				775C56012099D57100540B5B /* CloudKit.framework in Frameworks */,
+				777F0E3A20C6E5080064FF0E /* Armchair.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +212,7 @@
 				775C55DA2099BD9200540B5B /* Info.plist */,
 				776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */,
 				7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */,
+				777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */,
 			);
 			path = "Fuel Locator iOS";
 			sourceTree = "<group>";
@@ -201,6 +261,17 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
+		777F0E2C20C6E41D0064FF0E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				777F0E3320C6E4430064FF0E /* Armchair.framework */,
+				777F0E3520C6E4430064FF0E /* Armchair.framework */,
+				777F0E3720C6E4430064FF0E /* Armchair.bundle */,
+				777F0E3920C6E4430064FF0E /* Armchair.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		77FA294620BB8168007EE0F1 /* Map View */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +279,7 @@
 				776E944C20A32283008AB0FC /* StationAnnotation.swift */,
 				776E944E20A3235B008AB0FC /* StationMarkerAnnotationView.swift */,
 				776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */,
+				77BC47B120BE531D006E50FF /* ProgressViewController.swift */,
 			);
 			name = "Map View";
 			sourceTree = "<group>";
@@ -217,6 +289,8 @@
 			children = (
 				77FA294920BB829A007EE0F1 /* GraphViewController.swift */,
 				77BC47AF20BDB15B006E50FF /* GraphView.swift */,
+				777F0E2720C573CC0064FF0E /* XAxisView.swift */,
+				777F0E2920C573E40064FF0E /* YAxisView.swift */,
 				77FA294B20BB82D8007EE0F1 /* GraphBand.swift */,
 			);
 			path = "Graph View";
@@ -235,10 +309,12 @@
 				77F2EB4320AC345600772B4B /* Increment Version */,
 				7742572920B81DEE00D21B48 /* Insert verion to Launch Screen */,
 				775C55C72099BD7500540B5B /* Resources */,
+				777F0E3E20C6E5090064FF0E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				777F0E3D20C6E5090064FF0E /* PBXTargetDependency */,
 			);
 			name = "Fuel Locator iOS";
 			productName = "Fuel Locator iOS";
@@ -326,6 +402,12 @@
 			mainGroup = 775C55C02099BD7500540B5B;
 			productRefGroup = 775C55CA2099BD7500540B5B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 777F0E2C20C6E41D0064FF0E /* Products */;
+					ProjectRef = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				775C55C82099BD7500540B5B /* Fuel Locator iOS */,
@@ -334,6 +416,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		777F0E3320C6E4430064FF0E /* Armchair.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Armchair.framework;
+			remoteRef = 777F0E3220C6E4430064FF0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		777F0E3520C6E4430064FF0E /* Armchair.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Armchair.framework;
+			remoteRef = 777F0E3420C6E4430064FF0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		777F0E3720C6E4430064FF0E /* Armchair.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Armchair.bundle;
+			remoteRef = 777F0E3620C6E4430064FF0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		777F0E3920C6E4430064FF0E /* Armchair.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Armchair.bundle;
+			remoteRef = 777F0E3820C6E4430064FF0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		775C55C72099BD7500540B5B /* Resources */ = {
@@ -419,6 +532,7 @@
 				776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */,
 				77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */,
 				776E943620A014D6008AB0FC /* FLOCloud.swift in Sources */,
+				777F0E2820C573CE0064FF0E /* XAxisView.swift in Sources */,
 				776E9431209EE690008AB0FC /* PriceOnDay.swift in Sources */,
 				775C55CF2099BD7500540B5B /* MapViewController.swift in Sources */,
 				776E9432209EE690008AB0FC /* Product.swift in Sources */,
@@ -428,7 +542,9 @@
 				776E9430209EE690008AB0FC /* Suburb.swift in Sources */,
 				776E942F209EE690008AB0FC /* Brand.swift in Sources */,
 				776E942D209EE690008AB0FC /* Station.swift in Sources */,
+				777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */,
 				776E9434209EE935008AB0FC /* FLODataEntity.swift in Sources */,
+				77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */,
 				77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */,
 				776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */,
 				775C5603209DF34800540B5B /* SettingsViewController.swift in Sources */,
@@ -464,6 +580,11 @@
 			isa = PBXTargetDependency;
 			target = 775C55C82099BD7500540B5B /* Fuel Locator iOS */;
 			targetProxy = 775C55EB2099BD9300540B5B /* PBXContainerItemProxy */;
+		};
+		777F0E3D20C6E5090064FF0E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Armchair;
+			targetProxy = 777F0E3C20C6E5090064FF0E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -604,6 +725,7 @@
 		775C55F42099BD9300540B5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Fuel Locator iOS/Fuel Locator iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -624,6 +746,7 @@
 		775C55F52099BD9300540B5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Fuel Locator iOS/Fuel Locator iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;

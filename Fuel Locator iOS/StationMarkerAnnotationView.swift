@@ -23,17 +23,17 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
             canShowCallout = true
             let mapsButton = UIButton(frame: CGRect(origin: CGPoint.zero,
                                                     size: CGSize(width: 30, height: 30)))
-            mapsButton.setBackgroundImage(UIImage(named: "map_location"), for: UIControlState())
+            mapsButton.setBackgroundImage(UIImage(named: "route-icon"), for: UIControlState())
             rightCalloutAccessoryView = mapsButton
             let detailLabel = UILabel()
             detailLabel.numberOfLines = 0
-            detailLabel.font = detailLabel.font.withSize(12)
+            detailLabel.font = detailLabel.font?.withSize(12) ?? UIFont(name: "Helvetica Neue", size: 12)
             let features = annot.station.siteFeatures?.reduce("", { $0 + ($0 == "" ? "  " : "\n  ") + $1 })
             if let brand = annot.station.brand {
                 if brand.brandIdent == Brand.Known.independent {
                     glyphText = "Ind"
                     glyphImage = nil
-                    detailLabel.text = """
+                    detailLabel.text =  """
                                         \(annot.station.tradingName)
                                         \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")
                                         \(annot.station.phone ?? "")
@@ -43,7 +43,7 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
                 } else {
                     glyphImage = brand.glyph
                     glyphText = nil
-                    detailLabel.text = """
+                    detailLabel.text =  """
                                         \(annot.station.tradingName)
                                         Brand: \(brand.name)
                                         \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")

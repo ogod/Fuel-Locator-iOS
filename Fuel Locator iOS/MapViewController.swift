@@ -9,12 +9,17 @@
 import UIKit
 import MapKit
 import CloudKit
+import Armchair
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var titleButton: UIButton!
     @IBOutlet weak var titlePanelView: UIView!
+
+    @IBAction func done(_ segue: UIStoryboardSegue) {
+        print(segue)
+    }
 
     enum Status {
         case uninitialised
@@ -37,6 +42,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     var refreshFlag = false
 
+    /// Refresh the annotations and display
     func refresh() {
         guard !refreshFlag && globalProduct != nil && !retrieving else {
             return
@@ -70,6 +76,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                             DispatchQueue.main.async {
                                 self.resetAnnotations()
                                 self.refreshFlag = false
+                                self.mapView.setNeedsDisplay()
                             }
                         }
                     })
@@ -78,12 +85,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
 
+    /// The current date being observed, shared with entire application
     var globalDate: Date! = nil {
         didSet {
             refresh()
         }
     }
 
+    /// The current product being observed, shared with the entire application
     var globalProduct: Product! = nil {
         didSet {
             guard globalProduct != nil else {
@@ -92,6 +101,29 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             UserDefaults.standard.set(globalProduct.ident, forKey: "Product.lastUsed")
             refresh()
         }
+    }
+
+    typealias AccType = (count: Int, prev: Int, reg: Region?, prevReg: Region?)
+
+    /// The current global region.
+    /// This method polls the visible annotations as to a concensus of what region is being viewed. First majority wins.
+    /// If the region has no visible annotations, nil is returned.
+    var globalRegion: Region! {
+        let allAnnotations = Array(mapView.annotations(in: mapView.visibleMapRect))
+        let stationAnnotions = allAnnotations.compactMap({$0 as? MKClusterAnnotation}).flatMap({$0.memberAnnotations}).compactMap({$0 as? StationAnnotation}) +
+            allAnnotations.compactMap({$0 as? StationAnnotation})
+        let regions = stationAnnotions.compactMap({$0.station.suburb?.region}).flatMap({$0}).sorted(by: {$0.ident < $1.ident})
+        let modal = regions.reduce((count: 0 as Int, prev: 0 as Int, reg: nil as Region?, prevReg: nil as Region?)) { (part, region) -> AccType in
+            guard region.ident == (part.reg?.ident ?? -2) else {
+                if part.count > part.prev {
+                    return (count: 1, prev: part.count, reg: region, prevReg: part.reg)
+                } else {
+                    return (count: 1, prev: part.prev, reg: region, prevReg: part.prevReg)
+                }
+            }
+            return (count: part.count+1, prev: part.prev, reg: part.reg, prevReg: part.prevReg)
+        }
+        return modal.prevReg
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,6 +147,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                            span: MKCoordinateSpan(latitudeDelta: 0.2,
                                                   longitudeDelta: 0.2))
 
+    /// Resets the annotations by siply removing them and adding them fresh
     func resetAnnotations() {
         self.mapView.removeAnnotations(self.mapView.annotations)
         guard globalProduct != nil else {
@@ -129,10 +162,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         resetAnnotations()
     }
 
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+    /// Function to handle a callout accessory tap by activating a map route
+    ///
+    /// - Parameters:
+    ///   - mapView: The map view
+    ///   - view: The annotation view that initiated the call
+    ///   - control: The control within the annotation view that was tapped
+    func mapView(_ mapView: MKMapView,
+                 annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
         if let location = view.annotation as? StationAnnotation {
-            let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+            let launchOptions: [String: Any] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                                MKLaunchOptionsShowsTrafficKey: true]
+            Armchair.userDidSignificantEvent(true)
             location.mapItem().openInMaps(launchOptions: launchOptions)
         }
     }
@@ -143,41 +185,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     fileprivate func addUserTrackingButton() {
-        let button = MKUserTrackingButton(mapView: mapView)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        mapView.addSubview(button)
-        NSLayoutConstraint.activate([button.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -4),
-                                     button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -4)])
+        let trackingButton = MKUserTrackingButton(mapView: mapView)
+        trackingButton.translatesAutoresizingMaskIntoConstraints = false
+        titlePanelView.addSubview(trackingButton)
+        NSLayoutConstraint.activate([trackingButton.bottomAnchor.constraint(equalTo: titlePanelView.bottomAnchor, constant: -4),
+                                     trackingButton.centerXAnchor.constraint(equalTo: titlePanelView.centerXAnchor)])
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        locationManager.delegate = self
-        mapView.showsUserLocation = true
-        mapView.setRegion(initialRegion, animated: true)
-
+    fileprivate func setupTitlePanel() {
         titleButton.titleLabel?.lineBreakMode = .byWordWrapping
         titleButton.titleLabel?.numberOfLines = 2
         titleButton.titleLabel?.adjustsFontForContentSizeCategory = true
         titleButton.titleLabel?.adjustsFontSizeToFitWidth = true
         titleButton.titleLabel?.minimumScaleFactor = 0.5
         titleButton.titleLabel?.textAlignment = .center
+    }
 
-        let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        blurEffectView.frame = titlePanelView.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-        titlePanelView.insertSubview(blurEffectView, at: 0)
-        titlePanelView.superview?.layer.shadowColor = UIColor.gray.cgColor
-
-        registerAnnotationClasses()
-        addUserTrackingButton()
-//        addCompassButton()
-
-        self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-        self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
-
+    fileprivate func checkCloudCredentials() {
         status = .initialising
         FLOCloud.shared.alertUserToEnterICloudCredentials(controller: self) { (success) in
             guard success else {
@@ -193,6 +217,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        locationManager.delegate = self
+        mapView.showsUserLocation = true
+        mapView.setRegion(initialRegion, animated: true)
+
+        setupTitlePanel()
+        registerAnnotationClasses()
+        addUserTrackingButton()
+
+        self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+
+        checkCloudCredentials()
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -201,7 +242,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var retrieving = false
 
     func refreshData(iteration: Int = 0) {
-        guard !retrieving else {
+        guard !retrieving || iteration > 0 else {
             return
         }
         guard iteration < 5 else {
@@ -212,7 +253,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         DispatchQueue.main.async {
             self.retrieving = true
             let increment: Float = 1.0 / 1.0
-            self.displayProgressBar()
+            self.displayProgressBar(label: """
+                                            Refeshing data…
+                                            please wait
+                                            """)
             self.advanceProgress(progress: 1 * increment)
             Station.all.retrieve({ (success, error) in
                 guard error == nil else {
@@ -270,7 +314,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         DispatchQueue.main.async {
             self.retrieving = true
             let increment: Float = 1.0 / 5.0
-            self.displayProgressBar()
+            self.displayProgressBar(label: """
+                                            Reading prices…
+                                            please wait
+                                            """)
             self.advanceProgress(progress: 1 * increment)
             Brand.all.retrieve({ (success1, error) in
                 guard error == nil else {
@@ -343,65 +390,69 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
 
-    var progressView: UIView! = nil
-    var progressBar: UIProgressView! = nil
+    private lazy var progressView = self.storyboard!.instantiateViewController(withIdentifier: "progressView") as! ProgressViewController
+    private var progressActive = false
 
-    func displayProgressBar() {
-        DispatchQueue.main.async {
-            guard self.progressView == nil && self.progressBar == nil else {
-                return
-            }
-
-            self.progressView = UIView.init(frame: self.view.bounds)
-            self.progressView.backgroundColor = .clear
-            self.progressBar = UIProgressView(progressViewStyle: .bar)
-            self.progressBar.center = self.progressView.center
-
-            let blurEffect = UIBlurEffect(style: .light)
-            let blurView = UIVisualEffectView(effect: blurEffect)
-            blurView.translatesAutoresizingMaskIntoConstraints = false
-            blurView.frame = self.view.frame
-
-            self.progressView.insertSubview(blurView, at: 0)
-            self.progressView.addSubview(self.progressBar)
-            self.view.addSubview(self.progressView)
+    /// Adds the progress bar overlay to the display
+    ///
+    /// - Parameter label: The label to display on the progress indicator
+    func displayProgressBar(label: String) {
+        guard !self.progressActive else {
+            return
         }
+
+        self.progressActive = true
+        self.progressView.progress = 0
+        self.progressView.heading = label
+        self.progressView.view.alpha = 0
+        self.progressView.view.frame = self.view.bounds
+        self.view.addSubview(self.progressView.view)
+        UIView.animate(withDuration: 0.5) {
+            self.progressView.view.alpha = 1
+        }
+        NSLayoutConstraint.activate([self.progressView.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                                     self.progressView.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                                     self.progressView.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                                     self.progressView.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)])
     }
 
+    /// Davances the progress bar
+    ///
+    /// - Parameter progress: the position of the bar
     func advanceProgress(progress: Float) {
-        DispatchQueue.main.async {
-            guard self.progressView != nil && self.progressBar != nil else {
-                return
-            }
-
-            self.progressBar?.setProgress(progress, animated: true)
+        guard self.progressActive else {
+            return
         }
+
+        self.progressView.progress = progress
     }
 
+    /// Removes the progress bar overlay
     func removeProgressBar() {
-        DispatchQueue.main.async {
-            guard self.progressView != nil && self.progressBar != nil else {
-                return
-            }
-
-            self.progressView.removeFromSuperview()
-            self.progressBar = nil
-            self.progressView = nil
+        guard self.progressActive else {
+            return
         }
+
+        UIView.animate(withDuration: 0.5, animations: {
+            self.progressView.view.alpha = 0
+        }, completion: { (complete) in
+            self.progressView.view.removeFromSuperview()
+            self.progressActive = false
+        })
     }
 
-    @IBAction func edgePanDetected(_ sender: Any) {
-        performSegue(withIdentifier: "graph", sender: self)
-    }
-
-    @IBOutlet var edgePanRecogniser: UIScreenEdgePanGestureRecognizer!
-
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == edgePanRecogniser {
-            return true
-        }
-        return false
-    }
-
+//    @IBAction func edgePanDetected(_ sender: Any) {
+//        performSegue(withIdentifier: "graph", sender: self)
+//    }
+//
+//    @IBOutlet var edgePanRecogniser: UIScreenEdgePanGestureRecognizer!
+//
+//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        if gestureRecognizer == edgePanRecogniser {
+//            return true
+//        }
+//        return false
+//    }
+//
 }
 

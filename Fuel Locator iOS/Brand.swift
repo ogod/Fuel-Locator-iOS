@@ -233,7 +233,8 @@ class Brand: FLODataEntity, Hashable {
                 completionBlock(brand, error)
             }
         } catch {
-            print(error)
+            let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Brand.fetch")
+            os_log("Fetch error: %@", log: logger, type: .error, error.localizedDescription)
         }
     }
 
@@ -254,11 +255,13 @@ class Brand: FLODataEntity, Hashable {
                     abort()
                 })
             } else {
-                print(FLOError.cloudDatabaseNotAvailable)
+                let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Brand.fetchAll")
+                os_log("FetchAll error: %@", log: logger, type: .error, FLOError.cloudDatabaseNotAvailable.localizedDescription)
                 abort()
             }
         } catch {
-            print(error)
+            let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Brand.fetchAll")
+            os_log("FetchAll error: %@", log: logger, type: .error, error.localizedDescription)
             abort()
         }
     }

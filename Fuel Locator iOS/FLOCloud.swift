@@ -244,8 +244,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     // NSApplication delegate because that message will be sent before your application has a chance to set
     // a delegate for the NSUserNotificationCenter.
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didActivate notification: UNNotification) {
-        print(notification)
-//        self.dateFromMessage = 
+        os_log("Notification: %@", log: logger, type: .error, notification.description)
+//        self.dateFromMessage =
     }
 
     // Sent to the delegate when the Notification Center has decided not to present your notification, for example when your application is front most. If you want the notification to be displayed anyway, return YES.
@@ -257,7 +257,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (authorised, error) in
             guard error == nil else {
-                print(error!)
+                let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLOCloud")
+                os_log("Subscription setup error: %@", log: logger, type: .error, error!.localizedDescription)
                 return
             }
             if authorised {
@@ -270,7 +271,6 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
 
     func didRegisterForRemoteNotifications() {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            print("Notification settings : \(settings)")
             guard settings.authorizationStatus == .authorized else {
                 return
             }
@@ -297,7 +297,6 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                     }
                     return
                 }
-                print("subscription saved successfuly")
             })
         } catch {
             print(error)
@@ -324,7 +323,6 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                     }
                     return
                 }
-                print("subscription saved successfuly")
             })
         } catch {
             print(error)

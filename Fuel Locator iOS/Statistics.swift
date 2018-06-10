@@ -111,6 +111,22 @@ class Statistics: FLODataEntity, Hashable {
         }
     }
 
+    class func fetchHistoric(_ product: Product, _ region: Region, _ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {
+        let pRef = CKReference(recordID: product.recordID, action: .none)
+        let rRef = CKReference(recordID: region.recordID, action: .none)
+        let predicate = NSPredicate(format: "product == %@ AND region == %@", pRef, rRef)
+        let query = CKQuery(recordType: "FWStatistics", predicate: predicate)
+
+        do {
+            Statistics.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
+                let stats = Set<Statistics>(records?.map({ Statistics(record: $0) }) ?? [])
+                completionBlock(stats, error)
+            }
+        } catch {
+            print(error)
+        }
+    }
+
     static var all = FLODataEntityAll<Int16, Statistics>()
 
     var key: Int16 {

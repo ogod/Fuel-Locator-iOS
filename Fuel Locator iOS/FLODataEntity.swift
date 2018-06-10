@@ -71,6 +71,8 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity> {
             V.fetchAll({ (sts, err) in
                 FLOCloud.shared.queue.async {
                     guard err == nil else {
+                        let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.retrieve")
+                        os_log("Error on retrieval: %@", log: logger, type: .error, err!.localizedDescription)
                         print(err!)
                         DispatchQueue.main.async {
                             pthread_rwlock_unlock(&self.lock)
@@ -187,20 +189,23 @@ extension FLODataEntity {
                         }
 
                     case .serverRejectedRequest:
-                        print("Record name: \(self.record.recordID.recordName)")
+                        let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.upload.serverRejected")
+                        os_log("Derver rejected upload: %@", log: logger, type: .error, err!.localizedDescription)
                         DispatchQueue.main.async {
                             completion?(error, false)
                         }
 
                     default:
-                        print("Default error return: \(String(reflecting: error)), \(error.localizedDescription)")
+                        let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.upload.default")
+                        os_log("Error: %@", log: logger, type: .error, err!.localizedDescription)
                         DispatchQueue.main.async {
                             completion?(error, false)
                         }
                     }
 
                 default:
-                    print("Default error return: \(err?.localizedDescription ?? "")")
+                    let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.upload.default")
+                    os_log("Error: %@", log: logger, type: .error, err!.localizedDescription)
                     DispatchQueue.main.async {
                         completion?(err, false)
                     }
@@ -391,10 +396,8 @@ extension FLODataEntity {
         }
         operation.queryCompletionBlock = { (cursor, err) in
             guard err == nil else {
-                print(err!)
                 switch err {
                 case let error as CKError:
-                    print("\(error.localizedDescription)")
                     let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double
                     switch error.code {
                     case .requestRateLimited:

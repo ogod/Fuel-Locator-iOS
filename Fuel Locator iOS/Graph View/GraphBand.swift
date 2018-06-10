@@ -19,7 +19,10 @@ typealias PriceBandPoint = (high: CGPoint, low: CGPoint)
 /// Each band also has an associated line defining the highest price for that band
 class GraphBand {
 
-    var xLength: CGFloat
+    var xStart: CGFloat
+    var xEnd: CGFloat
+    var startDate: Date
+    var endDate: Date
     var yHeight: CGFloat
 
     var fadeInLines = [UIBezierPath]()
@@ -30,15 +33,15 @@ class GraphBand {
     var fadeOutAreas = [UIBezierPath]()
 
     private static let calendar = Calendar.current
-    private static let referenceDate: Date = GraphBand.calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "AWST"),
-                                                                                             year: 2001,
-                                                                                             month: 1,
-                                                                                             day: 1,
-                                                                                             hour: 0,
-                                                                                             minute: 0,
-                                                                                             second: 0,
-                                                                                             nanosecond: 0))!
-    private static let secondsInDay: TimeInterval = 86400
+    private static let referenceDate: Date = GraphBand.calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "Australia/Perth"),
+                                                                                          year: 2001,
+                                                                                          month: 1,
+                                                                                          day: 1,
+                                                                                          hour: 0,
+                                                                                          minute: 0,
+                                                                                          second: 0,
+                                                                                          nanosecond: 0))!
+        private static let secondsInDay: TimeInterval = 86400
 
     /// The x value for a given date. A unit represents 1 day.
     ///
@@ -78,17 +81,23 @@ class GraphBand {
                                         second: 0,
                                         of: $0.date)!, $0)
         }))
-        let startDate = values.keys.min()!
-        let endDate = values.keys.max()!
+        let formDate = DateFormatter()
+        formDate.dateStyle = .long
+        formDate.timeStyle = .none
+        startDate = values.keys.min()!
+        endDate = values.keys.max()!
         var points = [PriceBandPoint]()
-        xLength = 0
+        xStart = CGFloat.greatestFiniteMagnitude
+        xEnd = 0
         yHeight = 0
-        GraphBand.calendar.enumerateDates(startingAfter: startDate, matching: DateComponents(hour: 0, minute: 0, second: 0, nanosecond: 0),
-                                             matchingPolicy: .nextTime,
-                                             repeatedTimePolicy: .first,
-                                             direction: .forward)
+        let sd = GraphBand.calendar.date(byAdding: .second, value: -1, to: startDate)!
+        GraphBand.calendar.enumerateDates(startingAfter: sd,
+                                          matching: DateComponents(hour: 0, minute: 0, second: 0, nanosecond: 0),
+                                          matchingPolicy: .nextTime,
+                                          repeatedTimePolicy: .first,
+                                          direction: .forward)
         { (date: Date!, indx: Bool, stop: inout Bool) in
-            guard date <= endDate else {
+            guard date <= endDate || points.count > 0 else {
                 stop = true
                 return
             }
@@ -151,7 +160,7 @@ class GraphBand {
                     fadeInLine.addLine(to: p1.high)
                     line.move(to: p1.high)
                     for p in points.dropFirst() {
-                        line.move(to: p.high)
+                        line.addLine(to: p.high)
                     }
                     fadeOutLine.move(to: pn1.high)
                     fadeOutLine.addLine(to: CGPoint(x: pn1.high.x - (pn2.high.x - pn1.high.x) / 3.0,
@@ -167,10 +176,10 @@ class GraphBand {
 
                     area.move(to: p1.high)
                     for p in points.dropFirst() {
-                        area.move(to: p.high)
+                        area.addLine(to: p.high)
                     }
                     for p in points.reversed() {
-                        area.move(to: p.high)
+                        area.addLine(to: p.low)
                     }
                     area.close()
 
@@ -189,9 +198,10 @@ class GraphBand {
                     fillAreas.append(area)
                     fadeOutAreas.append(fadeOutArea)
                 }
+                xStart = min(xStart, xValue(startDate))
+                xEnd = max(xEnd, xValue(endDate))
+                yHeight = max(yHeight, points.map({$0.high.y}).max()!)
             }
         }
-        xLength = xValue(endDate)
-        yHeight = points.map({$0.high.y}).max()!
     }
 }

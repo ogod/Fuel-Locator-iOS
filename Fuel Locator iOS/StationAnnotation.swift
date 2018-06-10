@@ -29,9 +29,18 @@ class StationAnnotation: MKPointAnnotation {
     }
 
     func mapItem() -> MKMapItem {
-        let addressDict = [CNPostalAddressStreetKey: station.address ?? ""]
+        var addressDict = [CNPostalAddressStateKey: "Western Australia"]
+        if station.address != nil {
+            addressDict[CNPostalAddressStreetKey] = station.address!
+        }
+        if station.suburb?.name != nil {
+            addressDict[CNPostalAddressCityKey] = station.suburb!.name
+        }
+
         let placemark = MKPlacemark(coordinate: station.coordinate, addressDictionary: addressDict)
         let mapItem = MKMapItem(placemark: placemark)
+        mapItem.phoneNumber = station.phone
+        mapItem.timeZone = TimeZone(identifier: "Australia/Perth")
         mapItem.name = station.tradingName
         return mapItem
     }
