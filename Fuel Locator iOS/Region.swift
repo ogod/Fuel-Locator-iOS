@@ -26,6 +26,56 @@ class Region: FLODataEntity, Hashable {
         self.name = name
     }
     
+    enum Known: Int16 {
+        case metropolitanArea = -1
+        case gascoyne = 1
+        case goldfieldsEsperance = 2
+        case greatSouthern = 3
+        case kimberley = 4
+        case midWest  = 5
+        case peel = 6
+        case pilbara = 7
+        case southWest = 8
+        case wheatbelt = 9
+        case northOfTheRiver = 25
+        case southOfTheRiver = 26
+        case eastHills = 27
+
+        var name: String! {
+            switch self {
+            case .metropolitanArea:
+                return "Metropolitan Area"
+            case .gascoyne:
+                return "Gascoyne"
+            case .goldfieldsEsperance:
+                return "Goldfields-Esperance"
+            case .greatSouthern:
+                return "Great Southern"
+            case .kimberley:
+                return "Kimberley"
+            case .midWest:
+                return "Mid West"
+            case .peel:
+                return "Peel"
+            case .pilbara:
+                return "Pilbara"
+            case .southWest:
+                return "South West"
+            case .wheatbelt:
+                return "Wheatbelt"
+            case .northOfTheRiver:
+                return "North of the River"
+            case .southOfTheRiver:
+                return "South of the River"
+            case .eastHills:
+                return "East/Hills"
+            }
+        }
+        var recordId: CKRecordID {
+            return Region.recordId(from: rawValue)
+        }
+}
+
     init(record: CKRecord) {
         ident = Brand.ident(from: record.recordID)
         name = record["name"] as! String
@@ -127,6 +177,10 @@ class Region: FLODataEntity, Hashable {
 
     class func recordId(from ident: Int16) -> CKRecordID {
         return CKRecordID(recordName: "Region:" + String(ident))
+    }
+
+    class func recordId(from ident: Known) -> CKRecordID {
+        return recordId(from: ident.rawValue)
     }
 
     var recordID: CKRecordID {

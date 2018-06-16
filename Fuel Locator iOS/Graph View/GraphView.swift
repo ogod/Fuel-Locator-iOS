@@ -11,6 +11,7 @@ import UIKit
 class GraphView: UIView {
 
     private var bands = Array<GraphBand?>(repeating: nil, count: 10)
+    private var sevenDayAverage: GraphSevenDayAverage! = nil
     var xStart: CGFloat = 0
     var xEnd: CGFloat = 0
     var yHeight: CGFloat = 0
@@ -87,6 +88,7 @@ class GraphView: UIView {
         bands[7] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per80!.int16Value, low: $0.per70!.int16Value, date: $0.date)})))
         bands[8] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per90!.int16Value, low: $0.per80!.int16Value, date: $0.date)})))
         bands[9] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.maximum!.int16Value, low: $0.per90!.int16Value, date: $0.date)})))
+        sevenDayAverage = GraphSevenDayAverage(values: AnySequence<PricePointValue>(s.map({(value: $0.mean!.int16Value, date: $0.date)})))
         xStart = bands.map({$0?.xStart ?? 0}).min() ?? 1
         xEnd = bands.map({$0?.xEnd ?? 0}).max() ?? 1
         yHeight = floor((bands.map({$0?.yHeight ?? 0}).max() ?? 0.0) / 10.0 + 1.0) * 10.0
@@ -194,6 +196,52 @@ class GraphView: UIView {
                                                options: [])
                     context.restoreGState()
                 }
+            }
+        }
+
+        if let band = sevenDayAverage {
+            let colour = UIColor.purple
+
+            let context = UIGraphicsGetCurrentContext()!
+            let gradient = CGGradient(colorsSpace: CGColorSpace(name: CGColorSpace.genericRGBLinear),
+                                      colors: [UIColor.clear.cgColor, colour.cgColor] as CFArray,
+                                      locations: nil)!
+
+            colour.setStroke()
+            for a in band.fadeInLines {
+                let a1 = UIBezierPath(cgPath: a.cgPath)
+                a1.apply(transform)
+                let r = a1.bounds
+                context.saveGState()
+                context.addPath(a1.cgPath)
+                context.setLineWidth(0.5)
+                context.replacePathWithStrokedPath()
+                context.clip()
+                context.drawLinearGradient(gradient,
+                                           start: CGPoint(x: r.minX, y: r.midY),
+                                           end: CGPoint(x: r.maxX, y: r.midY),
+                                           options: [])
+                context.restoreGState()
+            }
+            for a in band.lines {
+                let a1 = UIBezierPath(cgPath: a.cgPath)
+                a1.apply(transform)
+                a1.stroke(with: .normal, alpha: 1)
+            }
+            for a in band.fadeOutLines {
+                let a1 = UIBezierPath(cgPath: a.cgPath)
+                a1.apply(transform)
+                let r = a1.bounds
+                context.saveGState()
+                context.addPath(a1.cgPath)
+                context.setLineWidth(0.5)
+                context.replacePathWithStrokedPath()
+                context.clip()
+                context.drawLinearGradient(gradient,
+                                           start: CGPoint(x: r.maxX, y: r.midY),
+                                           end: CGPoint(x: r.minX, y: r.midY),
+                                           options: [])
+                context.restoreGState()
             }
         }
 

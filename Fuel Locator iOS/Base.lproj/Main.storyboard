@@ -1442,141 +1442,25 @@
                                 <rect key="frame" x="20" y="64" width="335" height="583"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="Fuel Locator">
-                                        <attributes>
-                                            <font key="NSFont" size="24" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
                                     <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">Copyright © 2018 by Owen Godfrey
-</string>
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">Data is provided by the FuelWatch website (http://fuelwatch.wa.gov.au) which is copyright © 20011 by the Western Australian Department of Mines, Industry Regulation and Safety. This data is publicly accessible, and this app depends upon this site for its data. The author offers no warranty about the future or correctness of this website or the data it offers.
+                                        <mutableString key="content">Fuel Locator
+Copyright © 2018 by Owen Godfrey
+
+Data is provided by the FuelWatch website (http://fuelwatch.wa.gov.au) which is copyright © 2011 by the Western Australian Department of Mines, Industry Regulation and Safety. This data is publicly accessible, and this app depends upon this site for its data. The author offers no warranty about the future or correctness of this website or the data it offers.
 
 Fuel stations and brands publish their names and brands freely to the website and these are used for informational purposes only. The names and symbols of the fuel brands are trademarked by the owners and are only used under terms of fair dealing (Copyright Act 1968) for the purpose of reporting prices.
-</string>
-                                        <attributes>
-                                            <font key="NSFont" size="10" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">Thanks for using Fuel Locator!
-</string>
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="This app is designed to be as intuitive as possible. On the map, stations with a ">
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="red">
-                                        <attributes>
-                                            <color key="NSColor" red="0.71055000000000001" green="0.10387" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" colour have the 10% worst prices and stations with a ">
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="green">
-                                        <attributes>
-                                            <color key="NSColor" red="0.39974999999999999" green="0.61334999999999995" blue="0.20601" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content"> colour have the 10% best prices. Between those two extremes are eight other price bands representing 10% bands each, and they vary slowly between </string>
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="green">
-                                        <attributes>
-                                            <color key="NSColor" red="0.39974999999999999" green="0.61334999999999995" blue="0.20601" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" and ">
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="red">
-                                        <attributes>
-                                            <color key="NSColor" red="0.67803000000000002" green="0.24279999999999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=", with the ">
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="yellow">
-                                        <attributes>
-                                            <color key="NSColor" red="0.55206" green="0.52546999999999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content"> bands representing the median break point prices.
+
+Thanks for using Fuel Locator!
+This app is designed to be as intuitive as possible. On the map, stations with a red colour have the 10% worst prices and stations with an aqua colour have the 10% best prices. Between those two extremes are eight other price bands representing 10% bands each, and they vary slowly between green and orange, with the yellow bands representing the median break point prices.
 Fuel prices are presented for particular day and fuel product. To select a different day or fuel type, tap on the label at the top of the map. You will also be given the opportunity to change map display and to select what brands to apply fuel price discounts to. (Discounts are approximated for each brand, and are generally assumed to be 4c per litre, although this may change in the future.)
-The history view allows you to view fuel price changes over the previous several years so that you can gain a balanced side of how much you should reasonably be paying for fuel now.The statistics will vary depending on the region that you are currently viewing on the map, such as the Pilbra, Wheatbelt, Peel and Metropolitan Areas.
+The history view allows you to view fuel price changes over the previous several years so that you can gain a balanced side of how much you should reasonably be paying for fuel now.The statistics will vary depending on the region that you are currently viewing on the map, such as the Pilbra, Wheatbelt, Peel and Metropolitan Areas. A violet line also indicates the 14-day average of those fuel prices.
 If you have any comments or suggestions, drop us a line through reviews on the app store, or by direct email through the address you will find in the app store.
 Once again, thanks for using Fuel Locator!
-Owen Godfrey</string>
+Owen Godfrey</mutableString>
                                         <attributes>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                            <color key="NSColor" red="0.0011289465401793349" green="0.34974201946282768" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="24" name="HelveticaNeue-Thin"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -1739,7 +1623,7 @@ Owen Godfrey</string>
         <image name="map_location" width="32" height="32"/>
         <image name="map_location_outline" width="33" height="33"/>
         <namedColor name="clusterColour">
-            <color red="0.21500000357627869" green="0.21500000357627869" blue="0.21500000357627869" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.21500000357627869" green="0.21500000357627869" blue="0.21500000357627869" alpha="0.20000000298023224" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>

@@ -10,12 +10,15 @@ import UIKit
 import CoreLocation
 import UserNotifications
 import Armchair
+import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     let locationManager = CLLocationManager()
+
+    fileprivate let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "AppDelegate")
 
     fileprivate func registerUserDefaults() {
         UserDefaults.standard.register(defaults: [
@@ -42,13 +45,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Brand.Known.united.key : false,
             Brand.Known.vibe.key : false,
             Brand.Known.wesco.key : false,
+            "notification.product": Product.Known.ulp.rawValue,
+            "notification.region": Region.Known.metropolitanArea.rawValue,
+            "notification.priceChange": 0.05,
             "Product.lastUsed" : Product.Known.ulp.rawValue])
     }
 
     var armchairTimer: Timer? = nil
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         Armchair.appID("1389830186")
 //        Armchair.debugEnabled(true)
         Armchair.significantEventsUntilPrompt(5)
@@ -60,7 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FLOCloud.shared.setupSubscription(application: application)
         if let notification = launchOptions?[.remoteNotification] {
             print(notification)
-//            FLOCloud.shared.dateFromMessage = 
         }
         return true
     }
@@ -93,6 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 Armchair.showPromptIfNecessary()
             }
         case .failed:
+            os_log("Cloud database was not accessible", log: logger, type: .fault)
             let alert = UIAlertController(title: "Cloud Database",
                                           message: "The iCloud Database is not accessible. Please try again later.",
                                           preferredStyle: .alert)
@@ -118,7 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-//        print("Failed to register: \(error)")
+        os_log("Failed to register for Remote Notifications", log: logger, type: .fault, error.localizedDescription)
     }
 }
 

@@ -16,6 +16,7 @@ class FLOCloud: NSObject {
 
     var identifier: String
     static let shared: FLOCloud = FLOCloud("iCloud.com.nomdejoye.Fuel-Locator-OSX")
+    static let calendar = Calendar.current
 
     lazy var container = CKContainer(identifier: identifier)
     let queue = DispatchQueue(label: "Cloud Query Queue",
@@ -243,14 +244,28 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     // NSUserNotification that caused the application to launch. The NSUserNotification is delivered to the
     // NSApplication delegate because that message will be sent before your application has a chance to set
     // a delegate for the NSUserNotificationCenter.
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, didActivate notification: UNNotification) {
-        os_log("Notification: %@", log: logger, type: .error, notification.description)
-//        self.dateFromMessage =
+    public func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                       didActivate notification: UNNotification) {
+        os_log("Notification: %@", log: logger, type: .info, notification.description)
     }
 
-    // Sent to the delegate when the Notification Center has decided not to present your notification, for example when your application is front most. If you want the notification to be displayed anyway, return YES.
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, shouldPresent notification: UNNotification) -> Bool {
+    // Sent to the delegate when the Notification Center has decided not to present your notification, for example when your application is front most.
+    // If you want the notification to be displayed anyway, return YES.
+    public func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                       shouldPresent notification: UNNotification) -> Bool {
+        os_log("Notification: %@", log: logger, type: .info, notification.description)
         return true
+    }
+
+    // The method will be called on the delegate only if the application is in the foreground.
+    // If the method is not implemented or the handler is not called in a timely manner then the notification will not be presented.
+    // The application can choose to have the notification presented as a sound, badge, alert and/or in the notification list.
+    // This decision should be based on whether the information in the notification is otherwise visible to the user.
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        os_log("Notification: %@", log: logger, type: .info, notification.description)
+        completionHandler([.badge, .sound, .alert])
     }
 
     public func setupSubscription(application: UIApplication) {
@@ -275,45 +290,89 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                 return
             }
         }
+        removeSubscription()
+        setupSubscription()
+    }
 
-        let normalSuscription = CKQuerySubscription(recordType: "GlobalNotification",
-                                               predicate: NSPredicate(value: true),
-                                               options: .firesOnRecordCreation)
-        let normalInfo = CKNotificationInfo()
-        normalInfo.alertBody = "Tomorrow's fuel prices have been posted."
-        normalInfo.shouldBadge = false
-        normalInfo.soundName = "default"
+    func changeSubscription() {
+        removeSubscription()
+        setupSubscription()
+    }
 
-        normalSuscription.notificationInfo = normalInfo
-
+    func removeSubscription() {
+        let group = DispatchGroup()
         do {
-            try publicDatabase().save(normalSuscription, completionHandler: { (subscrip, error) in
+            try publicDatabase().fetchAllSubscriptions(completionHandler: { (subscriptions, error) in
+                defer { group.leave() }
                 guard error == nil else {
-                    switch error! {
-                    case let err as CKError where err.code == .serverRejectedRequest:
-                        break
-                    default:
-                        print(error!)
-                    }
+                    os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error!.localizedDescription)
                     return
                 }
+                for sub in subscriptions ?? [] {
+                    do {
+                        try self.publicDatabase().delete(withSubscriptionID: sub.subscriptionID, completionHandler: { (str, error) in
+                            defer { group.leave() }
+                            guard error == nil else {
+                                os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error!.localizedDescription)
+                                return
+                            }
+                            os_log("subscription deleted: %@", log: self.logger, type: .error, str ?? "No id")
+                        })
+                        group.enter()
+                    } catch {
+                        os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error.localizedDescription)
+                    }
+                }
             })
+            group.enter()
         } catch {
-            print(error)
+            os_log("Error during subscription deletion: %@", log: logger, type: .error, error.localizedDescription)
         }
+        group.wait()
+    }
 
+    func setupSubscription() {
+        let defaults = UserDefaults.standard
+        let form = NumberFormatter()
+        form.numberStyle = .percent
+        form.maximumFractionDigits = 0
+        let product = Product.Known(rawValue: Int16(defaults.integer(forKey: "notification.product"))) ?? .ulp
+        let region = Region.Known(rawValue: Int16(defaults.integer(forKey: "notification.region"))) ?? .metropolitanArea
+        let priceChange = defaults.float(forKey: "notification.priceChange")
+        let pred: NSPredicate
+        let subTitle: String
+        let body: String
+        if let tradingName = defaults.string(forKey: "notification.station") {
+            pred = NSPredicate(format: "priceChange >= %@ AND station == %@ AND product == %@",
+                               priceChange as NSNumber,
+                               CKReference(recordID: Station.recordId(from: tradingName), action: .deleteSelf),
+                               CKReference(recordID: product.recordId, action: .deleteSelf))
+            subTitle = "Product: \(product.fullName), Station: \(tradingName)"
+            body = "A price rise of over \(form.string(from: priceChange as NSNumber)!) has been added."
+        } else {
+            pred = NSPredicate(format: "priceChange >= %@ AND region == %@ AND product == %@",
+                               priceChange as NSNumber,
+                               CKReference(recordID: region.recordId, action: .deleteSelf),
+                               CKReference(recordID: product.recordId, action: .deleteSelf))
+            subTitle = "Product: \(product.fullName!), Region: \(region.name!)"
+            body = "A price rise of over \(form.string(from: priceChange as NSNumber)!) has been added."
+        }
         let risingSubscription = CKQuerySubscription(recordType: "GlobalNotification",
-                                               predicate: NSPredicate(format: "priceRise = %@", NSNumber(integerLiteral: 1)),
-                                               options: .firesOnRecordCreation)
+                                                     predicate: pred,
+                                                     options: .firesOnRecordCreation)
         let risingInfo = CKNotificationInfo()
-        risingInfo.alertBody = "Median fuel prices are rising tomorrow!"
+        risingInfo.title = "Fuel Price Rise Added"
+        risingInfo.subtitle = subTitle
+        risingInfo.alertBody = body
         risingInfo.shouldBadge = true
-        risingInfo.soundName = "Bloom"
-
+        risingInfo.soundName = "chords2.caf"
+        risingInfo.desiredKeys = ["priceChange", "region", "product", "date", "dateCreated"]
         risingSubscription.notificationInfo = risingInfo
 
+        let group = DispatchGroup()
         do {
             try publicDatabase().save(risingSubscription, completionHandler: { (subscrip, error) in
+                defer { group.leave() }
                 guard error == nil else {
                     switch error! {
                     case let err as CKError where err.code == .serverRejectedRequest:
@@ -324,9 +383,9 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                     return
                 }
             })
+            group.enter()
         } catch {
             print(error)
         }
     }
-
 }

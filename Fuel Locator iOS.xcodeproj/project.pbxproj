@@ -34,8 +34,10 @@
 		777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777F0E2920C573E40064FF0E /* YAxisView.swift */; };
 		777F0E3A20C6E5080064FF0E /* Armchair.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; };
 		777F0E3B20C6E5080064FF0E /* Armchair.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7794B15420D4FA4E00505746 /* chords2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 7794B15020D4FA4D00505746 /* chords2.caf */; };
 		77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47AF20BDB15B006E50FF /* GraphView.swift */; };
 		77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47B120BE531D006E50FF /* ProgressViewController.swift */; };
+		77EBD6BA20D218FC00FD6605 /* GraphSevenDayAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */; };
 		77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294920BB829A007EE0F1 /* GraphViewController.swift */; };
 		77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294B20BB82D8007EE0F1 /* GraphBand.swift */; };
 /* End PBXBuildFile section */
@@ -142,8 +144,11 @@
 		777F0E2720C573CC0064FF0E /* XAxisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XAxisView.swift; sourceTree = "<group>"; };
 		777F0E2920C573E40064FF0E /* YAxisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YAxisView.swift; sourceTree = "<group>"; };
 		777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Armchair.xcodeproj; path = ../../Armchair/Armchair.xcodeproj; sourceTree = "<group>"; };
+		7794B15020D4FA4D00505746 /* chords2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chords2.caf; sourceTree = "<group>"; };
+		7794B15520D552F000505746 /* Fuel Locator Information.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Fuel Locator Information.rtf"; sourceTree = "<group>"; };
 		77BC47AF20BDB15B006E50FF /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		77BC47B120BE531D006E50FF /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSevenDayAverage.swift; sourceTree = "<group>"; };
 		77FA294920BB829A007EE0F1 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		77FA294B20BB82D8007EE0F1 /* GraphBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphBand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -203,6 +208,8 @@
 				775C5604209EDB1000540B5B /* Data */,
 				775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */,
 				775C55CC2099BD7500540B5B /* AppDelegate.swift */,
+				7794B15020D4FA4D00505746 /* chords2.caf */,
+				7794B15520D552F000505746 /* Fuel Locator Information.rtf */,
 				77FA294620BB8168007EE0F1 /* Map View */,
 				775C5602209DF34800540B5B /* SettingsViewController.swift */,
 				77FA294820BB8249007EE0F1 /* Graph View */,
@@ -292,6 +299,7 @@
 				777F0E2720C573CC0064FF0E /* XAxisView.swift */,
 				777F0E2920C573E40064FF0E /* YAxisView.swift */,
 				77FA294B20BB82D8007EE0F1 /* GraphBand.swift */,
+				77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */,
 			);
 			path = "Graph View";
 			sourceTree = "<group>";
@@ -453,6 +461,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7794B15420D4FA4E00505746 /* chords2.caf in Resources */,
 				775C55D92099BD9200540B5B /* LaunchScreen.storyboard in Resources */,
 				775C55D62099BD9200540B5B /* Assets.xcassets in Resources */,
 				775C55D42099BD7500540B5B /* Main.storyboard in Resources */,
@@ -531,6 +540,7 @@
 				775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */,
 				776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */,
 				77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */,
+				77EBD6BA20D218FC00FD6605 /* GraphSevenDayAverage.swift in Sources */,
 				776E943620A014D6008AB0FC /* FLOCloud.swift in Sources */,
 				777F0E2820C573CE0064FF0E /* XAxisView.swift in Sources */,
 				776E9431209EE690008AB0FC /* PriceOnDay.swift in Sources */,

@@ -91,7 +91,7 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
                     self.graphView.generateBands(fromStatistics: stats)
                     self.graphView.ready = true
                     self.setupContentSizes()
-                    self.relativeOffset = CGPoint(x: 1, y: 1)
+                    self.relativeOffset = CGPoint(x: 1, y: 0)
                     self.activityIndicator.stopAnimating()
                     self.view.setNeedsLayout()
                 }

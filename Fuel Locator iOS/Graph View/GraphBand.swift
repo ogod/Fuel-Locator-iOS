@@ -112,17 +112,24 @@ class GraphBand {
                 }
                 switch points.count {
                 case 1:
-                    let fadeInLine = UIBezierPath()
-                    let fadeOutLine = UIBezierPath()
+                    let fadeInHighLine = UIBezierPath()
+                    let fadeOutHighLine = UIBezierPath()
+                    let fadeInLowLine = UIBezierPath()
+                    let fadeOutLowLine = UIBezierPath()
                     let fadeInArea = UIBezierPath()
                     let fadeOutArea = UIBezierPath()
 
                     let p = points.first!
 
-                    fadeInLine.move(to: CGPoint(x: p.high.x-0.3333333, y: p.high.y))
-                    fadeInLine.addLine(to: CGPoint(x: p.high.x, y: p.high.y))
-                    fadeOutLine.move(to: CGPoint(x: p.low.x, y: p.low.y))
-                    fadeOutLine.addLine(to: CGPoint(x: p.low.x+0.3333333, y: p.low.y))
+                    fadeInHighLine.move(to: CGPoint(x: p.high.x-0.3333333, y: p.high.y))
+                    fadeInHighLine.addLine(to: CGPoint(x: p.high.x, y: p.high.y))
+                    fadeOutHighLine.move(to: CGPoint(x: p.high.x, y: p.high.y))
+                    fadeOutHighLine.addLine(to: CGPoint(x: p.high.x+0.3333333, y: p.high.y))
+
+                    fadeInHighLine.move(to: CGPoint(x: p.low.x-0.3333333, y: p.low.y))
+                    fadeInHighLine.addLine(to: CGPoint(x: p.low.x, y: p.low.y))
+                    fadeOutHighLine.move(to: CGPoint(x: p.low.x, y: p.low.y))
+                    fadeOutHighLine.addLine(to: CGPoint(x: p.low.x+0.3333333, y: p.low.y))
 
                     fadeInArea.move(to: CGPoint(x: p.high.x-0.3333333, y: p.high.y))
                     fadeInArea.addLine(to: CGPoint(x: p.high.x, y: p.high.y))
@@ -136,15 +143,20 @@ class GraphBand {
                     fadeOutArea.addLine(to: CGPoint(x: p.high.x, y: p.low.y))
                     fadeOutArea.close()
 
-                    fadeInLines.append(fadeInLine)
-                    fadeOutLines.append(fadeOutLine)
+                    fadeInLines.append(fadeInHighLine)
+                    fadeInLines.append(fadeInLowLine)
+                    fadeOutLines.append(fadeOutHighLine)
+                    fadeOutLines.append(fadeOutLowLine)
                     fadeInAreas.append(fadeInArea)
                     fadeOutAreas.append(fadeOutArea)
 
                 default:
-                    let fadeInLine = UIBezierPath()
-                    let line = UIBezierPath()
-                    let fadeOutLine = UIBezierPath()
+                    let fadeInHighLine = UIBezierPath()
+                    let highLine = UIBezierPath()
+                    let fadeOutHighLine = UIBezierPath()
+                    let fadeInLowLine = UIBezierPath()
+                    let lowLine = UIBezierPath()
+                    let fadeOutLowLine = UIBezierPath()
                     let fadeInArea = UIBezierPath()
                     let area = UIBezierPath()
                     let fadeOutArea = UIBezierPath()
@@ -155,16 +167,27 @@ class GraphBand {
                     let pn2 = points[n-2]
                     let pn1 = points[n-1]
 
-                    fadeInLine.move(to: CGPoint(x: p1.high.x - (p2.high.x - p1.high.x) / 3.0,
-                                                y: p1.high.y - (p2.high.y - p1.high.y) / 3.0))
-                    fadeInLine.addLine(to: p1.high)
-                    line.move(to: p1.high)
+                    fadeInHighLine.move(to: CGPoint(x: p1.high.x - (p2.high.x - p1.high.x) / 3.0,
+                                                    y: p1.high.y - (p2.high.y - p1.high.y) / 3.0))
+                    fadeInHighLine.addLine(to: p1.high)
+                    highLine.move(to: p1.high)
                     for p in points.dropFirst() {
-                        line.addLine(to: p.high)
+                        highLine.addLine(to: p.high)
                     }
-                    fadeOutLine.move(to: pn1.high)
-                    fadeOutLine.addLine(to: CGPoint(x: pn1.high.x - (pn2.high.x - pn1.high.x) / 3.0,
-                                                    y: pn1.high.y - (pn2.high.y - pn1.high.y) / 3.0))
+                    fadeOutHighLine.move(to: pn1.high)
+                    fadeOutHighLine.addLine(to: CGPoint(x: pn1.high.x - (pn2.high.x - pn1.high.x) / 3.0,
+                                                        y: pn1.high.y - (pn2.high.y - pn1.high.y) / 3.0))
+
+                    fadeInLowLine.move(to: CGPoint(x: p1.low.x - (p2.low.x - p1.low.x) / 3.0,
+                                                    y: p1.low.y - (p2.low.y - p1.low.y) / 3.0))
+                    fadeInLowLine.addLine(to: p1.low)
+                    lowLine.move(to: p1.low)
+                    for p in points.dropFirst() {
+                        lowLine.addLine(to: p.low)
+                    }
+                    fadeOutLowLine.move(to: pn1.low)
+                    fadeOutLowLine.addLine(to: CGPoint(x: pn1.low.x - (pn2.low.x - pn1.low.x) / 3.0,
+                                                        y: pn1.low.y - (pn2.low.y - pn1.low.y) / 3.0))
 
                     fadeInArea.move(to: CGPoint(x: p1.high.x - (p2.high.x - p1.high.x) / 3.0,
                                                 y: p1.high.y - (p2.high.y - p1.high.y) / 3.0))
@@ -191,9 +214,12 @@ class GraphBand {
                     fadeOutArea.addLine(to: CGPoint(x: pn1.low.x, y: pn1.low.y))
                     fadeOutArea.close()
 
-                    fadeInLines.append(fadeInLine)
-                    lines.append(line)
-                    fadeOutLines.append(fadeOutLine)
+                    fadeInLines.append(fadeInHighLine)
+                    lines.append(highLine)
+                    fadeOutLines.append(fadeOutHighLine)
+                    fadeInLines.append(fadeInLowLine)
+                    lines.append(lowLine)
+                    fadeOutLines.append(fadeOutLowLine)
                     fadeInAreas.append(fadeInArea)
                     fillAreas.append(area)
                     fadeOutAreas.append(fadeOutArea)
