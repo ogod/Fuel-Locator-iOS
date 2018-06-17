@@ -11,28 +11,70 @@ import MapKit
 
 class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
+    let defaults = UserDefaults.standard
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
 
     @IBOutlet var brandSwitches: [UISwitch]!
+    @IBOutlet weak var notificationproductPickerView: UIPickerView!
+    @IBOutlet weak var notificationRegionPickerView: UIPickerView!
+    @IBOutlet weak var defaultProductpickerView: UIPickerView!
+    @IBOutlet weak var priceChangeTextView: UITextField!
 
     @IBAction func done(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return products.count
+        switch pickerView {
+        case defaultProductpickerView, notificationproductPickerView:
+            return products.count
+        case notificationRegionPickerView:
+            return regions.count
+        default:
+            return 0
+        }
     }
 
     lazy var products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+    lazy var regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return products[row].knownType.fullName ?? products[row].name
+        switch pickerView {
+        case defaultProductpickerView, notificationproductPickerView:
+            return products[row].knownType.fullName ?? products[row].name
+        case notificationRegionPickerView:
+            return regions[row].name
+        default:
+            return nil
+        }
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        MapViewController.instance!.globalProduct = products[row]
+        switch pickerView {
+        case defaultProductpickerView:
+            MapViewController.instance!.globalProduct = products[row]
+        case notificationproductPickerView:
+            defaults.set(products[row].ident, forKey: "notification.product")
+            defaults.synchronize()
+            FLOCloud.shared.changeSubscription()
+        case notificationRegionPickerView:
+            defaults.set(regions[row].ident, forKey: "notification.region")
+            defaults.synchronize()
+            FLOCloud.shared.changeSubscription()
+        default:
+            return
+        }
+    }
+
+    @IBAction func changeFieldDidEndEditing(_ sender: UITextField) {
+        if let val = Float(sender.text ?? "X") {
+            defaults.set(val / 100.0, forKey: "notification.priceChange")
+            defaults.synchronize()
+            FLOCloud.shared.changeSubscription()
+        }
     }
 
     @IBAction func newDateSelected(_ sender: UIDatePicker) {
@@ -60,6 +102,10 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
 
         productPicker.dataSource = self
         productPicker.delegate = self
+        notificationproductPickerView.dataSource = self
+        notificationRegionPickerView.dataSource = self
+        notificationproductPickerView.delegate = self
+        notificationRegionPickerView.delegate = self
 
         datePicker.date = MapViewController.instance!.globalDate
 
@@ -76,6 +122,12 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         if MapViewController.instance?.globalProduct != nil {
             productPicker.selectRow(products.index(of: (MapViewController.instance?.globalProduct!)!)!, inComponent: 0, animated: false)
         }
+        let notProd = defaults.integer(forKey: "notification.product")
+        let notReg = defaults.integer(forKey: "notification.region")
+        let notPrice = defaults.float(forKey: "notification.priceChange")
+        notificationproductPickerView.selectRow(products.index(of: (products.first(where: {$0.ident == notProd}))!)!, inComponent: 0, animated: false)
+        notificationRegionPickerView.selectRow(regions.index(of: (regions.first(where: {$0.ident == notReg}))!)!, inComponent: 0, animated: false)
+        priceChangeTextView.text = String(Int(notPrice*100))
     }
 
     @IBAction func MapTypeSelected(_ sender: UISegmentedControl) {

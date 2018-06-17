@@ -40,6 +40,7 @@
 		77EBD6BA20D218FC00FD6605 /* GraphSevenDayAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */; };
 		77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294920BB829A007EE0F1 /* GraphViewController.swift */; };
 		77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294B20BB82D8007EE0F1 /* GraphBand.swift */; };
+		77FAC1FB20D589100059DA08 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FAC1FA20D589100059DA08 /* AboutViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +152,7 @@
 		77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSevenDayAverage.swift; sourceTree = "<group>"; };
 		77FA294920BB829A007EE0F1 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		77FA294B20BB82D8007EE0F1 /* GraphBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphBand.swift; sourceTree = "<group>"; };
+		77FAC1FA20D589100059DA08 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				775C55D22099BD7500540B5B /* Main.storyboard */,
 				775C55D52099BD9200540B5B /* Assets.xcassets */,
 				775C55D72099BD9200540B5B /* LaunchScreen.storyboard */,
+				77FAC1FA20D589100059DA08 /* AboutViewController.swift */,
 				775C55DA2099BD9200540B5B /* Info.plist */,
 				776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */,
 				7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */,
@@ -542,6 +545,7 @@
 				77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */,
 				77EBD6BA20D218FC00FD6605 /* GraphSevenDayAverage.swift in Sources */,
 				776E943620A014D6008AB0FC /* FLOCloud.swift in Sources */,
+				77FAC1FB20D589100059DA08 /* AboutViewController.swift in Sources */,
 				777F0E2820C573CE0064FF0E /* XAxisView.swift in Sources */,
 				776E9431209EE690008AB0FC /* PriceOnDay.swift in Sources */,
 				775C55CF2099BD7500540B5B /* MapViewController.swift in Sources */,

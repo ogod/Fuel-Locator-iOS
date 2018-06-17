@@ -364,6 +364,7 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
         risingInfo.title = "Fuel Price Rise Added"
         risingInfo.subtitle = subTitle
         risingInfo.alertBody = body
+        risingInfo.shouldSendContentAvailable = true
         risingInfo.shouldBadge = true
         risingInfo.soundName = "chords2.caf"
         risingInfo.desiredKeys = ["priceChange", "region", "product", "date", "dateCreated"]
