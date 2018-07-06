@@ -11,11 +11,24 @@ import MapKit
 import CloudKit
 import Armchair
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+    typealias `Self` = MapViewController
 
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var titleButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var titlePanelView: UIView!
+    @IBOutlet weak var pullDownPanelView: UIView!
+    @IBOutlet weak var panelVisualEffects: UIVisualEffectView!
+    @IBOutlet weak var panelView: UIView!
+    @IBOutlet weak var panelMaskView: UIView!
+    @IBOutlet weak var mapTypeButton: UISegmentedControl!
+    @IBOutlet weak var productPicker: UIPickerView!
+    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var panelConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tabPanel: UIView!
+    @IBOutlet weak var tabMaskPanel: UIView!
+    @IBOutlet weak var clippingView: UIView!
+    @IBOutlet weak var clipTopConstraint: NSLayoutConstraint!
 
     @IBAction func done(_ segue: UIStoryboardSegue) {
         print(segue)
@@ -38,9 +51,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }()
 
     static var instance: MapViewController? = nil
-    static let calendar = Calendar.current
+    private static let calendar = Calendar.current
+    private let foldedPanelHeight: CGFloat = 74
+    private static let defaults = UserDefaults.standard
+
+    private var products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+    private var regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
 
     var refreshFlag = false
+
+    @IBAction func newDateSelected(_ sender: UIDatePicker) {
+        MapViewController.instance!.globalDate = sender.date
+    }
 
     /// Refresh the annotations and display
     func refresh() {
@@ -48,10 +70,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             return
         }
         refreshFlag = true
-        titleButton.setTitle("""
-                                Prices for: \(formatter.string(from: globalDate))
-                                \(globalProduct.knownType.fullName ?? globalProduct.name)
-                                """, for: .normal)
+        titleLabel.text = """
+                            Prices for: \(formatter.string(from: globalDate))
+                            \(globalProduct.knownType.fullName ?? globalProduct.name)
+                            """
+        DispatchQueue.main.async {
+//            self.tabMaskPanel.bounds = self.tabPanel.bounds
+            self.pullDownPanelView.layoutSubviews()
+            self.tabMaskPanel.layoutSubviews()
+        }
         DispatchQueue.global().async {
             Statistics.all.retrieve({ (success, err) in
                 guard err == nil else {
@@ -98,8 +125,25 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             guard globalProduct != nil else {
                 return
             }
-            UserDefaults.standard.set(globalProduct.ident, forKey: "Product.lastUsed")
+            Self.defaults.set(globalProduct.ident, forKey: "Product.lastUsed")
             refresh()
+        }
+    }
+
+    @IBAction func mapTypeSelected(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 1:
+            mapView.mapType = .satellite
+            Self.defaults.set(1, forKey: FLSettingsBundleHelper.Keys.mapType.rawValue)
+            Self.defaults.synchronize()
+        case 2:
+            mapView.mapType = .hybrid
+            Self.defaults.set(2, forKey: FLSettingsBundleHelper.Keys.mapType.rawValue)
+            Self.defaults.synchronize()
+        default:
+            mapView.mapType = .mutedStandard
+            Self.defaults.set(0, forKey: FLSettingsBundleHelper.Keys.mapType.rawValue)
+            Self.defaults.synchronize()
         }
     }
 
@@ -159,6 +203,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        products = Product.all.values.sorted(by: { $0.ident < $1.ident })
         resetAnnotations()
     }
 
@@ -193,12 +238,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     fileprivate func setupTitlePanel() {
-        titleButton.titleLabel?.lineBreakMode = .byWordWrapping
-        titleButton.titleLabel?.numberOfLines = 2
-        titleButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        titleButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        titleButton.titleLabel?.minimumScaleFactor = 0.5
-        titleButton.titleLabel?.textAlignment = .center
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.numberOfLines = 2
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.5
+        titleLabel.textAlignment = .center
+        panelMaskView.removeFromSuperview()
+        panelMaskView.frame = panelView.frame
+        panelVisualEffects.mask = panelMaskView
+        let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
+            self.panelConstraint.constant = self.foldedPanelHeight
+            self.clippingView.layoutIfNeeded()
+        }
+        animation.startAnimation()
+
     }
 
     fileprivate func checkCloudCredentials() {
@@ -224,12 +278,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.showsUserLocation = true
         mapView.setRegion(initialRegion, animated: true)
 
+        switch Self.defaults.integer(forKey: FLSettingsBundleHelper.Keys.mapType.rawValue) {
+        case 1:
+            mapView.mapType = .satellite
+            mapTypeButton.selectedSegmentIndex = 1
+        case 2:
+            mapView.mapType = .hybrid
+            mapTypeButton.selectedSegmentIndex = 2
+        default:
+            mapView.mapType = .mutedStandard
+            mapTypeButton.selectedSegmentIndex = 0
+        }
+
         setupTitlePanel()
         registerAnnotationClasses()
         addUserTrackingButton()
 
-        self.globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-        self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+        globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+
+        datePicker.date = MapViewController.instance!.globalDate
 
         checkCloudCredentials()
     }
@@ -380,6 +448,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                                 }
                                 self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
                                 self.retrieving = false
+                                self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+                                self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
+                                self.productPicker.reloadAllComponents()
+                                if let i = self.products.index(of: self.globalProduct) {
+                                    self.productPicker.selectRow(i, inComponent: 0, animated: true)
+                                }
                                 self.removeProgressBar()
                                 self.refresh()
                             })
@@ -454,5 +528,69 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 //        return false
 //    }
 //
+
+    private var clippingHeight: CGFloat = 0
+    private var panelHeight: CGFloat = 0
+
+    @IBAction func detectPan(_ recogniser: UIPanGestureRecognizer) {
+        let translation = recogniser.translation(in: view)
+        switch recogniser.state {
+        case .began:
+            self.clippingHeight = self.clippingView.frame.height
+            self.panelHeight = self.pullDownPanelView.frame.height
+
+        case .changed:
+            let height = min(max(self.clippingHeight + translation.y, self.foldedPanelHeight), self.panelHeight - 8)
+            panelConstraint.constant = height
+            clipTopConstraint.constant = 0
+            self.clippingView.layoutIfNeeded()
+
+        case .possible:
+            let height = min(max(self.clippingHeight + translation.y, self.foldedPanelHeight), self.panelHeight - 8)
+            panelConstraint.constant = height
+            clipTopConstraint.constant = 0
+            self.clippingView.layoutIfNeeded()
+
+        case .cancelled, .failed:
+            self.clipTopConstraint.constant = 0
+            self.clippingView.layoutIfNeeded()
+            let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+                self.panelConstraint.constant = self.clippingHeight
+                self.clipTopConstraint.constant = 0
+                self.clippingView.layoutIfNeeded()
+            }
+            animation.startAnimation()
+
+        case .ended:
+            let height = min(max(self.clippingHeight + translation.y, self.foldedPanelHeight), self.panelHeight - 8)
+            let flag = (height - self.foldedPanelHeight) - (self.panelHeight - foldedPanelHeight) / 2 < 0
+            panelConstraint.constant = height
+            self.clippingView.center = CGPoint(x: self.clippingView.center.x, y: self.clippingView.bounds.height/2)
+            self.clippingView.layoutIfNeeded()
+            let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
+                self.clippingView.center = CGPoint(x: self.clippingView.center.x, y: self.clippingView.bounds.height/2)
+                self.panelConstraint.constant = flag ? self.foldedPanelHeight : self.panelHeight - 8
+                self.clippingView.layoutIfNeeded()
+            }
+            animation.startAnimation()
+        }
+    }
 }
 
+extension MapViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return products.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return products[row].knownType.fullName ?? products[row].name
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        globalProduct = products[row]
+    }
+}

@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Brand - Eagle.png",
+      "filename" : "Eagle Logo Image-2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Brand - Eagle@2x.png",
+      "filename" : "Eagle Logo Image-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Brand - Eagle@3x.png",
+      "filename" : "Eagle Logo Image.png",
       "scale" : "3x"
     }
   ],

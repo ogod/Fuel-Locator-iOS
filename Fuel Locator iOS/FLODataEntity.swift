@@ -30,14 +30,15 @@ protocol FLODataEntity: Hashable {
     var key: Key { get }
 }
 
-class FLODataEntityAll<K: Hashable, V: FLODataEntity> {
+class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
     private var _all: [K: V] = [:]
     var queue = FLOCloud.shared.queue
     var lock: pthread_rwlock_t
 
-    init() {
+    override init() {
         lock = pthread_rwlock_t()
         let status = pthread_rwlock_init(&lock, nil)
+        super.init()
         assert(status == 0)
     }
 
@@ -63,6 +64,14 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity> {
         }
         defer { pthread_rwlock_unlock(&lock) }
         return _all.values
+    }
+
+    var keys: Dictionary<K, V>.Keys! {
+        guard pthread_rwlock_tryrdlock(&lock) == 0  else {
+            return nil
+        }
+        defer { pthread_rwlock_unlock(&lock) }
+        return _all.keys
     }
 
     func retrieve(_ block: @escaping (Bool, Error?)->Void) {

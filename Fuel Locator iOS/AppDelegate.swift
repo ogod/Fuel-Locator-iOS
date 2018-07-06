@@ -20,37 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     fileprivate let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "AppDelegate")
 
-    fileprivate func registerUserDefaults() {
-        UserDefaults.standard.register(defaults: [
-            Brand.Known.ampol.key : false,
-            Brand.Known.betterChoice.key : false,
-            Brand.Known.blackWhite.key : false,
-            Brand.Known.boc.key : false,
-            Brand.Known.bp.key : false,
-            Brand.Known.caltex.key : false,
-            Brand.Known.caltexWoolworths.key : false,
-            Brand.Known.colesExpress.key : false,
-            Brand.Known.eagle.key : false,
-            Brand.Known.fastfuel24_7.key : false,
-            Brand.Known.fuelsWest.key : false,
-            Brand.Known.gull.key : false,
-            Brand.Known.kleenheat.key : false,
-            Brand.Known.kwikfuel.key : false,
-            Brand.Known.liberty.key : false,
-            Brand.Known.mobil.key : false,
-            Brand.Known.peak.key : false,
-            Brand.Known.pumaEnergy.key : false,
-            Brand.Known.sevenEleven.key : false,
-            Brand.Known.shell.key : false,
-            Brand.Known.united.key : false,
-            Brand.Known.vibe.key : false,
-            Brand.Known.wesco.key : false,
-            "notification.product": Product.Known.ulp.rawValue,
-            "notification.region": Region.Known.metropolitanArea.rawValue,
-            "notification.priceChange": 0.05,
-            "Product.lastUsed" : Product.Known.ulp.rawValue])
-    }
-
     var armchairTimer: Timer? = nil
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -60,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Armchair.usesUntilPrompt(7)
         locationManager.requestWhenInUseAuthorization()
         application.applicationIconBadgeNumber = 0
-        registerUserDefaults()
+        FLSettingsBundleHelper.registerSettings()
         FLOCloud.shared.setupNotifications()
         FLOCloud.shared.setupSubscription(application: application)
         if let notification = launchOptions?[.remoteNotification] {
@@ -89,7 +58,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         armchairTimer?.invalidate()
-        switch MapViewController.instance?.status ?? .uninitialised {
+        FLSettingsBundleHelper.checkSettings()
+        FLSettingsBundleHelper.setVersion()
+        let status = MapViewController.instance?.status ?? .uninitialised
+        switch  status {
         case .ready:
             MapViewController.instance?.refreshData()
             armchairTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: false) { (timer) in

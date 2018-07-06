@@ -17,11 +17,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         return 1
     }
 
-    @IBOutlet var brandSwitches: [UISwitch]!
-    @IBOutlet weak var notificationproductPickerView: UIPickerView!
-    @IBOutlet weak var notificationRegionPickerView: UIPickerView!
     @IBOutlet weak var defaultProductpickerView: UIPickerView!
-    @IBOutlet weak var priceChangeTextView: UITextField!
 
     @IBAction func done(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -29,10 +25,8 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView {
-        case defaultProductpickerView, notificationproductPickerView:
+        case defaultProductpickerView:
             return products.count
-        case notificationRegionPickerView:
-            return regions.count
         default:
             return 0
         }
@@ -43,10 +37,8 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView {
-        case defaultProductpickerView, notificationproductPickerView:
+        case defaultProductpickerView:
             return products[row].knownType.fullName ?? products[row].name
-        case notificationRegionPickerView:
-            return regions[row].name
         default:
             return nil
         }
@@ -56,14 +48,6 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         switch pickerView {
         case defaultProductpickerView:
             MapViewController.instance!.globalProduct = products[row]
-        case notificationproductPickerView:
-            defaults.set(products[row].ident, forKey: "notification.product")
-            defaults.synchronize()
-            FLOCloud.shared.changeSubscription()
-        case notificationRegionPickerView:
-            defaults.set(regions[row].ident, forKey: "notification.region")
-            defaults.synchronize()
-            FLOCloud.shared.changeSubscription()
         default:
             return
         }
@@ -102,18 +86,8 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
 
         productPicker.dataSource = self
         productPicker.delegate = self
-        notificationproductPickerView.dataSource = self
-        notificationRegionPickerView.dataSource = self
-        notificationproductPickerView.delegate = self
-        notificationRegionPickerView.delegate = self
 
         datePicker.date = MapViewController.instance!.globalDate
-
-        for sw in brandSwitches {
-            if let br = Brand.Known(rawValue: Int16(sw.tag)) {
-                sw.isOn = UserDefaults.standard.bool(forKey: br.key)
-            }
-        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -122,12 +96,6 @@ class SettingsViewController: UITableViewController, UIPickerViewDataSource, UIP
         if MapViewController.instance?.globalProduct != nil {
             productPicker.selectRow(products.index(of: (MapViewController.instance?.globalProduct!)!)!, inComponent: 0, animated: false)
         }
-        let notProd = defaults.integer(forKey: "notification.product")
-        let notReg = defaults.integer(forKey: "notification.region")
-        let notPrice = defaults.float(forKey: "notification.priceChange")
-        notificationproductPickerView.selectRow(products.index(of: (products.first(where: {$0.ident == notProd}))!)!, inComponent: 0, animated: false)
-        notificationRegionPickerView.selectRow(regions.index(of: (regions.first(where: {$0.ident == notReg}))!)!, inComponent: 0, animated: false)
-        priceChangeTextView.text = String(Int(notPrice*100))
     }
 
     @IBAction func MapTypeSelected(_ sender: UISegmentedControl) {

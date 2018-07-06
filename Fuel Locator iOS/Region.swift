@@ -28,56 +28,316 @@ class Region: FLODataEntity, Hashable {
     
     enum Known: Int16 {
         case metropolitanArea = -1
-        case gascoyne = 1
-        case goldfieldsEsperance = 2
-        case greatSouthern = 3
-        case kimberley = 4
-        case midWest  = 5
-        case peel = 6
-        case pilbara = 7
-        case southWest = 8
-        case wheatbelt = 9
-        case northOfTheRiver = 25
-        case southOfTheRiver = 26
+        case northOfRiver = 25
+        case southOfRiver = 26
         case eastHills = 27
+        case albany = 15
+        case augustaMargaretRiver = 28
+        case bridgetownGreenbushes = 30
+        case boulder = 1
+        case broome = 2
+        case bunbury = 16
+        case busseltonTownsite = 3
+        case busseltonShire = 29
+        case capel = 19
+        case carnarvon = 4
+        case cataby = 33
+        case collie = 5
+        case coolgardie = 34
+        case cunderdin = 35
+        case donnybrookBalingup = 31
+        case dalwallinu = 36
+        case dampier = 6
+        case dardanup = 20
+        case denmark = 37
+        case derby = 38
+        case dongara = 39
+        case esperance = 7
+        case exmouth = 40
+        case fitzroyCrossing = 41
+        case geraldton = 17
+        case greenough = 21
+        case harvey = 22
+        case jurien = 42
+        case kalgoorlie = 8
+        case kambalda = 43
+        case karratha = 9
+        case kellerberrin = 44
+        case kojonup = 45
+        case kununurra = 10
+        case mandurah = 18
+        case manjimup = 32
+        case meckering = 58
+        case meekatharra = 46
+        case moora = 47
+        case mtBarker = 48
+        case murray = 23
+        case narrogin = 11
+        case newman = 49
+        case norseman = 50
+        case northam = 12
+        case portHedland = 13
+        case ravensthorpe = 51
+        case regansFord = 57
+        case southHedland = 14
+        case tammin = 53
+        case waroona = 24
+        case williams = 54
+        case wubin = 55
+        case wundowie = 59
+        case york = 56
 
-        var name: String! {
+        var identifier: String {
+            switch self {
+            case .metropolitanArea:
+                return "metropolitanArea"
+            case .northOfRiver:
+                return "northOfRiver"
+            case .southOfRiver:
+                return "southOfRiver"
+            case .eastHills:
+                return "eastHills"
+            case .albany:
+                return "albany"
+            case .augustaMargaretRiver:
+                return "augustaMargaretRiver"
+            case .bridgetownGreenbushes:
+                return "bridgetownGreenbushes"
+            case .boulder:
+                return "boulder"
+            case .broome:
+                return "broome"
+            case .bunbury:
+                return "bunbury"
+            case .busseltonTownsite:
+                return "busseltonTownsite"
+            case .busseltonShire:
+                return "busseltonShire"
+            case .capel:
+                return "capel"
+            case .carnarvon:
+                return "carnarvon"
+            case .cataby:
+                return "cataby"
+            case .collie:
+                return "collie"
+            case .coolgardie:
+                return "coolgardie"
+            case .cunderdin:
+                return "cunderdin"
+            case .donnybrookBalingup:
+                return "donnybrookBalingup"
+            case .dalwallinu:
+                return "dalwallinu"
+            case .dampier:
+                return "dampier"
+            case .dardanup:
+                return "dardanup"
+            case .denmark:
+                return "denmark"
+            case .derby:
+                return "derby"
+            case .dongara:
+                return "dongara"
+            case .esperance:
+                return "esperance"
+            case .exmouth:
+                return "exmouth"
+            case .fitzroyCrossing:
+                return "fitzroyCrossing"
+            case .geraldton:
+                return "geraldton"
+            case .greenough:
+                return "greenough"
+            case .harvey:
+                return "harvey"
+            case .jurien:
+                return "jurien"
+            case .kalgoorlie:
+                return "kalgoorlie"
+            case .kambalda:
+                return "kambalda"
+            case .karratha:
+                return "karratha"
+            case .kellerberrin:
+                return "kellerberrin"
+            case .kojonup:
+                return "kojonup"
+            case .kununurra:
+                return "kununurra"
+            case .mandurah:
+                return "mandurah"
+            case .manjimup:
+                return "manjimup"
+            case .meckering:
+                return "meckering"
+            case .meekatharra:
+                return "meekatharra"
+            case .moora:
+                return "moora"
+            case .mtBarker:
+                return "mtBarker"
+            case .murray:
+                return "murray"
+            case .narrogin:
+                return "narrogin"
+            case .newman:
+                return "newman"
+            case .norseman:
+                return "norseman"
+            case .northam:
+                return "northam"
+            case .portHedland:
+                return "portHedland"
+            case .ravensthorpe:
+                return "ravensthorpe"
+            case .regansFord:
+                return "regansFord"
+            case .southHedland:
+                return "southHedland"
+            case .tammin:
+                return "tammin"
+            case .waroona:
+                return "waroona"
+            case .williams:
+                return "williams"
+            case .wubin:
+                return "wubin"
+            case .wundowie:
+                return "wundowie"
+            case .york:
+                return "york"
+            }
+        }
+        var name: String {
             switch self {
             case .metropolitanArea:
                 return "Metropolitan Area"
-            case .gascoyne:
-                return "Gascoyne"
-            case .goldfieldsEsperance:
-                return "Goldfields-Esperance"
-            case .greatSouthern:
-                return "Great Southern"
-            case .kimberley:
-                return "Kimberley"
-            case .midWest:
-                return "Mid West"
-            case .peel:
-                return "Peel"
-            case .pilbara:
-                return "Pilbara"
-            case .southWest:
-                return "South West"
-            case .wheatbelt:
-                return "Wheatbelt"
-            case .northOfTheRiver:
-                return "North of the River"
-            case .southOfTheRiver:
-                return "South of the River"
+            case .northOfRiver:
+                return "Metro : North of River"
+            case .southOfRiver:
+                return "Metro : South of River"
             case .eastHills:
-                return "East/Hills"
+                return "Metro : East/Hills"
+            case .albany:
+                return "Albany"
+            case .augustaMargaretRiver:
+                return "Augusta / Margaret River"
+            case .bridgetownGreenbushes:
+                return "Bridgetown / Greenbushes"
+            case .boulder:
+                return "Boulder"
+            case .broome:
+                return "Broome"
+            case .bunbury:
+                return "Bunbury"
+            case .busseltonTownsite:
+                return "Busselton (Townsite)"
+            case .busseltonShire:
+                return "Busselton (Shire)"
+            case .capel:
+                return "Capel"
+            case .carnarvon:
+                return "Carnarvon"
+            case .cataby:
+                return "Cataby"
+            case .collie:
+                return "Collie"
+            case .coolgardie:
+                return "Coolgardie"
+            case .cunderdin:
+                return "Cunderdin"
+            case .donnybrookBalingup:
+                return "Donnybrook / Balingup"
+            case .dalwallinu:
+                return "Dalwallinu"
+            case .dampier:
+                return "Dampier"
+            case .dardanup:
+                return "Dardanup"
+            case .denmark:
+                return "Denmark"
+            case .derby:
+                return "Derby"
+            case .dongara:
+                return "Dongara"
+            case .esperance:
+                return "Esperance"
+            case .exmouth:
+                return "Exmouth"
+            case .fitzroyCrossing:
+                return "Fitzroy Crossing"
+            case .geraldton:
+                return "Geraldton"
+            case .greenough:
+                return "Greenough"
+            case .harvey:
+                return "Harvey"
+            case .jurien:
+                return "Jurien"
+            case .kalgoorlie:
+                return "Kalgoorlie"
+            case .kambalda:
+                return "Kambalda"
+            case .karratha:
+                return "Karratha"
+            case .kellerberrin:
+                return "Kellerberrin"
+            case .kojonup:
+                return "Kojonup"
+            case .kununurra:
+                return "Kununurra"
+            case .mandurah:
+                return "Mandurah"
+            case .manjimup:
+                return "Manjimup"
+            case .meckering:
+                return "Meckering"
+            case .meekatharra:
+                return "Meekatharra"
+            case .moora:
+                return "Moora"
+            case .mtBarker:
+                return "Mt Barker"
+            case .murray:
+                return "Murray"
+            case .narrogin:
+                return "Narrogin"
+            case .newman:
+                return "Newman"
+            case .norseman:
+                return "Norseman"
+            case .northam:
+                return "Northam"
+            case .portHedland:
+                return "Port Hedland"
+            case .ravensthorpe:
+                return "Ravensthorpe"
+            case .regansFord:
+                return "Regans Ford"
+            case .southHedland:
+                return "South Hedland"
+            case .tammin:
+                return "Tammin"
+            case .waroona:
+                return "Waroona"
+            case .williams:
+                return "Williams"
+            case .wubin:
+                return "Wubin"
+            case .wundowie:
+                return "Wundowie"
+            case .york:
+                return "York"
             }
         }
         var recordId: CKRecordID {
             return Region.recordId(from: rawValue)
         }
-}
+    }
 
     init(record: CKRecord) {
-        ident = Brand.ident(from: record.recordID)
+        ident = Region.ident(from: record.recordID)
         name = record["name"] as! String
         latitude = record["latitude"] as? NSNumber ?? 0
         longitude = record["longitude"] as? NSNumber ?? 0

@@ -123,7 +123,7 @@
     {
       "size" : "24x24",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-3.png",
+      "filename" : "Fuel Location II Logo-26.png",
       "scale" : "2x",
       "role" : "notificationCenter",
       "subtype" : "38mm"
@@ -131,7 +131,7 @@
     {
       "size" : "27.5x27.5",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-4.png",
+      "filename" : "Fuel Location II Logo-25.png",
       "scale" : "2x",
       "role" : "notificationCenter",
       "subtype" : "42mm"
@@ -139,21 +139,21 @@
     {
       "size" : "29x29",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-5.png",
+      "filename" : "Fuel Location II Logo-24.png",
       "role" : "companionSettings",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-6.png",
+      "filename" : "Fuel Location II Logo-23.png",
       "role" : "companionSettings",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-7.png",
+      "filename" : "Fuel Location II Logo-22.png",
       "scale" : "2x",
       "role" : "appLauncher",
       "subtype" : "38mm"
@@ -161,7 +161,7 @@
     {
       "size" : "86x86",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-8.png",
+      "filename" : "Fuel Location II Logo-21.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "38mm"
@@ -169,7 +169,7 @@
     {
       "size" : "98x98",
       "idiom" : "watch",
-      "filename" : "Fuel Location Logo-9.png",
+      "filename" : "Fuel Location II Logo-20.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "42mm"

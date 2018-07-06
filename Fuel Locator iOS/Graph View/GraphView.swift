@@ -50,6 +50,10 @@ class GraphView: UIView {
         return stride(from: floor((xStart - 1) / 7 + 0.5) * 7, to: xEnd + 1, by: strideBy)
     }
 
+    var xMinorStride: StrideTo<CGFloat> {
+        return stride(from: xStart, to: xEnd + 1, by: 1)
+    }
+
     var yStride: StrideTo<CGFloat> {
         let strideBy: CGFloat
         switch yHeight * 200 / bounds.height {
@@ -118,9 +122,49 @@ class GraphView: UIView {
 
         let xScale: CGFloat = bounds.width / (xEnd - xStart + 2)
         let yScale: CGFloat = bounds.height / max(yHeight, 1)
-
-
         let transform = CGAffineTransform(scaleX: xScale, y: -yScale).translatedBy(x: -xStart + 1, y: -yHeight)
+        let startDate = XAxisView.cal.date(from: DateComponents(calendar: XAxisView.cal,
+                                                                timeZone: XAxisView.timeZone,
+                                                                year: 2001,
+                                                                month: 1,
+                                                                day: 1))!
+
+        for y in yStride {
+            let path = UIBezierPath()
+            path.move(to: CGPoint(x: xStart, y: y))
+            path.addLine(to: CGPoint(x: xEnd, y: y))
+            path.apply(transform)
+            if Int(y) % 100 == 0 {
+                UIColor.gray.withAlphaComponent(0.5).setStroke()
+            } else {
+                UIColor.lightGray.withAlphaComponent(0.25).setStroke()
+            }
+            path.lineWidth = 0.5
+            path.stroke()
+        }
+
+        for x in xMinorStride {
+            guard xStart ... xEnd ~= x else {
+                continue
+            }
+            let path = UIBezierPath()
+            path.move(to: CGPoint(x: x, y: 0))
+            path.addLine(to: CGPoint(x: x, y: yHeight))
+            path.apply(transform)
+            path.lineWidth = 0.5
+            let date = XAxisView.cal.date(byAdding: .day, value: Int(x), to: startDate)!
+            let dayOfMonth = XAxisView.cal.component(.day, from: date)
+            if dayOfMonth == 1 {
+                UIColor.gray.withAlphaComponent(0.75).setStroke()
+                path.setLineDash([CGFloat(4), CGFloat(4)], count: 2, phase: 0)
+            } else if Int(x) % 7 == 0 {
+                UIColor.gray.withAlphaComponent(0.5).setStroke()
+            } else {
+                UIColor.lightGray.withAlphaComponent(0.25).setStroke()
+            }
+            path.stroke()
+        }
+
         for i in 0..<bands.count {
             if let band = bands[i] {
                 let colour = GraphView.colours[i]!
@@ -244,39 +288,6 @@ class GraphView: UIView {
                 context.restoreGState()
             }
         }
-
-        for y in yStride {
-            let path = UIBezierPath()
-            path.move(to: CGPoint(x: xStart, y: y))
-            path.addLine(to: CGPoint(x: xEnd, y: y))
-            path.apply(transform)
-            if Int(y) % 100 == 0 {
-                UIColor.gray.withAlphaComponent(0.5).setStroke()
-            } else {
-                UIColor.lightGray.withAlphaComponent(0.25).setStroke()
-            }
-            path.lineWidth = 0.5
-            path.stroke()
-        }
-
-        for x in xStride {
-            guard xStart ... xEnd ~= x else {
-                continue
-            }
-            let path = UIBezierPath()
-            path.move(to: CGPoint(x: x, y: 0))
-            path.addLine(to: CGPoint(x: x, y: yHeight))
-            path.apply(transform)
-            path.lineWidth = 0.5
-            if Int(x) % 7 == 0 {
-                UIColor.gray.withAlphaComponent(0.5).setStroke()
-            } else {
-                UIColor.lightGray.withAlphaComponent(0.25).setStroke()
-            }
-            path.stroke()
-        }
-
-
     }
 
 }

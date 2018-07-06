@@ -10,6 +10,7 @@ import Foundation
 import CloudKit
 import UserNotifications
 import UIKit
+import MapKit
 import os.log
 
 class FLOCloud: NSObject {
@@ -246,6 +247,76 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     // a delegate for the NSUserNotificationCenter.
     public func userNotificationCenter(_ center: UNUserNotificationCenter,
                                        didActivate notification: UNNotification) {
+        print(notification.request.identifier)
+        guard let productRef = notification.request.content.userInfo["product"] as? CKReference else {
+            return
+        }
+        let regionRef = notification.request.content.userInfo["region"] as? CKReference
+        let stationRef = notification.request.content.userInfo["station"] as? CKReference
+        guard regionRef != nil || stationRef != nil else {
+            return
+        }
+        do {
+        	try Product.download(withRecordID: productRef.recordID) { (error, rec) in
+                guard error == nil else {
+                    os_log("Product download failed : %@", log: self.logger, type: .info, error!.localizedDescription)
+                    return
+                }
+                guard let record = rec else {
+                    os_log("Product downlad failed", log: self.logger, type: .info)
+                    return
+                }
+                let product = Product(record: record)
+                MapViewController.instance?.globalProduct = product
+                if stationRef != nil {
+                    do {
+                        try Station.download(withRecordID: stationRef!.recordID, completion: { (error, rec) in
+                            guard error == nil else {
+                                os_log("Station download failed : %@", log: self.logger, type: .info, error!.localizedDescription)
+                                return
+                            }
+                            guard let record = rec else {
+                                os_log("Station downlad failed", log: self.logger, type: .info)
+                                return
+                            }
+                            let station = Station(record: record)
+                            if let suburb = station.suburb {
+                                let reg = MKCoordinateRegionMakeWithDistance(suburb.location.coordinate,
+                                                                              suburb.radius!.doubleValue,
+                                                                              suburb.radius!.doubleValue)
+                                MapViewController.instance?.mapView.region = reg
+                            }
+                        })
+                    } catch {
+                        os_log("Database failed : %@", log: self.logger, type: .info, error.localizedDescription)
+                    }
+                } else {
+                    do {
+                        try Region.download(withRecordID: regionRef!.recordID, completion: { (error, record) in
+                            guard error == nil else {
+                                os_log("Region download failed : %@", log: self.logger, type: .info, error!.localizedDescription)
+                                return
+                            }
+                            guard let record = rec else {
+                                os_log("Region downlad failed", log: self.logger, type: .info)
+                                return
+                            }
+                            let region = Region(record: record)
+                            if let location = region.location {
+                                let reg = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                             region.radius!.doubleValue,
+                                                                             region.radius!.doubleValue)
+                                MapViewController.instance?.mapView.region = reg
+                            }
+                        })
+                    } catch {
+                        os_log("Database failed : %@", log: self.logger, type: .info, error.localizedDescription)
+                    }
+                }
+            }
+        } catch {
+            os_log("Database failed : %@", log: logger, type: .info, error.localizedDescription)
+        }
         os_log("Notification: %@", log: logger, type: .info, notification.description)
     }
 
@@ -264,8 +335,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        os_log("Notification: %@", log: logger, type: .info, notification.description)
-        completionHandler([.badge, .sound, .alert])
+        completionHandler([.sound, .alert])
+        MapViewController.instance?.refreshData()
     }
 
     public func setupSubscription(application: UIApplication) {
@@ -290,13 +361,16 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                 return
             }
         }
-        removeSubscription()
-        setupSubscription()
+        changeSubscription()
     }
 
     func changeSubscription() {
         removeSubscription()
         setupSubscription()
+//        subscribe(priceChange: 0.05, product: .ulp, station: "Puma Como")
+//        subscribe(product: .ulp, station: "Puma Como")
+//        subscribe(priceChange: 0.05, product: .ulp, region: .metropolitanArea)
+//        subscribe(product: .ulp, region: .metropolitanArea)
     }
 
     func removeSubscription() {
@@ -316,7 +390,6 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                                 os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error!.localizedDescription)
                                 return
                             }
-                            os_log("subscription deleted: %@", log: self.logger, type: .error, str ?? "No id")
                         })
                         group.enter()
                     } catch {
@@ -331,43 +404,52 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
         group.wait()
     }
 
-    func setupSubscription() {
+    fileprivate func subscribe(priceChange: Float = 0, product: Product.Known, region: Region.Known? = nil, station: String? = nil) {
+        guard region != nil || station != nil else {
+            return
+        }
         let defaults = UserDefaults.standard
-        let form = NumberFormatter()
-        form.numberStyle = .percent
-        form.maximumFractionDigits = 0
-        let product = Product.Known(rawValue: Int16(defaults.integer(forKey: "notification.product"))) ?? .ulp
-        let region = Region.Known(rawValue: Int16(defaults.integer(forKey: "notification.region"))) ?? .metropolitanArea
-        let priceChange = defaults.float(forKey: "notification.priceChange")
         let pred: NSPredicate
         let subTitle: String
-        let body: String
-        if let tradingName = defaults.string(forKey: "notification.station") {
-            pred = NSPredicate(format: "priceChange >= %@ AND station == %@ AND product == %@",
-                               priceChange as NSNumber,
-                               CKReference(recordID: Station.recordId(from: tradingName), action: .deleteSelf),
-                               CKReference(recordID: product.recordId, action: .deleteSelf))
-            subTitle = "Product: \(product.fullName), Station: \(tradingName)"
-            body = "A price rise of over \(form.string(from: priceChange as NSNumber)!) has been added."
+        let body: String = "A price change of %1$@ cpl (%2$@ percent) for %3$@. The new price is %4$@ cpl."
+        let args: [String] = ["riseString", "percentString", "dateStr", "priceString"]
+        if station != nil {
+            if priceChange > 0 {
+                pred = NSPredicate(format: "priceChange >= %@ AND station == %@ AND product == %@",
+                                   priceChange as NSNumber,
+                                   CKReference(recordID: Station.recordId(from: station!), action: .deleteSelf),
+                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+            } else {
+                pred = NSPredicate(format: "station == %@ AND product == %@",
+                                   CKReference(recordID: Station.recordId(from: station!), action: .deleteSelf),
+                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+            }
+            subTitle = "Product: \(product.fullName), Station: \(station!)"
         } else {
-            pred = NSPredicate(format: "priceChange >= %@ AND region == %@ AND product == %@",
-                               priceChange as NSNumber,
-                               CKReference(recordID: region.recordId, action: .deleteSelf),
-                               CKReference(recordID: product.recordId, action: .deleteSelf))
-            subTitle = "Product: \(product.fullName!), Region: \(region.name!)"
-            body = "A price rise of over \(form.string(from: priceChange as NSNumber)!) has been added."
+            if priceChange > 0 {
+                pred = NSPredicate(format: "priceChange >= %@ AND region == %@ AND product == %@",
+                                   priceChange as NSNumber,
+                                   CKReference(recordID: region!.recordId, action: .deleteSelf),
+                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+            } else {
+                pred = NSPredicate(format: "region == %@ AND product == %@",
+                                   CKReference(recordID: region!.recordId, action: .deleteSelf),
+                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+            }
+            subTitle = "Product: \(product.fullName!), Region: \(region!.name)"
         }
         let risingSubscription = CKQuerySubscription(recordType: "GlobalNotification",
                                                      predicate: pred,
-                                                     options: .firesOnRecordCreation)
+                                                     options: [.firesOnRecordCreation])
         let risingInfo = CKNotificationInfo()
         risingInfo.title = "Fuel Price Rise Added"
         risingInfo.subtitle = subTitle
-        risingInfo.alertBody = body
+        risingInfo.alertLocalizationKey = body
+        risingInfo.alertLocalizationArgs = args
         risingInfo.shouldSendContentAvailable = true
         risingInfo.shouldBadge = true
         risingInfo.soundName = "chords2.caf"
-        risingInfo.desiredKeys = ["priceChange", "region", "product", "date", "dateCreated"]
+        risingInfo.desiredKeys = ["region", "product", "date", "price", "priceRise"]
         risingSubscription.notificationInfo = risingInfo
 
         let group = DispatchGroup()
@@ -387,6 +469,30 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
             group.enter()
         } catch {
             print(error)
+        }
+        group.wait()
+    }
+
+    func setupSubscription() {
+        let defaults = UserDefaults.standard
+        let form = NumberFormatter()
+        form.numberStyle = .percent
+        form.maximumFractionDigits = 0
+        let product = Product.Known(rawValue: Int16(defaults.integer(forKey: FLSettingsBundleHelper.Keys.notificationProduct.rawValue))) ?? .ulp
+        let priceChange = defaults.float(forKey: FLSettingsBundleHelper.Keys.notificationPriceChange.rawValue)
+        if let station = defaults.string(forKey: FLSettingsBundleHelper.Keys.notificationStation.rawValue) {
+            if priceChange > 0 {
+                subscribe(priceChange: priceChange, product: product, station: station)
+            } else {
+                subscribe(product: product, station: station)
+            }
+        } else {
+            let region = Region.Known(rawValue: Int16(defaults.integer(forKey: FLSettingsBundleHelper.Keys.notificationRegion.rawValue))) ?? .metropolitanArea
+            if priceChange > 0 {
+                subscribe(priceChange: priceChange, product: product, region: region)
+            } else {
+                subscribe(product: product, region: region)
+            }
         }
     }
 }

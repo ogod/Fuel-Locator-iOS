@@ -266,7 +266,7 @@ class Brand: FLODataEntity, Hashable {
         }
     }
 
-    static var all: FLODataEntityAll<Int16, Brand> = FLODataEntityAll<Int16, Brand>()
+    static var all: FLODataEntityAll<Int16, Brand> = FLODataEntityAll<Int16, Brand>() 
 
     var key: Int16 {
         return ident

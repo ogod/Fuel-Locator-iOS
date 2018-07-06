@@ -12,7 +12,7 @@ import Contacts
 class StationAnnotation: MKPointAnnotation {
 
     let station: Station
-    var category = 0
+    @objc dynamic var category = 0
 
     static let format: NumberFormatter = {
         let f = NumberFormatter()
@@ -85,6 +85,7 @@ class StationAnnotation: MKPointAnnotation {
             }
         } else {
             self.title = ""
+            category = 0
         }
     }
 
