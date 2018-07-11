@@ -74,28 +74,64 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "–––"
+        guard let product = MapViewController.instance?.globalProduct else {
+            let alert = UIAlertController(title: "Failed to Identify Product",
+                                          message: """
+                                                    I could not identify the current product to generate a statistical graph.
+                                                    """,
+                                          preferredStyle: .alert)
+            let action = UIAlertAction(title: "Okay", style: .default, handler: { (action) in
+                self.dismiss(animated: true)
+            })
+            alert.addAction(action)
+            alert.preferredAction = action
+            self.present(alert, animated: true)
+            return
+        }
+        guard let region = MapViewController.instance?.globalRegion else {
+            let alert = UIAlertController(title: "Failed to Identify Region",
+                                          message: """
+                                                    I could not identify the current region to generate a statistical graph.
+                                                    Please expand the viewed area or move to a new region.
+                                                    """,
+                                          preferredStyle: .alert)
+            let action = UIAlertAction(title: "Okay", style: .default, handler: { (action) in
+                self.dismiss(animated: true)
+            })
+            alert.addAction(action)
+            alert.preferredAction = action
+            self.present(alert, animated: true)
+            return
+        }
         yAxisLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
         activityIndicator.startAnimating()
-        if let product = MapViewController.instance?.globalProduct {
-            if let region = MapViewController.instance?.globalRegion {
-                title = view.bounds.width > 500 ?
-                    "Fuel Price History for \(product.name) in the \(region.name)" :
-                    "\(product.name) in \(region.name)"
-                Statistics.fetchHistoric(product, region) { (stats, error) in
-                    guard error == nil else {
-                        print(error!)
-                        return
-                    }
-                    self.xAxisView.graphView = self.graphView
-                    self.yAxisView.graphView = self.graphView
-                    self.graphView.generateBands(fromStatistics: stats)
-                    self.graphView.ready = true
-                    self.setupContentSizes()
-                    self.relativeOffset = CGPoint(x: 1, y: 0)
-                    self.activityIndicator.stopAnimating()
-                    self.view.setNeedsLayout()
-                }
+        title = view.bounds.width > 500 ?
+            "Fuel Price History for \(product.name) in the \(region.name)" :
+            "\(product.name) in \(region.name)"
+        self.xAxisView.graphView = self.graphView
+        self.yAxisView.graphView = self.graphView
+        Statistics.fetchHistoric(product, region) { (statistics, error) in
+            guard error == nil else {
+                let alert = UIAlertController(title: "Failed to Load Statisics",
+                                              message: """
+                                                    I could not load the statistics for the product and region.
+                                                    \(error!.localizedDescription)
+                                                    """,
+                                              preferredStyle: .alert)
+                let action = UIAlertAction(title: "Okay", style: .default, handler: { (action) in
+                    self.dismiss(animated: true)
+                })
+                alert.addAction(action)
+                alert.preferredAction = action
+                self.present(alert, animated: true)
+                return
             }
+            self.graphView.generateBands(fromStatistics: statistics)
+            self.graphView.ready = true
+            self.setupContentSizes()
+            self.relativeOffset = CGPoint(x: 1, y: 0)
+            self.activityIndicator.stopAnimating()
+            self.view.setNeedsLayout()
         }
     }
 

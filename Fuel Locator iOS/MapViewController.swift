@@ -54,6 +54,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     private static let calendar = Calendar.current
     private let foldedPanelHeight: CGFloat = 74
     private static let defaults = UserDefaults.standard
+    private var clippingOffset: CGFloat = 0
+    private var panelHeight: CGFloat = 0
+    private var clippingHeight: CGFloat = 0
 
     private var products = Product.all.values.sorted(by: { $0.ident < $1.ident })
     private var regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
@@ -77,7 +80,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         DispatchQueue.main.async {
 //            self.tabMaskPanel.bounds = self.tabPanel.bounds
             self.pullDownPanelView.layoutSubviews()
-            self.tabMaskPanel.layoutSubviews()
+//            self.tabMaskPanel.layoutSubviews()
         }
         DispatchQueue.global().async {
             Statistics.all.retrieve({ (success, err) in
@@ -198,7 +201,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             return
         }
         if let stations = Station.all.values {
-            self.mapView.addAnnotations(stations.filter({$0.latitude != 0 && $0.longitude != 0}).map({StationAnnotation($0)}))
+            print("Beginning add annotations")
+            self.mapView.addAnnotations(stations.filter({ st in
+                guard st.latitude != 0 && st.longitude != 0 else {
+                    return false
+                }
+                guard st.dateRange == nil || st.dateRange! ~= globalDate else {
+                    print("Station \(st.tradingName) excluded because \(self.formatter.string(from: globalDate)) is not in \(self.formatter.string(from: st.dateRange!.lowerBound)) ... \(self.formatter.string(from: st.dateRange!.upperBound))")
+                    return false
+                }
+                return true
+            }).map({StationAnnotation($0)}))
+            print("Added annotations")
         }
     }
 
@@ -244,15 +258,27 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
         titleLabel.textAlignment = .center
+        panelHeight = pullDownPanelView.frame.height
         panelMaskView.removeFromSuperview()
         panelMaskView.frame = panelView.frame
         panelVisualEffects.mask = panelMaskView
-        let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
-            self.panelConstraint.constant = self.foldedPanelHeight
+
+        let range = foldedPanelHeight - panelHeight - 8 ... -8
+        let offset = range.lowerBound
+        let flag = (offset - range.lowerBound) - (range.upperBound - range.lowerBound) / 2 < 0
+        let outerSize = CGSize(width: self.clippingView.frame.width, height: flag ? self.foldedPanelHeight : self.panelHeight)
+        let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
+        let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
+        let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
+        panelConstraint.constant = offset
+        self.clippingView.layoutIfNeeded()
+        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+            self.clippingView.frame = finalOuterFrame
+            self.pullDownPanelView.frame = finalinnerFrame
+            self.panelConstraint.constant = flag ? range.lowerBound : range.upperBound
             self.clippingView.layoutIfNeeded()
         }
         animation.startAnimation()
-
     }
 
     fileprivate func checkCloudCredentials() {
@@ -297,7 +323,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
         globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
 
+        let today = Self.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        let tomorrow = Self.calendar.date(byAdding: .day, value: 1, to: today)!
         datePicker.date = MapViewController.instance!.globalDate
+        datePicker.maximumDate = tomorrow
 
         checkCloudCredentials()
     }
@@ -454,8 +483,145 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                                 if let i = self.products.index(of: self.globalProduct) {
                                     self.productPicker.selectRow(i, inComponent: 0, animated: true)
                                 }
-                                self.removeProgressBar()
                                 self.refresh()
+                                self.removeProgressBar()
+//                                DispatchQueue.global().async {
+//                                    print("Fetching past dates")
+//                                    let finalOp = BlockOperation(block: {
+//                                        print("Past Date fetch complete")
+//                                        self.refresh()
+//                                    })
+//                                    for station in Station.all.values {
+//                                        var first: Date!
+//                                        var last: Date!
+//                                        let pred = NSPredicate(format: "station == %@", CKReference(recordID: station.recordID, action: .none))
+//                                        let queryFirst = CKQuery(recordType: "FWPrice", predicate: pred)
+//                                        queryFirst.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+//                                        let opFirst = CKQueryOperation(query: queryFirst)
+//                                        opFirst.resultsLimit = 1
+//                                        opFirst.queuePriority = .veryLow
+//                                        opFirst.recordFetchedBlock = { record in
+//                                            if let l = record["date"] as? Date {
+//                                                first = l
+//                                            } else {
+//                                                print("Station '\(station.tradingName)', has no first")
+//                                            }
+//                                        }
+//                                        let queryLast = CKQuery(recordType: "FWPrice", predicate: pred)
+//                                        queryLast.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+//                                        let opLast = CKQueryOperation(query: queryLast)
+//                                        opLast.resultsLimit = 1
+//                                        opLast.queuePriority = .veryLow
+//                                        opLast.recordFetchedBlock = { record in
+//                                            if let l = record["date"] as? Date {
+//                                                last = l
+//                                            } else {
+//                                                print("Station '\(station.tradingName)', has no last")
+//                                            }
+//                                        }
+//                                        let opComplete = BlockOperation(block: {
+//                                            if first != nil && last != nil {
+//                                                station.dateRange = first ... Self.calendar.date(byAdding: .day, value: 7, to: last)!
+//                                            }
+//                                        })
+//                                        opComplete.queuePriority = .veryLow
+//                                        opComplete.addDependency(opFirst)
+//                                        opComplete.addDependency(opLast)
+//                                        finalOp.addDependency(opComplete)
+//                                        opFirst.queryCompletionBlock = { (cursor, error) in
+//                                            guard error == nil else {
+//                                                print("Query error: \(error!.localizedDescription)")
+//                                                switch error! {
+//                                                case let error as CKError:
+//                                                    let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double ?? 30.0
+//                                                    switch error.code {
+//                                                    case .networkFailure, .networkUnavailable, .internalError, .serverRejectedRequest:
+//                                                        // An error that is returned when the network is available but cannot be accessed.
+//                                                        // An error that is returned when the network is not available.
+//                                                        print("Error on cloud read: \(error.localizedDescription)")
+//                                                        fallthrough
+//
+//                                                    case .requestRateLimited:
+//                                                        // Transfers to and from the server are being rate limited for the client at this time.
+//                                                        print("rate limited")
+//                                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + retryAfter) {
+//                                                            let op = CKQueryOperation(query: queryFirst)
+//                                                            op.recordFetchedBlock = opFirst.recordFetchedBlock
+//                                                            op.queryCompletionBlock = opFirst.queryCompletionBlock
+//                                                            op.resultsLimit = 1
+//                                                            op.queuePriority = .veryLow
+//                                                            opComplete.addDependency(op)
+//                                                            do {
+//                                                                try FLOCloud.shared.publicDatabase().add(op)
+//                                                            } catch {
+//                                                                print("Database error: \(error.localizedDescription)")
+//                                                            }
+//                                                        }
+//
+//                                                    default:
+//                                                        print("Error on cloud read: \(error.localizedDescription)")
+//                                                    }
+//
+//                                                default:
+//                                                    print("Error on cloud read: \(error!.localizedDescription)")
+//                                                }
+//
+//                                                return
+//                                            }
+//                                        }
+//                                        opLast.queryCompletionBlock = { (cursor, error) in
+//                                            guard error == nil else {
+//                                                guard error == nil else {
+//                                                    print("Query error: \(error!.localizedDescription)")
+//                                                    switch error! {
+//                                                    case let error as CKError:
+//                                                        let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double ?? 30.0
+//                                                        switch error.code {
+//                                                        case .networkFailure, .networkUnavailable, .internalError, .serverRejectedRequest:
+//                                                            // An error that is returned when the network is available but cannot be accessed.
+//                                                            // An error that is returned when the network is not available.
+//                                                            print("Error on cloud read: \(error.localizedDescription)")
+//                                                            fallthrough
+//
+//                                                        case .requestRateLimited:
+//                                                            // Transfers to and from the server are being rate limited for the client at this time.
+//                                                            print("rate limited")
+//                                                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + retryAfter) {
+//                                                                let op = CKQueryOperation(query: queryLast)
+//                                                                op.recordFetchedBlock = opLast.recordFetchedBlock
+//                                                                op.queryCompletionBlock = opLast.queryCompletionBlock
+//                                                                op.resultsLimit = 1
+//                                                                op.queuePriority = .veryLow
+//                                                                opComplete.addDependency(op)
+//                                                                do {
+//                                                                    try FLOCloud.shared.publicDatabase().add(op)
+//                                                                } catch {
+//                                                                    print("Database error: \(error.localizedDescription)")
+//                                                                }
+//                                                            }
+//
+//                                                        default:
+//                                                            print("Error on cloud read: \(error.localizedDescription)")
+//                                                        }
+//
+//                                                    default:
+//                                                        print("Error on cloud read: \(error!.localizedDescription)")
+//                                                    }
+//                                                    return
+//                                                }
+//                                                return
+//                                            }
+//                                        }
+//                                        do {
+//                                            try FLOCloud.shared.publicDatabase().add(opFirst)
+//                                            try FLOCloud.shared.publicDatabase().add(opLast)
+//                                            OperationQueue.main.addOperation(opComplete)
+//                                        } catch {
+//                                            print("Database error: \(error.localizedDescription)")
+//                                        }
+//                                    }
+//                                    OperationQueue.main.addOperation(finalOp)
+//                                }
                             })
                         })
                     })
@@ -515,61 +681,55 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         })
     }
 
-//    @IBAction func edgePanDetected(_ sender: Any) {
-//        performSegue(withIdentifier: "graph", sender: self)
-//    }
-//
-//    @IBOutlet var edgePanRecogniser: UIScreenEdgePanGestureRecognizer!
-//
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if gestureRecognizer == edgePanRecogniser {
-//            return true
-//        }
-//        return false
-//    }
-//
-
-    private var clippingHeight: CGFloat = 0
-    private var panelHeight: CGFloat = 0
-
     @IBAction func detectPan(_ recogniser: UIPanGestureRecognizer) {
         let translation = recogniser.translation(in: view)
+        let range = foldedPanelHeight - panelHeight - 8 ... -8
         switch recogniser.state {
         case .began:
-            self.clippingHeight = self.clippingView.frame.height
+            self.clippingOffset = self.panelConstraint.constant
             self.panelHeight = self.pullDownPanelView.frame.height
+            self.clippingHeight = self.clippingView.frame.height
 
         case .changed:
-            let height = min(max(self.clippingHeight + translation.y, self.foldedPanelHeight), self.panelHeight - 8)
-            panelConstraint.constant = height
-            clipTopConstraint.constant = 0
+            self.panelConstraint.constant = (self.clippingOffset + translation.y).clamped(to: range)
+            self.clipTopConstraint.constant = 0
             self.clippingView.layoutIfNeeded()
 
         case .possible:
-            let height = min(max(self.clippingHeight + translation.y, self.foldedPanelHeight), self.panelHeight - 8)
-            panelConstraint.constant = height
-            clipTopConstraint.constant = 0
+            self.panelConstraint.constant = (self.clippingOffset + translation.y).clamped(to: range)
+            self.clipTopConstraint.constant = 0
             self.clippingView.layoutIfNeeded()
 
         case .cancelled, .failed:
-            self.clipTopConstraint.constant = 0
+            let offset = (self.clippingOffset).clamped(to: range)
+            let flag = (offset - range.lowerBound) - (range.upperBound - range.lowerBound) / 2 < 0
+            let outerSize = CGSize(width: self.clippingView.frame.width, height: flag ? self.foldedPanelHeight : self.panelHeight)
+            let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
+            let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
+            let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
+            self.panelConstraint.constant = offset
             self.clippingView.layoutIfNeeded()
-            let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
-                self.panelConstraint.constant = self.clippingHeight
-                self.clipTopConstraint.constant = 0
+            let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
+                self.clippingView.frame = finalOuterFrame
+                self.pullDownPanelView.frame = finalinnerFrame
+                self.panelConstraint.constant = flag ? range.lowerBound : range.upperBound
                 self.clippingView.layoutIfNeeded()
             }
             animation.startAnimation()
 
         case .ended:
-            let height = min(max(self.clippingHeight + translation.y, self.foldedPanelHeight), self.panelHeight - 8)
-            let flag = (height - self.foldedPanelHeight) - (self.panelHeight - foldedPanelHeight) / 2 < 0
-            panelConstraint.constant = height
-            self.clippingView.center = CGPoint(x: self.clippingView.center.x, y: self.clippingView.bounds.height/2)
+            let offset = (self.clippingOffset + translation.y).clamped(to: range)
+            let flag = (offset - range.lowerBound) - (range.upperBound - range.lowerBound) / 2 < 0
+            let outerSize = CGSize(width: self.clippingView.frame.width, height: flag ? self.foldedPanelHeight : self.panelHeight)
+            let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
+            let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
+            let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
+            panelConstraint.constant = offset
             self.clippingView.layoutIfNeeded()
-            let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
-                self.clippingView.center = CGPoint(x: self.clippingView.center.x, y: self.clippingView.bounds.height/2)
-                self.panelConstraint.constant = flag ? self.foldedPanelHeight : self.panelHeight - 8
+            let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+                self.clippingView.frame = finalOuterFrame
+                self.pullDownPanelView.frame = finalinnerFrame
+                self.panelConstraint.constant = flag ? range.lowerBound : range.upperBound
                 self.clippingView.layoutIfNeeded()
             }
             animation.startAnimation()
@@ -594,3 +754,5 @@ extension MapViewController: UIPickerViewDataSource, UIPickerViewDelegate {
         globalProduct = products[row]
     }
 }
+
+

@@ -24,13 +24,13 @@
         "mode" : "9-part",
         "center" : {
           "mode" : "stretch",
-          "width" : 384,
+          "width" : 368,
           "height" : 69
         },
         "cap-insets" : {
           "bottom" : 16,
           "top" : 16,
-          "right" : 0,
+          "right" : 16,
           "left" : 16
         }
       },

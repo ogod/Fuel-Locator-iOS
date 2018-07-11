@@ -133,12 +133,14 @@ class GraphSevenDayAverage {
                     let pn2 = points[n-2]
                     let pn1 = points[n-1]
 
+                    var v: [CGPoint] = points
                     for i in 0 ..< n {
-                        points[i].y = (i-7 ... i+6).reduce(0.0, {$0 + points[max(min($1, n-1), 0)].y}) / 14.0
+                        v[i].y = (i-3 ... i+3).reduce(0.0, {$0 + points[$1.clamped(to: 0...n-1, modulo: 7)].y  / 7.0})
                     }
+                    points = v
 
                     fadeInLine.move(to: CGPoint(x: p1.x - (p2.x - p1.x) / 3.0,
-                                                    y: p1.y - (p2.y - p1.y) / 3.0))
+                                                y: p1.y - (p2.y - p1.y) / 3.0))
                     fadeInLine.addLine(to: p1)
                     line.move(to: points.first!)
                     for i in 0 ..< n-1 {
@@ -147,7 +149,7 @@ class GraphSevenDayAverage {
                     line.addLine(to: points.last!)
                     fadeOutLine.move(to: pn1)
                     fadeOutLine.addLine(to: CGPoint(x: pn1.x - (pn2.x - pn1.x) / 3.0,
-                                                        y: pn1.y - (pn2.y - pn1.y) / 3.0))
+                                                    y: pn1.y - (pn2.y - pn1.y) / 3.0))
 
                     fadeInLines.append(fadeInLine)
                     lines.append(line)

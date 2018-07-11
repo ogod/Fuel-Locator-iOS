@@ -5,18 +5,18 @@
         "mode" : "9-part",
         "center" : {
           "mode" : "stretch",
-          "width" : 31,
-          "height" : 27
+          "width" : 27,
+          "height" : 1
         },
         "cap-insets" : {
-          "bottom" : 16,
-          "top" : 8,
-          "right" : 33,
-          "left" : 33
+          "bottom" : 6,
+          "top" : 0,
+          "right" : 3,
+          "left" : 3
         }
       },
       "idiom" : "universal",
-      "filename" : "PanelTab@x3-2.png",
+      "filename" : "PanelGrip-2.png",
       "scale" : "1x"
     },
     {
@@ -24,18 +24,18 @@
         "mode" : "9-part",
         "center" : {
           "mode" : "stretch",
-          "width" : 59,
-          "height" : 53
+          "width" : 58,
+          "height" : 1
         },
         "cap-insets" : {
-          "bottom" : 32,
-          "top" : 16,
-          "right" : 67,
-          "left" : 67
+          "bottom" : 23,
+          "top" : 0,
+          "right" : 4,
+          "left" : 4
         }
       },
       "idiom" : "universal",
-      "filename" : "PanelTab@x3-1.png",
+      "filename" : "PanelGrip-1.png",
       "scale" : "2x"
     },
     {
@@ -43,18 +43,18 @@
         "mode" : "9-part",
         "center" : {
           "mode" : "stretch",
-          "width" : 90,
-          "height" : 80
+          "width" : 89,
+          "height" : 1
         },
         "cap-insets" : {
-          "bottom" : 48,
-          "top" : 24,
-          "right" : 100,
-          "left" : 100
+          "bottom" : 35,
+          "top" : 0,
+          "right" : 5,
+          "left" : 5
         }
       },
       "idiom" : "universal",
-      "filename" : "PanelTab@x3.png",
+      "filename" : "PanelGrip.png",
       "scale" : "3x"
     }
   ],

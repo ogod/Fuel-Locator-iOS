@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7710E21A20E74EAD00FE3C80 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7710E21920E74EAD00FE3C80 /* Settings.bundle */; };
 		7710E21F20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7710E21E20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift */; };
+		7735EDE020F4A3550050ECCD /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7735EDDF20F4A3550050ECCD /* Utility.swift */; };
 		775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55CC2099BD7500540B5B /* AppDelegate.swift */; };
 		775C55CF2099BD7500540B5B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55CE2099BD7500540B5B /* MapViewController.swift */; };
 		775C55D42099BD7500540B5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775C55D22099BD7500540B5B /* Main.storyboard */; };
@@ -114,6 +115,7 @@
 /* Begin PBXFileReference section */
 		7710E21920E74EAD00FE3C80 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		7710E21E20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLSettingsBundleHelper.swift; sourceTree = "<group>"; };
+		7735EDDF20F4A3550050ECCD /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = WA_STATE_POLYGON_shp.geojson; sourceTree = "<group>"; };
 		775C55C92099BD7500540B5B /* Fuel Locator iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fuel Locator iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		775C55CC2099BD7500540B5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -187,6 +189,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7735EDDB20F4A31B0050ECCD /* Utility Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7735EDDF20F4A3550050ECCD /* Utility.swift */,
+			);
+			name = "Utility Classes";
+			sourceTree = "<group>";
+		};
 		775C55C02099BD7500540B5B = {
 			isa = PBXGroup;
 			children = (
@@ -228,6 +238,7 @@
 				775C55DA2099BD9200540B5B /* Info.plist */,
 				776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */,
 				7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */,
+				7735EDDB20F4A31B0050ECCD /* Utility Classes */,
 				777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */,
 			);
 			path = "Fuel Locator iOS";
@@ -567,6 +578,7 @@
 				777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */,
 				776E9434209EE935008AB0FC /* FLODataEntity.swift in Sources */,
 				77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */,
+				7735EDE020F4A3550050ECCD /* Utility.swift in Sources */,
 				77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */,
 				776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */,
 				775C5603209DF34800540B5B /* SettingsViewController.swift in Sources */,

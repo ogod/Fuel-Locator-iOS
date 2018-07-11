@@ -12,12 +12,14 @@ import CloudKit
 import os.log
 
 class Station: FLODataEntity, Hashable {
+    typealias `Self` = Station
     var hashValue: Int { return tradingName.hashValue }
 
     static func == (lhs: Station, rhs: Station) -> Bool {
         return lhs.tradingName == rhs.tradingName
     }
 
+    static let calendar = Calendar.current
 
     init(tradingName: String, brand: Brand, address: String?, latitude: Double, longitude: Double, phone: String?, stationDescription: String?, siteFeatures: Set<String>? = nil, suburb: Suburb? = nil) {
         self.tradingName = tradingName
@@ -40,6 +42,9 @@ class Station: FLODataEntity, Hashable {
         stationDescription = record["stationDescription"] as? String
         brand = Brand.all[Brand.ident(from: (record["brand"] as! CKReference).recordID)]
         suburb = Suburb.all[Suburb.ident(from: (record["suburb"] as! CKReference).recordID)]
+        if let earliest = record["earliest"] as? Date, let latest = record["latest"] as? Date {
+            dateRange = earliest ... Self.calendar.date(byAdding: .day, value: 7, to: latest)!
+        }
         systemFields = Brand.archiveSystemFields(from: record)
     }
 
@@ -55,6 +60,7 @@ class Station: FLODataEntity, Hashable {
     public var siteFeatures: Set<String>?
     public var suburb: Suburb?
     public var systemFields: Data?
+    public var dateRange: ClosedRange<Date>?
 
     fileprivate let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Station")
 

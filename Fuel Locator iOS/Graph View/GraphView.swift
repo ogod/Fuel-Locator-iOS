@@ -82,6 +82,7 @@ class GraphView: UIView {
 
     func generateBands(fromStatistics stats: Set<Statistics>) {
         let s = stats.filter({$0.minimum != nil})
+        print("Number of ites = \(s.count)")
         bands[0] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per10!.int16Value, low: $0.minimum!.int16Value, date: $0.date)})))
         bands[1] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per20!.int16Value, low: $0.per10!.int16Value, date: $0.date)})))
         bands[2] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per30!.int16Value, low: $0.per20!.int16Value, date: $0.date)})))
@@ -92,7 +93,7 @@ class GraphView: UIView {
         bands[7] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per80!.int16Value, low: $0.per70!.int16Value, date: $0.date)})))
         bands[8] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.per90!.int16Value, low: $0.per80!.int16Value, date: $0.date)})))
         bands[9] = GraphBand(values: AnySequence<PriceBandValue>(s.map({(high: $0.maximum!.int16Value, low: $0.per90!.int16Value, date: $0.date)})))
-        sevenDayAverage = GraphSevenDayAverage(values: AnySequence<PricePointValue>(s.map({(value: $0.mean!.int16Value, date: $0.date)})))
+        sevenDayAverage = GraphSevenDayAverage(values: AnySequence<PricePointValue>(s.filter({$0.mean != nil}).map({(value: $0.mean!.int16Value, date: $0.date)})))
         xStart = bands.map({$0?.xStart ?? 0}).min() ?? 1
         xEnd = bands.map({$0?.xEnd ?? 0}).max() ?? 1
         yHeight = floor((bands.map({$0?.yHeight ?? 0}).max() ?? 0.0) / 10.0 + 1.0) * 10.0
