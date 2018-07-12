@@ -262,6 +262,7 @@ Cg
                                         </constraints>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="AAY-lx-Bwk" appends="YES" id="C9q-8z-gNe"/>
+                                            <outletCollection property="gestureRecognizers" destination="BcZ-Gz-ee8" appends="YES" id="LUm-Fc-w5c"/>
                                         </connections>
                                     </view>
                                 </subviews>
@@ -429,6 +430,12 @@ Cg
                         <outlet property="delegate" destination="9pv-A4-QxB" id="iTH-4e-y2L"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer delaysTouchesBegan="YES" id="BcZ-Gz-ee8">
+                    <connections>
+                        <action selector="detectTap:" destination="9pv-A4-QxB" id="MHw-yO-LyC"/>
+                        <outlet property="delegate" destination="9pv-A4-QxB" id="Wym-d3-b03"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="206.8359375" y="-892.09370424597353"/>
         </scene>
@@ -941,36 +948,32 @@ Owen Godfrey</string>
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
+                                        <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fuel Location II Imprint" translatesAutoresizingMaskIntoConstraints="NO" id="xvj-5G-4zC">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
+                                        </imageView>
                                         <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JfB-0v-TDI">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="bhF-Wj-yLj">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <subviews>
-                                                    <imageView userInteractionEnabled="NO" alpha="0.10000000000000001" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fuel Location II Imprint" translatesAutoresizingMaskIntoConstraints="NO" id="xvj-5G-4zC">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
-                                                    </imageView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="xvj-5G-4zC" secondAttribute="bottom" id="AcV-8L-VrQ"/>
-                                                    <constraint firstItem="xvj-5G-4zC" firstAttribute="leading" secondItem="bhF-Wj-yLj" secondAttribute="leading" id="Hif-Wz-Ohs"/>
-                                                    <constraint firstItem="xvj-5G-4zC" firstAttribute="top" secondItem="bhF-Wj-yLj" secondAttribute="top" id="MBJ-vx-ap7"/>
-                                                    <constraint firstAttribute="trailing" secondItem="xvj-5G-4zC" secondAttribute="trailing" id="YtQ-gq-R6d"/>
-                                                </constraints>
                                             </view>
                                             <vibrancyEffect>
-                                                <blurEffect style="light"/>
+                                                <blurEffect style="extraLight"/>
                                             </vibrancyEffect>
                                         </visualEffectView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="xvj-5G-4zC" secondAttribute="bottom" id="6yU-ej-dhH"/>
+                                        <constraint firstItem="xvj-5G-4zC" firstAttribute="top" secondItem="f50-Ax-zap" secondAttribute="top" id="BlQ-zU-B4S"/>
+                                        <constraint firstAttribute="trailing" secondItem="xvj-5G-4zC" secondAttribute="trailing" id="PI0-zi-olJ"/>
                                         <constraint firstAttribute="trailing" secondItem="JfB-0v-TDI" secondAttribute="trailing" id="XCJ-S3-wsP"/>
                                         <constraint firstItem="JfB-0v-TDI" firstAttribute="leading" secondItem="f50-Ax-zap" secondAttribute="leading" id="Yqt-6E-692"/>
                                         <constraint firstItem="JfB-0v-TDI" firstAttribute="top" secondItem="f50-Ax-zap" secondAttribute="top" id="drd-9D-LzS"/>
                                         <constraint firstAttribute="bottom" secondItem="JfB-0v-TDI" secondAttribute="bottom" id="lXw-99-3Y1"/>
+                                        <constraint firstItem="xvj-5G-4zC" firstAttribute="leading" secondItem="f50-Ax-zap" secondAttribute="leading" id="yEQ-sr-d4I"/>
                                     </constraints>
                                 </view>
-                                <blurEffect style="light"/>
+                                <blurEffect style="regular"/>
                             </visualEffectView>
                             <progressView contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="mwc-5t-PMU">
                                 <rect key="frame" x="12.666666666666657" y="402" width="350" height="9"/>
@@ -982,26 +985,66 @@ Owen Godfrey</string>
                                 <color key="progressTintColor" name="selectedMenuItemColor" catalog="System" colorSpace="catalog"/>
                                 <color key="trackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </progressView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CkW-Qk-J7N">
-                                <rect key="frame" x="156.33333333333334" y="361.66666666666669" width="62.666666666666657" height="32.333333333333314"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <size key="shadowOffset" width="1" height="1"/>
-                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kVe-LZ-ocL">
+                                <rect key="frame" x="105.66666666666667" y="353" width="162.66666666666663" height="40.333333333333314"/>
+                                <subviews>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g8n-xS-cwT">
+                                        <rect key="frame" x="0.0" y="0.0" width="162.66666666666666" height="40.333333333333336"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please wait…" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CkW-Qk-J7N">
+                                                <rect key="frame" x="7.3333333333333286" y="4" width="146.66666666666669" height="32.333333333333336"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="highlightedColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="CkW-Qk-J7N" firstAttribute="leading" secondItem="g8n-xS-cwT" secondAttribute="leading" constant="8" id="TCN-0V-eyj"/>
+                                            <constraint firstItem="CkW-Qk-J7N" firstAttribute="top" secondItem="g8n-xS-cwT" secondAttribute="top" constant="4" id="dSX-iQ-0rH"/>
+                                            <constraint firstAttribute="bottom" secondItem="CkW-Qk-J7N" secondAttribute="bottom" constant="4" id="dk3-du-30T"/>
+                                            <constraint firstAttribute="trailing" secondItem="CkW-Qk-J7N" secondAttribute="trailing" constant="8" id="pkx-n3-CZG"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBoundary" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="g8n-xS-cwT" firstAttribute="top" secondItem="kVe-LZ-ocL" secondAttribute="top" id="4Ej-zg-dWw"/>
+                                    <constraint firstAttribute="trailing" secondItem="g8n-xS-cwT" secondAttribute="trailing" id="6so-Id-BDx"/>
+                                    <constraint firstItem="g8n-xS-cwT" firstAttribute="leading" secondItem="kVe-LZ-ocL" secondAttribute="leading" id="Kf0-Uo-Hf5"/>
+                                    <constraint firstAttribute="bottom" secondItem="g8n-xS-cwT" secondAttribute="bottom" id="iJK-Lb-ET0"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                        <real key="value" value="0.29999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                        <size key="value" width="0.0" height="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="CkW-Qk-J7N" firstAttribute="centerX" secondItem="mr1-EO-0Ek" secondAttribute="centerX" id="Fkg-LF-jnO"/>
+                            <constraint firstItem="mwc-5t-PMU" firstAttribute="top" secondItem="kVe-LZ-ocL" secondAttribute="bottom" constant="8" symbolic="YES" id="M5I-8a-yhO"/>
                             <constraint firstItem="mwc-5t-PMU" firstAttribute="centerY" secondItem="mr1-EO-0Ek" secondAttribute="centerY" id="S4A-Up-aaQ"/>
                             <constraint firstItem="mwc-5t-PMU" firstAttribute="centerX" secondItem="mr1-EO-0Ek" secondAttribute="centerX" id="UkM-SC-Qdq"/>
                             <constraint firstItem="g5M-bb-Dyj" firstAttribute="bottom" secondItem="8zl-vX-cVh" secondAttribute="bottom" id="YOE-3M-YUk"/>
                             <constraint firstItem="8zl-vX-cVh" firstAttribute="top" secondItem="g5M-bb-Dyj" secondAttribute="top" id="bRq-tr-Bvd"/>
                             <constraint firstItem="g5M-bb-Dyj" firstAttribute="trailing" secondItem="8zl-vX-cVh" secondAttribute="trailing" id="c7H-9W-Nq7"/>
-                            <constraint firstItem="g5M-bb-Dyj" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CkW-Qk-J7N" secondAttribute="trailing" constant="20" id="dQm-ua-JMQ"/>
+                            <constraint firstItem="kVe-LZ-ocL" firstAttribute="centerX" secondItem="mr1-EO-0Ek" secondAttribute="centerX" id="oad-tg-yr3"/>
                             <constraint firstItem="8zl-vX-cVh" firstAttribute="leading" secondItem="g5M-bb-Dyj" secondAttribute="leading" id="wIF-hf-KEo"/>
-                            <constraint firstItem="mwc-5t-PMU" firstAttribute="top" secondItem="CkW-Qk-J7N" secondAttribute="bottom" constant="8" symbolic="YES" id="yj1-AS-pTh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="g5M-bb-Dyj"/>
                     </view>
@@ -1997,7 +2040,7 @@ Owen Godfrey</string>
         </scene>
     </scenes>
     <resources>
-        <image name="Fuel Location II Imprint" width="2000" height="2000"/>
+        <image name="Fuel Location II Imprint" width="992" height="992"/>
         <image name="Graph" width="32" height="32"/>
         <image name="PanelGrip" width="33" height="12"/>
         <image name="PanelMaskTab" width="96" height="50"/>

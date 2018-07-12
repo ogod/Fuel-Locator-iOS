@@ -99,6 +99,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7740DB1720F5B70700488BD3 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		777F0E3E20C6E5090064FF0E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -116,6 +126,13 @@
 		7710E21920E74EAD00FE3C80 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		7710E21E20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLSettingsBundleHelper.swift; sourceTree = "<group>"; };
 		7735EDDF20F4A3550050ECCD /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		7740DAFA20F5B70700488BD3 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		7740DAFC20F5B70700488BD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7740DB0220F5B70700488BD3 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
+		7740DB0520F5B70700488BD3 /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
+		7740DB0820F5B70700488BD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7740DB0A20F5B70700488BD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7740DB1820F5BA0E00488BD3 /* FuelLocationRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelLocationRequestHandler.swift; sourceTree = "<group>"; };
 		7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = WA_STATE_POLYGON_shp.geojson; sourceTree = "<group>"; };
 		775C55C92099BD7500540B5B /* Fuel Locator iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fuel Locator iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		775C55CC2099BD7500540B5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -197,12 +214,34 @@
 			name = "Utility Classes";
 			sourceTree = "<group>";
 		};
+		7740DAF920F5B70700488BD3 /* Fuel Locator Request Extension */ = {
+			isa = PBXGroup;
+			children = (
+				7740DAFA20F5B70700488BD3 /* IntentHandler.swift */,
+				7740DB1820F5BA0E00488BD3 /* FuelLocationRequestHandler.swift */,
+				7740DAFC20F5B70700488BD3 /* Info.plist */,
+			);
+			path = "Fuel Locator Request Extension";
+			sourceTree = "<group>";
+		};
+		7740DB0420F5B70700488BD3 /* Fuel Locator Request ExtensionUI */ = {
+			isa = PBXGroup;
+			children = (
+				7740DB0520F5B70700488BD3 /* IntentViewController.swift */,
+				7740DB0720F5B70700488BD3 /* MainInterface.storyboard */,
+				7740DB0A20F5B70700488BD3 /* Info.plist */,
+			);
+			path = "Fuel Locator Request ExtensionUI";
+			sourceTree = "<group>";
+		};
 		775C55C02099BD7500540B5B = {
 			isa = PBXGroup;
 			children = (
 				775C55CB2099BD7500540B5B /* Fuel Locator iOS */,
 				775C55E22099BD9300540B5B /* Fuel Locator iOSTests */,
 				775C55ED2099BD9300540B5B /* Fuel Locator iOSUITests */,
+				7740DAF920F5B70700488BD3 /* Fuel Locator Request Extension */,
+				7740DB0420F5B70700488BD3 /* Fuel Locator Request ExtensionUI */,
 				775C55CA2099BD7500540B5B /* Products */,
 				775C55FC2099D53200540B5B /* Frameworks */,
 			);
@@ -267,6 +306,7 @@
 			children = (
 				775C56002099D57100540B5B /* CloudKit.framework */,
 				775C55FD2099D53200540B5B /* MapKit.framework */,
+				7740DB0220F5B70700488BD3 /* IntentsUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -338,6 +378,7 @@
 				7742572920B81DEE00D21B48 /* Insert verion to Launch Screen */,
 				775C55C72099BD7500540B5B /* Resources */,
 				777F0E3E20C6E5090064FF0E /* Embed Frameworks */,
+				7740DB1720F5B70700488BD3 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -392,7 +433,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = FL;
-				LastSwiftUpdateCheck = 0930;
+				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Owen Godfrey";
 				TargetAttributes = {
@@ -624,6 +665,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7740DB0720F5B70700488BD3 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7740DB0820F5B70700488BD3 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		775C55D22099BD7500540B5B /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -63,10 +63,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     var refreshFlag = false
 
-    @IBAction func newDateSelected(_ sender: UIDatePicker) {
-        MapViewController.instance!.globalDate = sender.date
-    }
-
     /// Refresh the annotations and display
     func refresh() {
         guard !refreshFlag && globalProduct != nil && !retrieving else {
@@ -134,6 +130,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     @IBAction func mapTypeSelected(_ sender: UISegmentedControl) {
+        resetFoldupTimer()
         switch sender.selectedSegmentIndex {
         case 1:
             mapView.mapType = .satellite
@@ -681,6 +678,66 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         })
     }
 
+    var foldupTimer: Timer?
+
+    func resetFoldupTimer() {
+        cancelFoldupTimer()
+        foldupTimer = Timer.scheduledTimer(timeInterval: 20.0, target: self, selector: #selector(fold), userInfo: nil, repeats: false)
+    }
+
+    func cancelFoldupTimer() {
+        foldupTimer?.invalidate()
+        foldupTimer = nil
+    }
+
+    @objc func fold() {
+        cancelFoldupTimer()
+        let range = foldedPanelHeight - self.pullDownPanelView.frame.height - 8 ... -8
+        let position = ((self.panelConstraint.constant - range.lowerBound) / (range.upperBound - range.lowerBound))
+        guard position == 1 else {
+            return
+        }
+        let outerSize = CGSize(width: self.clippingView.frame.width, height: self.foldedPanelHeight)
+        let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
+        let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
+        let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
+        self.clippingView.layoutIfNeeded()
+        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+            self.clippingView.frame = finalOuterFrame
+            self.pullDownPanelView.frame = finalinnerFrame
+            self.panelConstraint.constant = range.lowerBound
+            self.clippingView.layoutIfNeeded()
+        }
+        animation.startAnimation()
+    }
+
+    @IBAction func newDateSelected(_ sender: UIDatePicker) {
+        MapViewController.instance!.globalDate = sender.date
+        resetFoldupTimer()
+    }
+
+    @IBAction func detectTap(_ recogniser: UITapGestureRecognizer) {
+        let range = foldedPanelHeight - self.pullDownPanelView.frame.height - 8 ... -8 // Range for pull-down view offset, folded ... unfolded
+        let position = ((self.panelConstraint.constant - range.lowerBound) / (range.upperBound - range.lowerBound))  // 0 ==> folded, 1 ==> unfolded
+        let outerSize = CGSize(width: self.clippingView.frame.width, height: position > 0.5 ? self.foldedPanelHeight : self.pullDownPanelView.frame.height)
+        let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
+        let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
+        let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
+        self.clippingView.layoutIfNeeded()
+        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+            self.clippingView.frame = finalOuterFrame
+            self.pullDownPanelView.frame = finalinnerFrame
+            self.panelConstraint.constant = position > 0.5 ? range.lowerBound : range.upperBound
+            self.clippingView.layoutIfNeeded()
+        }
+        animation.startAnimation()
+        if position > 0.5 {
+            cancelFoldupTimer()
+        } else {
+            resetFoldupTimer()
+        }
+    }
+
     @IBAction func detectPan(_ recogniser: UIPanGestureRecognizer) {
         let translation = recogniser.translation(in: view)
         let range = foldedPanelHeight - panelHeight - 8 ... -8
@@ -702,8 +759,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
         case .cancelled, .failed:
             let offset = (self.clippingOffset).clamped(to: range)
-            let flag = (offset - range.lowerBound) - (range.upperBound - range.lowerBound) / 2 < 0
-            let outerSize = CGSize(width: self.clippingView.frame.width, height: flag ? self.foldedPanelHeight : self.panelHeight)
+            let position = ((self.clippingOffset - range.lowerBound) / (range.upperBound - range.lowerBound))  // 0 ==> folded, 1 ==> unfolded
+            let outerSize = CGSize(width: self.clippingView.frame.width, height: position < 0.5 ? self.foldedPanelHeight : self.panelHeight)
             let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
             let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
             let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
@@ -712,15 +769,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
                 self.clippingView.frame = finalOuterFrame
                 self.pullDownPanelView.frame = finalinnerFrame
-                self.panelConstraint.constant = flag ? range.lowerBound : range.upperBound
+                self.panelConstraint.constant = position < 0.5 ? range.lowerBound : range.upperBound
                 self.clippingView.layoutIfNeeded()
             }
             animation.startAnimation()
+            if position < 0.5 {
+                cancelFoldupTimer()
+            } else {
+                resetFoldupTimer()
+            }
 
         case .ended:
             let offset = (self.clippingOffset + translation.y).clamped(to: range)
-            let flag = (offset - range.lowerBound) - (range.upperBound - range.lowerBound) / 2 < 0
-            let outerSize = CGSize(width: self.clippingView.frame.width, height: flag ? self.foldedPanelHeight : self.panelHeight)
+            let position = ((self.panelConstraint.constant - range.lowerBound) / (range.upperBound - range.lowerBound))  // 0 ==> folded, 1 ==> unfolded
+            let outerSize = CGSize(width: self.clippingView.frame.width, height: position < 0.5 ? self.foldedPanelHeight : self.panelHeight)
             let innerOrigin = CGPoint(x: self.pullDownPanelView.frame.minX, y: outerSize.height - panelHeight - 6)
             let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
             let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
@@ -729,10 +791,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
                 self.clippingView.frame = finalOuterFrame
                 self.pullDownPanelView.frame = finalinnerFrame
-                self.panelConstraint.constant = flag ? range.lowerBound : range.upperBound
+                self.panelConstraint.constant = position < 0.5 ? range.lowerBound : range.upperBound
                 self.clippingView.layoutIfNeeded()
             }
             animation.startAnimation()
+            if position > 0.5 {
+                cancelFoldupTimer()
+            } else {
+                resetFoldupTimer()
+            }
         }
     }
 }
@@ -752,6 +819,20 @@ extension MapViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         globalProduct = products[row]
+        resetFoldupTimer()
+    }
+
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let pickerLabel: UILabel
+        if let v = view as? UILabel {
+            pickerLabel = v
+        } else {
+            pickerLabel = UILabel()
+            pickerLabel.font = UIFont.systemFont(ofSize: UIFont.systemFontSize * 1.5, weight: UIFont.Weight.thin)
+            pickerLabel.textAlignment = .center
+        }
+        pickerLabel.text = self.pickerView(pickerView, titleForRow: row, forComponent: component)
+        return pickerLabel
     }
 }
 
