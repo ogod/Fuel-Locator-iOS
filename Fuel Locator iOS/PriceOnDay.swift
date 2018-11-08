@@ -56,8 +56,8 @@ class PriceOnDay: FLODataEntity, Hashable {
     class func fetch(withIdent tradingName: String, _ completionBlock: @escaping (PriceOnDay?, Error?) -> Void) {
         let st = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate)!
         let en = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: st)!
-        let prodRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
-        let stRef = CKReference(recordID: Station.recordId(from: tradingName), action: .none)
+        let prodRef = CKRecord.Reference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
+        let stRef = CKRecord.Reference(recordID: Station.recordId(from: tradingName), action: .none)
         let pred = NSPredicate(format: "date >= %@ && date < %@ && product == %@ && station == %@",
                                st as NSDate, en as NSDate, prodRef, stRef)
         let query = CKQuery(recordType: "FWPrice", predicate: pred)
@@ -75,7 +75,7 @@ class PriceOnDay: FLODataEntity, Hashable {
     class func fetchAll(_ completionBlock: @escaping (Set<PriceOnDay>, Error?) -> Void) {
         let st = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate)!
         let en = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: st)!
-        let prodRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
+        let prodRef = CKRecord.Reference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
         let predicate = NSPredicate(format: "date >= %@ && date < %@ && product == %@",
                                     st as NSDate, en as NSDate, prodRef)
         let query = CKQuery(recordType: "FWPrice", predicate: predicate)
@@ -98,7 +98,7 @@ class PriceOnDay: FLODataEntity, Hashable {
         }
     }
 
-    class func ident(from recordID: CKRecordID) throws -> (date: Date, product: Product, station: Station) {
+    class func ident(from recordID: CKRecord.ID) throws -> (date: Date, product: Product, station: Station) {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
         let str = recordID.recordName
@@ -113,13 +113,13 @@ class PriceOnDay: FLODataEntity, Hashable {
         }
     }
 
-    class func recordID(date: Date, product: Product, station: Station) -> CKRecordID {
+    class func recordID(date: Date, product: Product, station: Station) -> CKRecord.ID {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
-        return CKRecordID(recordName: "Price:\(f.string(from: date))|\(product.ident)|\(station.tradingName)")
+        return CKRecord.ID(recordName: "Price:\(f.string(from: date))|\(product.ident)|\(station.tradingName)")
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return PriceOnDay.recordID(date: date, product: product, station: station)
     }
 
@@ -134,13 +134,13 @@ class PriceOnDay: FLODataEntity, Hashable {
                 return true
             }
         }
-        if let pr = record["product"] as? CKReference {
+        if let pr = record["product"] as? CKRecord.Reference {
             let id = Product.ident(from: pr.recordID)
             if product.ident != id {
                 return true
             }
         }
-        if let st = record["station"] as? CKReference {
+        if let st = record["station"] as? CKRecord.Reference {
             let tr = Station.tradingName(from: st.recordID)
             if station.tradingName != tr {
                 return true
@@ -161,8 +161,8 @@ class PriceOnDay: FLODataEntity, Hashable {
             }
             r["date"] = date as NSDate
             r["price"] = price as NSNumber
-            r["product"] = CKReference(record: product.record, action: .deleteSelf)
-            r["station"] = CKReference(record: station.record, action: .deleteSelf)
+            r["product"] = CKRecord.Reference(record: product.record, action: .deleteSelf)
+            r["station"] = CKRecord.Reference(record: station.record, action: .deleteSelf)
             return r
         }
         set {
@@ -177,13 +177,13 @@ class PriceOnDay: FLODataEntity, Hashable {
                     price = pri
                 }
             }
-            if let pr = newValue["product"] as? CKReference {
+            if let pr = newValue["product"] as? CKRecord.Reference {
                 let id = Product.ident(from: pr.recordID)
                 if product.ident != id {
 //                    product = Product.fetch(withIdent: id)!
                 }
             }
-            if let st = newValue["station"] as? CKReference {
+            if let st = newValue["station"] as? CKRecord.Reference {
                 let tr = Station.tradingName(from: st.recordID)
                 if station.tradingName != tr {
 //                    station = Station.fetch(withTradingName: tr)!

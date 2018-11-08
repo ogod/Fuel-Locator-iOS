@@ -37,3 +37,21 @@ extension CGFloat {
         }
     }
 }
+
+class MainThread {
+    static func async(closure: @escaping ()->Void) {
+        DispatchQueue.main.async {
+            closure()
+        }
+    }
+
+    static func sync(closure: @escaping ()->Void) {
+        if Thread.isMainThread {
+            closure()
+        } else {
+            DispatchQueue.main.sync {
+                closure()
+            }
+        }
+    }
+}

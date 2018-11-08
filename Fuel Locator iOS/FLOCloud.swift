@@ -46,7 +46,7 @@ class FLOCloud: NSObject {
             return
         }
         let subscription = CKDatabaseSubscription(subscriptionID: "shared-changes")
-        let notificationInfo = CKNotificationInfo()
+        let notificationInfo = CKSubscription.NotificationInfo()
         notificationInfo.shouldSendContentAvailable = true
         subscription.notificationInfo = notificationInfo
         let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: [])
@@ -63,7 +63,7 @@ class FLOCloud: NSObject {
 
     func silentPush() {
         // Silent push
-        let notificationInfo = CKNotificationInfo()
+        let notificationInfo = CKSubscription.NotificationInfo()
         // Set only this property
         notificationInfo.shouldSendContentAvailable = true
         // The device does NOT need to prompt for user acceptance!
@@ -72,7 +72,7 @@ class FLOCloud: NSObject {
     }
 
     func uiPush() {
-        let notificationInfo = CKNotificationInfo()
+        let notificationInfo = CKSubscription.NotificationInfo()
         // Set any one of these three properties
         notificationInfo.shouldBadge = true
         notificationInfo.alertBody = NSLocalizedString("alertBody", comment: "")
@@ -84,7 +84,7 @@ class FLOCloud: NSObject {
     }
 
     func subscribeToChanges() {
-        let notificationInfo = CKNotificationInfo()
+        let notificationInfo = CKSubscription.NotificationInfo()
         // Set any one of these three properties
         notificationInfo.shouldBadge = true
         notificationInfo.alertBody = NSLocalizedString("alertBody", comment: "")
@@ -108,9 +108,9 @@ class FLOCloud: NSObject {
         let changesOperation = CKFetchDatabaseChangesOperation(
             previousServerChangeToken: sharedDBChangeToken) // previously cached
         changesOperation.fetchAllChanges = true
-        changesOperation.recordZoneWithIDChangedBlock = (((CKRecordZoneID) -> Void)?) { (recordZoneID) in
+        changesOperation.recordZoneWithIDChangedBlock = (((CKRecordZone.ID) -> Void)?) { (recordZoneID) in
         } // collect zone IDs
-        changesOperation.recordZoneWithIDWasDeletedBlock = (((CKRecordZoneID) -> Void)?) { (recordZoneID) in
+        changesOperation.recordZoneWithIDWasDeletedBlock = (((CKRecordZone.ID) -> Void)?) { (recordZoneID) in
         } // delete local cache
         changesOperation.changeTokenUpdatedBlock = (((CKServerChangeToken) -> Void)?) { (serverChangeToken) in
         } // cache new token
@@ -151,7 +151,7 @@ class FLOCloud: NSObject {
                                               message: "Sign in to your iCloud account to write records. " +
                                                 "On the Home screen, launch Settings, tap iCloud, and enter your Apple ID. " +
                     "Turn iCloud Drive on. If you don't have an iCloud account, tap Create a new Apple ID.",
-                                              preferredStyle: UIAlertControllerStyle.alert)
+                                              preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 controller.present(alert, animated: true) {
                     callBack(false)
@@ -248,11 +248,11 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     public func userNotificationCenter(_ center: UNUserNotificationCenter,
                                        didActivate notification: UNNotification) {
         print(notification.request.identifier)
-        guard let productRef = notification.request.content.userInfo["product"] as? CKReference else {
+        guard let productRef = notification.request.content.userInfo["product"] as? CKRecord.Reference else {
             return
         }
-        let regionRef = notification.request.content.userInfo["region"] as? CKReference
-        let stationRef = notification.request.content.userInfo["station"] as? CKReference
+        let regionRef = notification.request.content.userInfo["region"] as? CKRecord.Reference
+        let stationRef = notification.request.content.userInfo["station"] as? CKRecord.Reference
         guard regionRef != nil || stationRef != nil else {
             return
         }
@@ -281,9 +281,9 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                             }
                             let station = Station(record: record)
                             if let suburb = station.suburb {
-                                let reg = MKCoordinateRegionMakeWithDistance(suburb.location.coordinate,
-                                                                              suburb.radius!.doubleValue,
-                                                                              suburb.radius!.doubleValue)
+                                let reg = MKCoordinateRegion.init(center: suburb.location.coordinate,
+                                                                              latitudinalMeters: suburb.radius!.doubleValue,
+                                                                              longitudinalMeters: suburb.radius!.doubleValue)
                                 MapViewController.instance?.mapView.region = reg
                             }
                         })
@@ -303,9 +303,9 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                             }
                             let region = Region(record: record)
                             if let location = region.location {
-                                let reg = MKCoordinateRegionMakeWithDistance(location.coordinate,
-                                                                             region.radius!.doubleValue,
-                                                                             region.radius!.doubleValue)
+                                let reg = MKCoordinateRegion.init(center: location.coordinate,
+                                                                             latitudinalMeters: region.radius!.doubleValue,
+                                                                             longitudinalMeters: region.radius!.doubleValue)
                                 MapViewController.instance?.mapView.region = reg
                             }
                         })
@@ -417,31 +417,31 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
             if priceChange > 0 {
                 pred = NSPredicate(format: "priceChange >= %@ AND station == %@ AND product == %@",
                                    priceChange as NSNumber,
-                                   CKReference(recordID: Station.recordId(from: station!), action: .deleteSelf),
-                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+                                   CKRecord.Reference(recordID: Station.recordId(from: station!), action: .deleteSelf),
+                                   CKRecord.Reference(recordID: product.recordId, action: .deleteSelf))
             } else {
                 pred = NSPredicate(format: "station == %@ AND product == %@",
-                                   CKReference(recordID: Station.recordId(from: station!), action: .deleteSelf),
-                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+                                   CKRecord.Reference(recordID: Station.recordId(from: station!), action: .deleteSelf),
+                                   CKRecord.Reference(recordID: product.recordId, action: .deleteSelf))
             }
-            subTitle = "Product: \(product.fullName), Station: \(station!)"
+            subTitle = "Product: \(product.fullName ?? "Unknown"), Station: \(station ?? "Unknown")"
         } else {
             if priceChange > 0 {
                 pred = NSPredicate(format: "priceChange >= %@ AND region == %@ AND product == %@",
                                    priceChange as NSNumber,
-                                   CKReference(recordID: region!.recordId, action: .deleteSelf),
-                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+                                   CKRecord.Reference(recordID: region!.recordId, action: .deleteSelf),
+                                   CKRecord.Reference(recordID: product.recordId, action: .deleteSelf))
             } else {
                 pred = NSPredicate(format: "region == %@ AND product == %@",
-                                   CKReference(recordID: region!.recordId, action: .deleteSelf),
-                                   CKReference(recordID: product.recordId, action: .deleteSelf))
+                                   CKRecord.Reference(recordID: region!.recordId, action: .deleteSelf),
+                                   CKRecord.Reference(recordID: product.recordId, action: .deleteSelf))
             }
             subTitle = "Product: \(product.fullName!), Region: \(region!.name)"
         }
         let risingSubscription = CKQuerySubscription(recordType: "GlobalNotification",
                                                      predicate: pred,
                                                      options: [.firesOnRecordCreation])
-        let risingInfo = CKNotificationInfo()
+        let risingInfo = CKSubscription.NotificationInfo()
         risingInfo.title = "Fuel Price Rise Added"
         risingInfo.subtitle = subTitle
         risingInfo.alertLocalizationKey = body
@@ -454,6 +454,7 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
 
         let group = DispatchGroup()
         do {
+            group.enter()
             try publicDatabase().save(risingSubscription, completionHandler: { (subscrip, error) in
                 defer { group.leave() }
                 guard error == nil else {
@@ -466,8 +467,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                     return
                 }
             })
-            group.enter()
         } catch {
+            group.leave()
             print(error)
         }
         group.wait()

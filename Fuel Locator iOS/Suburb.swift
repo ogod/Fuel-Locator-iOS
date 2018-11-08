@@ -31,12 +31,11 @@ class Suburb: FLODataEntity, Hashable {
     init(record: CKRecord) {
         ident = Suburb.ident(from: record.recordID)
         name = record["name"] as! String
-        latitude = record["latitude"] as? NSNumber ?? 0
-        longitude = record["longitude"] as? NSNumber ?? 0
+        self.location = record["location"] as? CLLocation
         radius = record["radius"] as? NSNumber ?? 0
-        if let ref = record["regions"] as? Array<CKReference> {
+        if let ref = record["regions"] as? Array<CKRecord.Reference> {
             region = Set<Region>(ref.map({Region.all[Region.ident(from: $0.recordID)]!}))
-        } else if let ref = record["region"] as? CKReference {
+        } else if let ref = record["region"] as? CKRecord.Reference {
             region = Set<Region>(arrayLiteral: Region.all[Region.ident(from: ref.recordID)]!)
         }
         if let fts = record["features"] as? NSArray {
@@ -46,7 +45,7 @@ class Suburb: FLODataEntity, Hashable {
                 }
             }
         }
-        if let ref = record["surround"] as? Array<CKReference> {
+        if let ref = record["surround"] as? Array<CKRecord.Reference> {
             let subs = ref.map({Suburb.all[Suburb.ident(from: $0.recordID)]})
             surround = Set<Suburb>(subs.filter({$0 != nil}).map({$0!}))
             if subs.count != ref.count {
@@ -79,7 +78,7 @@ class Suburb: FLODataEntity, Hashable {
         }
         set {
             latitude = newValue?.coordinate.latitude as NSNumber?
-            latitude = newValue?.coordinate.latitude as NSNumber?
+            longitude = newValue?.coordinate.longitude as NSNumber?
         }
     }
 
@@ -145,17 +144,17 @@ class Suburb: FLODataEntity, Hashable {
         return ident
     }
 
-    class func ident(from recordID: CKRecordID) -> String {
+    class func ident(from recordID: CKRecord.ID) -> String {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
         return String(str[index...])
     }
 
-    class func recordId(from ident: String) -> CKRecordID {
-        return CKRecordID(recordName: "Suburb:" + ident)
+    class func recordId(from ident: String) -> CKRecord.ID {
+        return CKRecord.ID(recordName: "Suburb:" + ident)
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return Suburb.recordId(from: ident)
     }
 

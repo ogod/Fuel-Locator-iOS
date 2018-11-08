@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var armchairTimer: Timer? = nil
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Armchair.appID("1389830186")
 //        Armchair.debugEnabled(true)
         Armchair.significantEventsUntilPrompt(5)
@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             MapViewController.instance?.present(alert, animated: true, completion: {
-                abort()
+                exit(0) // TODO: abort is not alowed
             })
         default:
             break

@@ -49,7 +49,7 @@ class StationAnnotation: MKPointAnnotation {
         if let price: PriceOnDay = PriceOnDay.all[station.tradingName] {
             let p = Double(price.adjustedPrice) / 10.0
             self.title = StationAnnotation.format.string(from: p as NSNumber)
-            if let d: Int16 = station.brand?.useDiscount ?? false ? station.brand?.discount : nil {
+            if let d: Int16 = station.brand?.useDiscount ?? false ? (station.brand?.personalDiscount ?? station.brand?.discount) : nil {
                 self.title = "\(StationAnnotation.format.string(from: p as NSNumber)!) (\(d)c)"
             }
 

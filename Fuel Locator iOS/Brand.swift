@@ -20,7 +20,6 @@ class Brand: FLODataEntity, Hashable {
     }
 
     enum Known: Int16 {
-        case unknown = 0
         case ampol = 2
         case betterChoice = 3
         case boc = 4
@@ -48,8 +47,6 @@ class Brand: FLODataEntity, Hashable {
 
         var name: String! {
             switch self {
-            case .unknown:
-                return nil
             case .ampol:
                 return "ampol"
             case .betterChoice:
@@ -106,6 +103,12 @@ class Brand: FLODataEntity, Hashable {
             }
             return "Brand.\(name!).useDiscount"
         }
+        var discountKey: String {
+            guard name != nil else {
+                return ""
+            }
+            return "Brand.\(name!).amountDiscount"
+        }
     }
 
     private let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "Brand")
@@ -122,7 +125,7 @@ class Brand: FLODataEntity, Hashable {
         discount = record["discount"] as? Int16 ?? 0
         systemFields = Brand.archiveSystemFields(from: record)
     }
-    
+
     public var discount: Int16
     public var ident: Int16
     public var name: String
@@ -133,23 +136,54 @@ class Brand: FLODataEntity, Hashable {
 
     public var useDiscount: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: brandIdent.key)
+            if let b = brandIdent {
+                return UserDefaults.standard.bool(forKey: b.key)
+            } else {
+                return false
+            }
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: brandIdent.key)
+            if let b = brandIdent {
+                UserDefaults.standard.set(newValue, forKey: b.key)
+            }
+        }
+    }
+    public var personalDiscount: Int16? {
+        get {
+            if let b = brandIdent {
+                if UserDefaults.standard.object(forKey: b.discountKey) != nil {
+                    let d = Int16(UserDefaults.standard.integer(forKey: b.discountKey))
+                    return d == 0 ? nil : d
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let b = brandIdent {
+                if newValue != nil {
+                    UserDefaults.standard.set(newValue, forKey: b.discountKey)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: b.discountKey)
+                }
+            }
         }
     }
 
     var adjustment: Int16 {
-        return useDiscount ? discount * 10 : 0
+        return useDiscount ? (personalDiscount ?? discount) * 10 : 0
     }
     
-    var brandIdent: Known {
+    var brandIdent: Known? {
         get {
-            return Known(rawValue: ident) ?? Known.unknown
+            return Known(rawValue: ident)
         }
         set {
-            ident = newValue.rawValue
+            if newValue != nil {
+                ident = newValue!.rawValue
+            }
         }
     }
 
@@ -272,17 +306,17 @@ class Brand: FLODataEntity, Hashable {
         return ident
     }
 
-    class func ident(from recordID: CKRecordID) -> Int16 {
+    class func ident(from recordID: CKRecord.ID) -> Int16 {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
         return Int16(String(str[index...]))!
     }
 
-    class func recordID(from ident: Int16) -> CKRecordID {
-        return CKRecordID(recordName: "Brand:" + String(ident))
+    class func recordID(from ident: Int16) -> CKRecord.ID {
+        return CKRecord.ID(recordName: "Brand:" + String(ident))
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return Brand.recordID(from: ident)
     }
 

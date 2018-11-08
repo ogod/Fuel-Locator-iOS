@@ -71,9 +71,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         refreshFlag = true
         titleLabel.text = """
                             Prices for: \(formatter.string(from: globalDate))
-                            \(globalProduct.knownType.fullName ?? globalProduct.name)
+                            Product: \(globalProduct.knownType.fullName ?? globalProduct.name)
+                            Region: \(globalRegion?.name ?? "Unknown")
                             """
-        DispatchQueue.main.async {
+        MainThread.async {
 //            self.tabMaskPanel.bounds = self.tabPanel.bounds
             self.pullDownPanelView.layoutSubviews()
 //            self.tabMaskPanel.layoutSubviews()
@@ -99,7 +100,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                             return
                         }
                         if success {
-                            DispatchQueue.main.async {
+                            MainThread.async{
                                 self.resetAnnotations()
                                 self.refreshFlag = false
                                 self.mapView.setNeedsDisplay()
@@ -149,25 +150,41 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     typealias AccType = (count: Int, prev: Int, reg: Region?, prevReg: Region?)
 
+
     /// The current global region.
     /// This method polls the visible annotations as to a concensus of what region is being viewed. First majority wins.
     /// If the region has no visible annotations, nil is returned.
     var globalRegion: Region! {
+        let mapRegion = mapView.region
+        let mapLocation = CLLocation(latitude: mapRegion.center.latitude, longitude: mapRegion.center.longitude)
+        let dist = mapLocation.distance(from: CLLocation(latitude: mapLocation.coordinate.latitude + mapRegion.span.latitudeDelta,
+                                                         longitude: mapLocation.coordinate.longitude + mapRegion.span.longitudeDelta))
+
+        let regions = Region.all.values.filter({$0.location != nil && mapLocation.distance(from: $0.location!) < ($0.radius?.doubleValue ?? 0) + dist})
+        guard regions.count > 1 else {
+            return regions.first
+        }
         let allAnnotations = Array(mapView.annotations(in: mapView.visibleMapRect))
         let stationAnnotions = allAnnotations.compactMap({$0 as? MKClusterAnnotation}).flatMap({$0.memberAnnotations}).compactMap({$0 as? StationAnnotation}) +
             allAnnotations.compactMap({$0 as? StationAnnotation})
-        let regions = stationAnnotions.compactMap({$0.station.suburb?.region}).flatMap({$0}).sorted(by: {$0.ident < $1.ident})
-        let modal = regions.reduce((count: 0 as Int, prev: 0 as Int, reg: nil as Region?, prevReg: nil as Region?)) { (part, region) -> AccType in
-            guard region.ident == (part.reg?.ident ?? -2) else {
-                if part.count > part.prev {
-                    return (count: 1, prev: part.count, reg: region, prevReg: part.reg)
-                } else {
-                    return (count: 1, prev: part.prev, reg: region, prevReg: part.prevReg)
+        let stations = stationAnnotions.map({$0.station})
+        let statRegs = stations.compactMap({$0.suburb?.region}).flatMap({$0})
+
+        var counts = Array<Int>(repeating: 0, count: regions.count)
+        var currentHighestCountIndex = -1
+        for i in 0 ..< regions.count {
+            for r in statRegs {
+                if r == regions[i] {
+                    counts[i] += 1
                 }
             }
-            return (count: part.count+1, prev: part.prev, reg: part.reg, prevReg: part.prevReg)
+            if currentHighestCountIndex == -1 {
+                currentHighestCountIndex = i
+            } else if counts[i] >= counts[currentHighestCountIndex] {
+                currentHighestCountIndex = i
+            }
         }
-        return modal.prevReg
+        return currentHighestCountIndex == -1 ? nil : regions[currentHighestCountIndex]
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -220,6 +237,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     /// Function to handle a callout accessory tap by activating a map route
     ///
+    /// This function doesn't seem to get called with annotation class registration.
+    /// As such, see the annotation object code for direct button action to launch
+    /// maps.
+    ///
     /// - Parameters:
     ///   - mapView: The map view
     ///   - view: The annotation view that initiated the call
@@ -269,7 +290,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
         panelConstraint.constant = offset
         self.clippingView.layoutIfNeeded()
-        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIView.AnimationCurve.easeInOut) {
             self.clippingView.frame = finalOuterFrame
             self.pullDownPanelView.frame = finalinnerFrame
             self.panelConstraint.constant = flag ? range.lowerBound : range.upperBound
@@ -344,7 +365,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             return
         }
-        DispatchQueue.main.async {
+        MainThread.async{
             self.retrieving = true
             let increment: Float = 1.0 / 1.0
             self.displayProgressBar(label: """
@@ -405,7 +426,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             return
         }
-        DispatchQueue.main.async {
+        MainThread.async{
             self.retrieving = true
             let increment: Float = 1.0 / 5.0
             self.displayProgressBar(label: """
@@ -702,7 +723,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
         let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
         self.clippingView.layoutIfNeeded()
-        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIView.AnimationCurve.easeInOut) {
             self.clippingView.frame = finalOuterFrame
             self.pullDownPanelView.frame = finalinnerFrame
             self.panelConstraint.constant = range.lowerBound
@@ -724,7 +745,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let finalOuterFrame = CGRect(origin: self.clippingView.frame.origin, size: outerSize)
         let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
         self.clippingView.layoutIfNeeded()
-        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+        let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIView.AnimationCurve.easeInOut) {
             self.clippingView.frame = finalOuterFrame
             self.pullDownPanelView.frame = finalinnerFrame
             self.panelConstraint.constant = position > 0.5 ? range.lowerBound : range.upperBound
@@ -766,7 +787,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
             self.panelConstraint.constant = offset
             self.clippingView.layoutIfNeeded()
-            let animation = UIViewPropertyAnimator(duration: 2, curve: UIViewAnimationCurve.easeInOut) {
+            let animation = UIViewPropertyAnimator(duration: 2, curve: UIView.AnimationCurve.easeInOut) {
                 self.clippingView.frame = finalOuterFrame
                 self.pullDownPanelView.frame = finalinnerFrame
                 self.panelConstraint.constant = position < 0.5 ? range.lowerBound : range.upperBound
@@ -788,7 +809,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let finalinnerFrame = CGRect(origin: innerOrigin, size: self.pullDownPanelView.frame.size)
             panelConstraint.constant = offset
             self.clippingView.layoutIfNeeded()
-            let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIViewAnimationCurve.easeInOut) {
+            let animation = UIViewPropertyAnimator(duration: 0.2, curve: UIView.AnimationCurve.easeInOut) {
                 self.clippingView.frame = finalOuterFrame
                 self.pullDownPanelView.frame = finalinnerFrame
                 self.panelConstraint.constant = position < 0.5 ? range.lowerBound : range.upperBound

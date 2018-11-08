@@ -331,7 +331,7 @@ class Region: FLODataEntity, Hashable {
                 return "York"
             }
         }
-        var recordId: CKRecordID {
+        var recordId: CKRecord.ID {
             return Region.recordId(from: rawValue)
         }
     }
@@ -339,9 +339,8 @@ class Region: FLODataEntity, Hashable {
     init(record: CKRecord) {
         ident = Region.ident(from: record.recordID)
         name = record["name"] as! String
-        latitude = record["latitude"] as? NSNumber ?? 0
-        longitude = record["longitude"] as? NSNumber ?? 0
-        radius = record["radius"] as? NSNumber ?? 0
+        location = record["location"] as? CLLocation
+        radius = record["radius"] as? NSNumber
         systemFields = Brand.archiveSystemFields(from: record)
     }
 
@@ -357,12 +356,12 @@ class Region: FLODataEntity, Hashable {
     var location: CLLocation? {
         get {
             return latitude != nil && longitude != nil ?
-                CLLocation(latitude: latitude! as! Double, longitude: longitude! as! Double) :
+                CLLocation(latitude: latitude!.doubleValue, longitude: longitude!.doubleValue) :
                 nil
         }
         set (newLocation) {
             latitude = newLocation?.coordinate.latitude as NSNumber?
-            latitude = newLocation?.coordinate.latitude as NSNumber?
+            longitude = newLocation?.coordinate.longitude as NSNumber?
         }
     }
 
@@ -429,21 +428,21 @@ class Region: FLODataEntity, Hashable {
         return ident
     }
 
-    class func ident(from recordID: CKRecordID) -> Int16 {
+    class func ident(from recordID: CKRecord.ID) -> Int16 {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
         return Int16(String(str[index...]))!
     }
 
-    class func recordId(from ident: Int16) -> CKRecordID {
-        return CKRecordID(recordName: "Region:" + String(ident))
+    class func recordId(from ident: Int16) -> CKRecord.ID {
+        return CKRecord.ID(recordName: "Region:" + String(ident))
     }
 
-    class func recordId(from ident: Known) -> CKRecordID {
+    class func recordId(from ident: Known) -> CKRecord.ID {
         return recordId(from: ident.rawValue)
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return Region.recordId(from: ident)
     }
 

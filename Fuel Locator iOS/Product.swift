@@ -93,7 +93,7 @@ class Product: FLODataEntity, Hashable {
                 return "Brand Diesel"
             }
         }
-        var recordId: CKRecordID {
+        var recordId: CKRecord.ID {
             return Product.recordId(from: rawValue)
         }
     }
@@ -158,21 +158,21 @@ class Product: FLODataEntity, Hashable {
         return ident
     }
 
-    class func ident(from recordID: CKRecordID) -> Int16 {
+    class func ident(from recordID: CKRecord.ID) -> Int16 {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
         return Int16(String(str[index...]))!
     }
 
-    class func recordId(from ident: Int16) -> CKRecordID {
-        return CKRecordID(recordName: "Product:" + String(ident))
+    class func recordId(from ident: Int16) -> CKRecord.ID {
+        return CKRecord.ID(recordName: "Product:" + String(ident))
     }
 
-    class func recordId(from ident: Known) -> CKRecordID {
+    class func recordId(from ident: Known) -> CKRecord.ID {
         return recordId(from: ident.rawValue)
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return Product.recordId(from: ident)
     }
 

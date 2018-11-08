@@ -35,8 +35,9 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
 
     var relativeOffset: CGPoint {
         set {
-            let xOffset = max(min(newValue.x, 1), 0) * (graphScrollView.contentSize.width - graphScrollView.bounds.width)
-            let yOffset = max(min(newValue.y, 1), 0) * (graphScrollView.contentSize.height - graphScrollView.bounds.height)
+            let xOffset = newValue.x.clamped(to: 0...1) * (graphScrollView.contentSize.width - graphScrollView.bounds.width)
+            let yOffset = (1 - newValue.y).clamped(to: 0...1) * (graphScrollView.contentSize.height - graphScrollView.bounds.height)
+            print("\(newValue) - xOffset = \(xOffset), yOffset = \(yOffset)")
             guard !xOffset.isNaN && !yOffset.isNaN else {
                 return
             }
@@ -129,7 +130,7 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
             self.graphView.generateBands(fromStatistics: statistics)
             self.graphView.ready = true
             self.setupContentSizes()
-            self.relativeOffset = CGPoint(x: 1, y: 0)
+            self.relativeOffset = CGPoint(x: 1, y: 1)
             self.activityIndicator.stopAnimating()
             self.view.setNeedsLayout()
         }

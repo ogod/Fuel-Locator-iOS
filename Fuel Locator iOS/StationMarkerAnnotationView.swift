@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreImage
+import Armchair
 
 class StationMarkerAnnotationView: MKMarkerAnnotationView {
 
@@ -21,9 +22,12 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
             }
             clusteringIdentifier = "station"
             canShowCallout = true
-            let mapsButton = UIButton(frame: CGRect(origin: CGPoint.zero,
-                                                    size: CGSize(width: 30, height: 30)))
-            mapsButton.setBackgroundImage(UIImage(named: "route-icon"), for: UIControlState())
+//            let mapsButton = UIButton(frame: CGRect(origin: CGPoint.zero,
+//                                                    size: CGSize(width: 30, height: 30)))
+            let mapsButton = UIButton(type: UIButton.ButtonType.detailDisclosure)
+            mapsButton.addTarget(self, action: #selector(launchInMaps), for: UIControl.Event.touchUpInside)
+            mapsButton.setImage(UIImage(named: "route-icon"), for: UIControl.State())
+            mapsButton.isEnabled = true
             rightCalloutAccessoryView = mapsButton
             let detailLabel = UILabel()
             detailLabel.numberOfLines = 0
@@ -48,7 +52,7 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
                                         Brand: \(brand.name)
                                         \(annot.station.address ?? ""), \(annot.station.suburb?.name ?? "Unknown Suburb")
                                         \(annot.station.phone ?? "")
-                                        Discount: \(brand.useDiscount ? String(brand.discount) + "c" : "Not") active
+                                        Discount: \(brand.useDiscount ? String(brand.personalDiscount ?? brand.discount) + "c/l" : "Not") active
                                         \(features ?? "")
                                         """
                     leftCalloutAccessoryView = UIImageView(image: brand.image)
@@ -57,6 +61,13 @@ class StationMarkerAnnotationView: MKMarkerAnnotationView {
             detailCalloutAccessoryView = detailLabel
             refresh()
         }
+    }
+
+    @objc private func launchInMaps() {
+        let launchOptions: [String: Any] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                            MKLaunchOptionsShowsTrafficKey: true]
+        Armchair.userDidSignificantEvent(true)
+        (annotation as? StationAnnotation)?.mapItem().openInMaps(launchOptions: launchOptions)
     }
 
     func refresh() {

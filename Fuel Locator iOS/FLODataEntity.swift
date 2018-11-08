@@ -17,7 +17,7 @@ protocol FLODataEntity: Hashable {
 
     var systemFields: Data? { get set }
 
-    var recordID: CKRecordID { get }
+    var recordID: CKRecord.ID { get }
 
     func hasChanged(from record: CKRecord) -> Bool
 
@@ -108,7 +108,7 @@ extension FLODataEntity {
     ///
     /// - Parameter record: The record whose system fields are to be archived
     /// - Returns: The archived system fields
-    static func archiveSystemFields(from record: CKRecord) -> Data? {
+    static func archiveSystemFields(from record: CKRecord) -> Data {
         let data = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: data)
         archiver.requiresSecureCoding = true
@@ -320,7 +320,7 @@ extension FLODataEntity {
     ///   - attempt: The number of prior atempts
     ///   - completion: A completion block to be called once the state is finally determined.
     static func download(fromDatabase database: CKDatabase = try! FLOCloud.shared.publicDatabase(),
-                         withRecordID recordID: CKRecordID,
+                         withRecordID recordID: CKRecord.ID,
                          attempt: Int = 0,
                          completion: ((_ error: Error?, _ record: CKRecord?)->Void)? = nil) throws {
         database.fetch(withRecordID: recordID) { (rec, err) in
@@ -394,7 +394,7 @@ extension FLODataEntity {
     ///   - completion: A completion block to be called once the state is finally determined.
     static func download(fromDatabase database: CKDatabase,
                          withQuery query: CKQuery? = nil,
-                         withCursor cursor0: CKQueryCursor? = nil,
+                         withCursor cursor0: CKQueryOperation.Cursor? = nil,
                          attempt: Int = 0,
                          accumulator: [CKRecord] = [CKRecord](),
                          completion: ((_ error: Error?, _ records: [CKRecord]?) -> Void)? = nil) {

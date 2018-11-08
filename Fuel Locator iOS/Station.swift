@@ -40,8 +40,8 @@ class Station: FLODataEntity, Hashable {
         longitude = location?.coordinate.longitude ?? 0
         phone = record["phone"] as? String
         stationDescription = record["stationDescription"] as? String
-        brand = Brand.all[Brand.ident(from: (record["brand"] as! CKReference).recordID)]
-        suburb = Suburb.all[Suburb.ident(from: (record["suburb"] as! CKReference).recordID)]
+        brand = Brand.all[Brand.ident(from: (record["brand"] as! CKRecord.Reference).recordID)]
+        suburb = Suburb.all[Suburb.ident(from: (record["suburb"] as! CKRecord.Reference).recordID)]
         if let earliest = record["earliest"] as? Date, let latest = record["latest"] as? Date {
             dateRange = earliest ... Self.calendar.date(byAdding: .day, value: 7, to: latest)!
         }
@@ -134,17 +134,17 @@ class Station: FLODataEntity, Hashable {
         return tradingName
     }
 
-    class func tradingName(from recordID: CKRecordID) -> String {
+    class func tradingName(from recordID: CKRecord.ID) -> String {
         let str = recordID.recordName
         let index = str.index(after: str.index(of: ":")!)
         return String(str[index...])
     }
 
-    class func recordId(from tradingName: String) -> CKRecordID {
-        return CKRecordID(recordName: "Station:" + tradingName)
+    class func recordId(from tradingName: String) -> CKRecord.ID {
+        return CKRecord.ID(recordName: "Station:" + tradingName)
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return Station.recordId(from: tradingName)
     }
 
@@ -154,13 +154,13 @@ class Station: FLODataEntity, Hashable {
                 return true
             }
         }
-        if let br = record["brand"] as? CKReference {
+        if let br = record["brand"] as? CKRecord.Reference {
             let brId = Brand.ident(from: br.recordID)
             if brId != brand?.ident {
                 return true
             }
         }
-        if let v = record["suburb"] as? CKReference {
+        if let v = record["suburb"] as? CKRecord.Reference {
             // Simply assert that this information won't change
             assert(suburb!.ident == Suburb.ident(from: v.recordID))
         }
@@ -210,7 +210,7 @@ class Station: FLODataEntity, Hashable {
                 r["address"] = address! as NSString
             }
             if brand != nil {
-                r["brand"] = CKReference.init(record: brand!.record, action: CKReferenceAction.none)
+                r["brand"] = CKRecord.Reference.init(record: brand!.record, action: CKRecord.Reference.Action.none)
             }
             if siteFeatures != nil {
                 r["features"] = Array<String>(siteFeatures!.map({$0})) as NSArray
@@ -223,7 +223,7 @@ class Station: FLODataEntity, Hashable {
                 r["stationDescription"] = stationDescription! as NSString
             }
             if suburb != nil {
-                r["suburb"] = CKReference.init(record: suburb!.record, action: CKReferenceAction.none)
+                r["suburb"] = CKRecord.Reference.init(record: suburb!.record, action: CKRecord.Reference.Action.none)
             }
             return r
         }
@@ -235,7 +235,7 @@ class Station: FLODataEntity, Hashable {
                     address = ad
                 }
             }
-            if let br = newValue["brand"] as? CKReference {
+            if let br = newValue["brand"] as? CKRecord.Reference {
                 let brId = Brand.ident(from: br.recordID)
                 if brId != brand?.ident {
                     let dg = DispatchGroup()
@@ -247,7 +247,7 @@ class Station: FLODataEntity, Hashable {
                     _ = dg.wait(timeout: DispatchTime.now() + .seconds(4))
                 }
             }
-            if let v = newValue["suburb"] as? CKReference {
+            if let v = newValue["suburb"] as? CKRecord.Reference {
                 // Simply assert that this information won't change
                 assert(suburb!.ident == Suburb.ident(from: v.recordID))
             }

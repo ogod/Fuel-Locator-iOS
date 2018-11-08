@@ -19,7 +19,6 @@
 		775C55EF2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55EE2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift */; };
 		775C55FE2099D53200540B5B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775C55FD2099D53200540B5B /* MapKit.framework */; };
 		775C56012099D57100540B5B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775C56002099D57100540B5B /* CloudKit.framework */; };
-		775C5603209DF34800540B5B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C5602209DF34800540B5B /* SettingsViewController.swift */; };
 		776E942C209EE690008AB0FC /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9424209EE659008AB0FC /* Region.swift */; };
 		776E942D209EE690008AB0FC /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9425209EE673008AB0FC /* Station.swift */; };
 		776E942E209EE690008AB0FC /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9426209EE67E008AB0FC /* Statistics.swift */; };
@@ -150,7 +149,6 @@
 		775C55FD2099D53200540B5B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Fuel Locator iOS.entitlements"; sourceTree = "<group>"; };
 		775C56002099D57100540B5B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		775C5602209DF34800540B5B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		776E9424209EE659008AB0FC /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		776E9425209EE673008AB0FC /* Station.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		776E9426209EE67E008AB0FC /* Statistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
@@ -266,7 +264,6 @@
 				7794B15020D4FA4D00505746 /* chords2.caf */,
 				7794B15520D552F000505746 /* Fuel Locator Information.rtf */,
 				77FA294620BB8168007EE0F1 /* Map View */,
-				775C5602209DF34800540B5B /* SettingsViewController.swift */,
 				77FA294820BB8249007EE0F1 /* Graph View */,
 				775C55D22099BD7500540B5B /* Main.storyboard */,
 				775C55D52099BD9200540B5B /* Assets.xcassets */,
@@ -439,6 +436,7 @@
 				TargetAttributes = {
 					775C55C82099BD7500540B5B = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -453,10 +451,12 @@
 					};
 					775C55DE2099BD9300540B5B = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1010;
 						TestTargetID = 775C55C82099BD7500540B5B;
 					};
 					775C55E92099BD9300540B5B = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1010;
 						TestTargetID = 775C55C82099BD7500540B5B;
 					};
 				};
@@ -622,7 +622,6 @@
 				7735EDE020F4A3550050ECCD /* Utility.swift in Sources */,
 				77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */,
 				776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */,
-				775C5603209DF34800540B5B /* SettingsViewController.swift in Sources */,
 				7710E21F20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift in Sources */,
 				77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */,
 			);
@@ -822,7 +821,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fuel Locator iOS/Fuel-Locator-iOS-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -843,7 +842,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fuel Locator iOS/Fuel-Locator-iOS-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -863,7 +862,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fuel Locator iOS.app/Fuel Locator iOS";
 			};
@@ -884,7 +883,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fuel Locator iOS.app/Fuel Locator iOS";
 			};
@@ -904,7 +903,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Fuel Locator iOS";
 			};
@@ -924,7 +923,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Fuel Locator iOS";
 			};

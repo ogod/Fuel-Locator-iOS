@@ -26,8 +26,8 @@ class Statistics: FLODataEntity, Hashable {
     
     init(record: CKRecord) {
         date = record["date"] as! Date
-        product = Product.all[Product.ident(from: (record["product"] as! CKReference).recordID)]!
-        if let rID = (record["region"] as? CKReference)?.recordID {
+        product = Product.all[Product.ident(from: (record["product"] as! CKRecord.Reference).recordID)]!
+        if let rID = (record["region"] as? CKRecord.Reference)?.recordID {
             region = Region.all[Region.ident(from: rID)]
         }
         mean = record["mean"] as? NSNumber
@@ -79,8 +79,8 @@ class Statistics: FLODataEntity, Hashable {
     class func fetch(withIdent ident: Int16, _ completionBlock: @escaping (Statistics?, Error?) -> Void) {
         let sd = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate!)!
         let ed = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: sd)!
-        let pRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
-        let sRef = CKReference(recordID: Region.all[ident]!.recordID, action: .none)
+        let pRef = CKRecord.Reference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
+        let sRef = CKRecord.Reference(recordID: Region.all[ident]!.recordID, action: .none)
         let pred = NSPredicate(format: "date >= %@ && date < %@ && product == %@ && region == %@", sd as NSDate, ed as NSDate, pRef, sRef)
         let query = CKQuery(recordType: "FWStatistics", predicate: pred)
 
@@ -97,7 +97,7 @@ class Statistics: FLODataEntity, Hashable {
     class func fetchAll(_ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {
         let sd = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate!)!
         let ed = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: sd)!
-        let pRef = CKReference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
+        let pRef = CKRecord.Reference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
         let predicate = NSPredicate(format: "date >= %@ && date < %@ && product == %@", sd as NSDate, ed as NSDate, pRef)
         let query = CKQuery(recordType: "FWStatistics", predicate: predicate)
 
@@ -112,8 +112,8 @@ class Statistics: FLODataEntity, Hashable {
     }
 
     class func fetchHistoric(_ product: Product, _ region: Region, _ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {
-        let pRef = CKReference(recordID: product.recordID, action: .none)
-        let rRef = CKReference(recordID: region.recordID, action: .none)
+        let pRef = CKRecord.Reference(recordID: product.recordID, action: .none)
+        let rRef = CKRecord.Reference(recordID: region.recordID, action: .none)
         let predicate = NSPredicate(format: "product == %@ AND region == %@", pRef, rRef)
         let query = CKQuery(recordType: "FWStatistics", predicate: predicate)
 
@@ -135,7 +135,7 @@ class Statistics: FLODataEntity, Hashable {
         }
     }
 
-    class func ident(from recordID: CKRecordID) -> (date: Date, product: Product, region: Region) {
+    class func ident(from recordID: CKRecord.ID) -> (date: Date, product: Product, region: Region) {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
 //        let part = String(recordID.recordName.substring(from: recordID.recordName.index(after: recordID.recordName.index(of: ":")!))).split(separator: "|")
@@ -150,13 +150,13 @@ class Statistics: FLODataEntity, Hashable {
         return (date: date, product: product, region: region)
     }
     
-    class func recordID(date: Date, product: Product, region: Region?) -> CKRecordID {
+    class func recordID(date: Date, product: Product, region: Region?) -> CKRecord.ID {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
-        return CKRecordID(recordName: "Statistics:\(f.string(from: date))|\(product.ident)|\(region?.ident ?? -1)")
+        return CKRecord.ID(recordName: "Statistics:\(f.string(from: date))|\(product.ident)|\(region?.ident ?? -1)")
     }
 
-    var recordID: CKRecordID {
+    var recordID: CKRecord.ID {
         return Statistics.recordID(date: date, product: product, region: region)
     }
 
@@ -195,10 +195,10 @@ class Statistics: FLODataEntity, Hashable {
         if ((record["date"] as? Date) ?? Date.distantFuture) != date {
             return true
         }
-        if (record["region"] as? CKReference) != CKReference(recordID: Region.recordId(from: region!.ident), action: .deleteSelf) {
+        if (record["region"] as? CKRecord.Reference) != CKRecord.Reference(recordID: Region.recordId(from: region!.ident), action: .deleteSelf) {
             return true
         }
-        if (record["product"] as? CKReference) != CKReference(recordID: Product.recordId(from: product.ident), action: .deleteSelf) {
+        if (record["product"] as? CKRecord.Reference) != CKRecord.Reference(recordID: Product.recordId(from: product.ident), action: .deleteSelf) {
             return true
         }
         return false
@@ -230,8 +230,8 @@ class Statistics: FLODataEntity, Hashable {
             r["median"] = median ?? minimum
             r["mode"] = mode ?? minimum
             r["date"] = date as NSDate
-            r["region"] = CKReference.init(recordID: Region.recordId(from: region!.ident), action: .deleteSelf)
-            r["product"] = CKReference.init(recordID: Product.recordId(from: product.ident), action: .deleteSelf)
+            r["region"] = CKRecord.Reference.init(recordID: Region.recordId(from: region!.ident), action: .deleteSelf)
+            r["product"] = CKRecord.Reference.init(recordID: Product.recordId(from: product.ident), action: .deleteSelf)
             return r
         }
         set {
@@ -267,10 +267,10 @@ class Statistics: FLODataEntity, Hashable {
             if ((record["date"] as? Date) ?? Date.distantFuture) != date {
                 date = (record["date"] as! Date)
             }
-            if (record["region"] as? CKReference) != CKReference(recordID: Region.recordId(from: region!.ident), action: .deleteSelf) {
+            if (record["region"] as? CKRecord.Reference) != CKRecord.Reference(recordID: Region.recordId(from: region!.ident), action: .deleteSelf) {
 //                region = Region.fetch(withIdent: Region.ident(from: (record["region"] as! CKReference).recordID))
             }
-            if (record["product"] as? CKReference) != CKReference(recordID: Product.recordId(from: product.ident), action: .deleteSelf) {
+            if (record["product"] as? CKRecord.Reference) != CKRecord.Reference(recordID: Product.recordId(from: product.ident), action: .deleteSelf) {
 //                product = Product.fetch(withIdent: Product.ident(from: (record["product"] as! CKReference).recordID))!
             }
 //            do {
