@@ -1,0 +1,1945 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>Title</key>
+	<string>Discount/Offer Activation and Personalised Amounts</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>BP</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.bp.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.bp.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Caltex</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.caltex.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.caltex.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Coles Express</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.colesExpress.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.colesExpress.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Puma</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.pumaEnergy.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.pumaEnergy.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Caltex Woolworths</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.caltexWoolworths.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.caltexWoolworths.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>7-Eleven</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.sevenEleven.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.sevenEleven.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>United</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.united.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.united.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Shell</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.shell.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.shell.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Vibe</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.vibe.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.vibe.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Gull</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.gull.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.gull.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Better Choice</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.betterChoice.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.betterChoice.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Liberty</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.liberty.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.liberty.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Mobil</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.mobil.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.mobil.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Eagle</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.eagle.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.eagle.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Kleenheat</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.kleenheat.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.kleenheat.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Peak</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.peak.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.peak.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>BOC</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.boc.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.boc.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Fast Fuel 24/7</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.fastfuel24_7.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.fastfuel24_7.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Kwik Fuel</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.kwikfuel.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.kwikfuel.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Wesco</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.wesco.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.wesco.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Ampol</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.ampol.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.ampol.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Black &amp; White</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.blackWhite.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.blackWhite.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Fuels West</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use Discount</string>
+			<key>Key</key>
+			<string>Brand.fuelsWest.useDiscount</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Discount Amount</string>
+			<key>Key</key>
+			<string>Brand.fuelsWest.amountDiscount</string>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
+				<integer>8</integer>
+				<integer>9</integer>
+				<integer>10</integer>
+				<integer>11</integer>
+				<integer>12</integer>
+				<integer>13</integer>
+				<integer>14</integer>
+				<integer>15</integer>
+				<integer>16</integer>
+				<integer>17</integer>
+				<integer>18</integer>
+				<integer>19</integer>
+				<integer>20</integer>
+				<integer>21</integer>
+				<integer>22</integer>
+				<integer>23</integer>
+				<integer>24</integer>
+				<integer>25</integer>
+			</array>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>1 c/l</string>
+				<string>2 c/l</string>
+				<string>3 c/l</string>
+				<string>4 c/l</string>
+				<string>5 c/l</string>
+				<string>6 c/l</string>
+				<string>7 c/l</string>
+				<string>8 c/l</string>
+				<string>9 c/l</string>
+				<string>10 c/l</string>
+				<string>11 c/l</string>
+				<string>12 c/l</string>
+				<string>13 c/l</string>
+				<string>14 c/l</string>
+				<string>15 c/l</string>
+				<string>16 c/l</string>
+				<string>17 c/l</string>
+				<string>18 c/l</string>
+				<string>19 c/l</string>
+				<string>20 c/l</string>
+				<string>21 c/l</string>
+				<string>22 c/l</string>
+				<string>23 c/l</string>
+				<string>24 c/l</string>
+				<string>25 c/l</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
