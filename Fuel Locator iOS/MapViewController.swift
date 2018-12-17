@@ -65,7 +65,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     /// Refresh the annotations and display
     func refresh() {
-        guard !refreshFlag && globalProduct != nil && !retrieving else {
+        guard !refreshFlag && globalProduct != nil && !retrieving && FLOCloud.shared.isEnabled else {
+//            print("refresh aborted: enabled = \(FLOCloud.shared.isEnabled), refreshFlag = \(refreshFlag), globalProduct = \(globalProduct?.name ?? "nil"), retrieving = \(retrieving)")
             return
         }
         refreshFlag = true
@@ -74,48 +75,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                             Product: \(globalProduct.knownType.fullName ?? globalProduct.name)
                             Region: \(globalRegion?.name ?? "Unknown")
                             """
+//        print("refresh: refreshFlag = \(refreshFlag), globalProduct = \(globalProduct?.name ?? "nil"), retrieving = \(retrieving)")
         MainThread.async {
-//            self.tabMaskPanel.bounds = self.tabPanel.bounds
             self.pullDownPanelView.layoutSubviews()
-//            self.tabMaskPanel.layoutSubviews()
-        }
-        DispatchQueue.global().async {
-            Statistics.all.retrieve({ (success, err) in
-                guard err == nil else {
-                    self.dataError(err!) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                            self.refresh()
-                        }
-                    }
-                    return
-                }
-                if success {
-                    PriceOnDay.all.retrieve({ (success, err) in
-                        guard err == nil else {
-                            self.dataError(err!) {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                    self.refresh()
-                                }
-                            }
-                            return
-                        }
-                        if success {
-                            MainThread.async{
-                                self.resetAnnotations()
-                                self.refreshFlag = false
-                                self.mapView.setNeedsDisplay()
-                            }
-                        }
-                    })
-                }
-            })
+            self.refreshFlag = false
         }
     }
+
 
     /// The current date being observed, shared with entire application
     var globalDate: Date! = nil {
         didSet {
             refresh()
+            guard globalDate != nil && globalProduct != nil && FLOCloud.shared.isEnabled else {
+                return
+            }
+            PriceOnDay.all.retrieve()
+            Statistics.all.retrieve()
         }
     }
 
@@ -127,6 +103,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             Self.defaults.set(globalProduct.ident, forKey: "Product.lastUsed")
             refresh()
+            guard globalDate != nil && FLOCloud.shared.isEnabled else {
+                return
+            }
+
+            PriceOnDay.all.retrieve()
+            Statistics.all.retrieve()
         }
     }
 
@@ -187,17 +169,101 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return currentHighestCountIndex == -1 ? nil : regions[currentHighestCountIndex]
     }
 
+    var observers: Array<NSObjectProtocol> = []
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         if MapViewController.instance == nil {
             MapViewController.instance = self
         }
+        let center = NotificationCenter.default
+        observers.append(center.addObserver(forName: FLOCloud.enabledNotificationName, object: nil, queue: nil, using: { (notification) in
+            print("Now enabled")
+            Brand.all.retrieve()
+            Product.all.retrieve()
+            Region.all.retrieve()
+        }))
+        observers.append(center.addObserver(forName: Product.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+            self.productPicker.reloadAllComponents()
+            if let i = self.products.index(of: self.globalProduct) {
+                self.productPicker.selectRow(i, inComponent: 0, animated: true)
+            }
+        })
+        observers.append(center.addObserver(forName: Region.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
+            Suburb.all.retrieve()
+        })
+        observers.append(center.addObserver(forName: Suburb.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            Station.all.retrieve()
+        })
+        observers.append(center.addObserver(forName: Station.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            PriceOnDay.all.retrieve()
+            Statistics.all.retrieve()
+        })
+        observers.append(center.addObserver(forName: Statistics.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            MainThread.async {
+                self.refreshAnnotations(redraw: true)
+            }
+        })
+        observers.append(center.addObserver(forName: PriceOnDay.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            MainThread.async {
+                self.refreshAnnotations(redraw: true)
+            }
+        })
+        refresh()
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         if MapViewController.instance == nil {
             MapViewController.instance = self
+        }
+        let center = NotificationCenter.default
+        observers.append(center.addObserver(forName: FLOCloud.enabledNotificationName, object: nil, queue: nil, using: { (notification) in
+            print("Now enabled")
+            Brand.all.retrieve()
+            Product.all.retrieve()
+            Region.all.retrieve()
+        }))
+        observers.append(center.addObserver(forName: Product.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+            self.productPicker.reloadAllComponents()
+            if let i = self.products.index(of: self.globalProduct) {
+                self.productPicker.selectRow(i, inComponent: 0, animated: true)
+            }
+        })
+        observers.append(center.addObserver(forName: Region.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
+            Suburb.all.retrieve()
+        })
+        observers.append(center.addObserver(forName: Suburb.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            Station.all.retrieve()
+        })
+        observers.append(center.addObserver(forName: Station.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            PriceOnDay.all.retrieve()
+            Statistics.all.retrieve()
+        })
+        observers.append(center.addObserver(forName: Statistics.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            if Statistics.all.hasData && PriceOnDay.all.hasData {
+                MainThread.async {
+                    self.refreshAnnotations(redraw: true)
+                }
+            }
+        })
+        observers.append(center.addObserver(forName: PriceOnDay.retrievalNotificationName, object: nil, queue: nil) { (notification) in
+            if Statistics.all.hasData && PriceOnDay.all.hasData {
+                MainThread.async {
+                    self.refreshAnnotations(redraw: true)
+                }
+            }
+        })
+        refresh()
+    }
+
+    deinit {
+        for obs in observers {
+            NotificationCenter.default.removeObserver(obs)
         }
     }
 
@@ -208,31 +274,48 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                            span: MKCoordinateSpan(latitudeDelta: 0.2,
                                                   longitudeDelta: 0.2))
 
-    /// Resets the annotations by siply removing them and adding them fresh
-    func resetAnnotations() {
-        self.mapView.removeAnnotations(self.mapView.annotations)
-        guard globalProduct != nil else {
-            return
-        }
-        if let stations = Station.all.values {
-            print("Beginning add annotations")
-            self.mapView.addAnnotations(stations.filter({ st in
-                guard st.latitude != 0 && st.longitude != 0 else {
-                    return false
+    /// Refresh the annotation
+    func refreshAnnotations(redraw: Bool = false) {
+        MainThread.async {
+            guard self.mapView != nil && self.globalProduct != nil else {
+                return
+            }
+            let stations = Set(Station.all.values.filter({$0.latitude != 0 && $0.longitude != 0 && ($0.dateRange == nil || $0.dateRange! ~= self.globalDate)}))
+//            self.mapView.removeAnnotations(self.mapView.annotations)
+//            self.mapView.addAnnotations(stations.map({StationAnnotation($0)}))
+            let stationAnnotations = Set(self.mapView.annotations.compactMap({$0 as? StationAnnotation}))
+            let annotatedStations = Set(stationAnnotations.compactMap({$0.station}))
+
+            // Add new annotations
+            let added = stations.subtracting(annotatedStations).map({StationAnnotation($0)})
+
+            // Intersecting annotations
+            let intersect = Array(stationAnnotations.filter({stations.contains($0.station)}))
+
+            // Annotations to be removed
+            let difference = Array(stationAnnotations.subtracting(intersect))
+
+            self.mapView.addAnnotations(added)
+            self.mapView.removeAnnotations(difference)
+
+            // Only if all annotations must be redrawn
+            if redraw {
+                self.mapView.removeAnnotations(intersect)
+                for an in intersect {
+                    an.refresh()
                 }
-                guard st.dateRange == nil || st.dateRange! ~= globalDate else {
-                    print("Station \(st.tradingName) excluded because \(self.formatter.string(from: globalDate)) is not in \(self.formatter.string(from: st.dateRange!.lowerBound)) ... \(self.formatter.string(from: st.dateRange!.upperBound))")
-                    return false
-                }
-                return true
-            }).map({StationAnnotation($0)}))
-            print("Added annotations")
+                self.mapView.addAnnotations(intersect)
+            }
+
+            // Refresh display
+            self.refresh()
+            self.mapView.setNeedsDisplay()
         }
     }
 
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-        products = Product.all.values.sorted(by: { $0.ident < $1.ident })
-        resetAnnotations()
+        refresh()
+        refreshAnnotations()
     }
 
     /// Function to handle a callout accessory tap by activating a map route
@@ -311,7 +394,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 return
             }
             self.status = .ready
-            self.readData()
+//            self.readData()
         }
     }
 
@@ -338,11 +421,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         registerAnnotationClasses()
         addUserTrackingButton()
 
-        globalDate = MapViewController.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-        globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
-
         let today = Self.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
         let tomorrow = Self.calendar.date(byAdding: .day, value: 1, to: today)!
+
+        globalDate = today
+        globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+
         datePicker.date = MapViewController.instance!.globalDate
         datePicker.maximumDate = tomorrow
 
@@ -368,16 +452,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         MainThread.async{
             self.retrieving = true
             let increment: Float = 1.0 / 1.0
-            self.displayProgressBar(label: """
-                                            Refeshing data…
-                                            please wait
-                                            """)
+//            self.displayProgressBar(label: """
+//                                            Refeshing data…
+//                                            please wait
+//                                            """)
             self.advanceProgress(progress: 1 * increment)
             Station.all.retrieve({ (success, error) in
                 guard error == nil else {
                     self.dataError(error!) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                            self.removeProgressBar()
+//                            self.removeProgressBar()
                             self.refreshData(iteration: iteration + 1)
                         }
                     }
@@ -416,237 +500,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         present(alert, animated: true)
     }
 
-    func readData(iteration: Int = 0) {
-        guard !retrieving || iteration > 0 else {
-            return
-        }
-        guard iteration < 10 else {
-            self.dataError(nil) {
-                abort()
-            }
-            return
-        }
-        MainThread.async{
-            self.retrieving = true
-            let increment: Float = 1.0 / 5.0
-            self.displayProgressBar(label: """
-                                            Reading prices…
-                                            please wait
-                                            """)
-            self.advanceProgress(progress: 1 * increment)
-            Brand.all.retrieve({ (success1, error) in
-                guard error == nil else {
-                    self.dataError(error!) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                            self.retrieving = false
-                            self.removeProgressBar()
-                            self.readData(iteration: iteration + 1)
-                        }
-                    }
-                    return
-                }
-                self.advanceProgress(progress: 2 * increment)
-                Product.all.retrieve({ (success2, error) in
-                    guard error == nil else {
-                        self.dataError(error!) {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                self.retrieving = false
-                                self.removeProgressBar()
-                                self.readData(iteration: iteration + 1)
-                            }
-                        }
-                        return
-                    }
-                    self.advanceProgress(progress: 3 * increment)
-                    Region.all.retrieve({ (success3, error) in
-                        guard error == nil else {
-                            self.dataError(error!) {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                    self.retrieving = false
-                                    self.removeProgressBar()
-                                    self.readData(iteration: iteration + 1)
-                                }
-                            }
-                            return
-                        }
-                        self.advanceProgress(progress: 4 * increment)
-                        Suburb.all.retrieve({ (success4, error) in
-                            guard error == nil else {
-                                self.dataError(error!) {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                        self.retrieving = false
-                                        self.removeProgressBar()
-                                        self.readData(iteration: iteration + 1)
-                                    }
-                                }
-                                return
-                            }
-                            self.advanceProgress(progress: 5 * increment)
-                            Station.all.retrieve({ (success5, error) in
-                                guard error == nil else {
-                                    self.dataError(error!) {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                            self.retrieving = false
-                                            self.removeProgressBar()
-                                            self.readData(iteration: iteration + 1)
-                                        }
-                                    }
-                                    return
-                                }
-                                self.globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
-                                self.retrieving = false
-                                self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
-                                self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
-                                self.productPicker.reloadAllComponents()
-                                if let i = self.products.index(of: self.globalProduct) {
-                                    self.productPicker.selectRow(i, inComponent: 0, animated: true)
-                                }
-                                self.refresh()
-                                self.removeProgressBar()
-//                                DispatchQueue.global().async {
-//                                    print("Fetching past dates")
-//                                    let finalOp = BlockOperation(block: {
-//                                        print("Past Date fetch complete")
-//                                        self.refresh()
-//                                    })
-//                                    for station in Station.all.values {
-//                                        var first: Date!
-//                                        var last: Date!
-//                                        let pred = NSPredicate(format: "station == %@", CKReference(recordID: station.recordID, action: .none))
-//                                        let queryFirst = CKQuery(recordType: "FWPrice", predicate: pred)
-//                                        queryFirst.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
-//                                        let opFirst = CKQueryOperation(query: queryFirst)
-//                                        opFirst.resultsLimit = 1
-//                                        opFirst.queuePriority = .veryLow
-//                                        opFirst.recordFetchedBlock = { record in
-//                                            if let l = record["date"] as? Date {
-//                                                first = l
-//                                            } else {
-//                                                print("Station '\(station.tradingName)', has no first")
-//                                            }
-//                                        }
-//                                        let queryLast = CKQuery(recordType: "FWPrice", predicate: pred)
-//                                        queryLast.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-//                                        let opLast = CKQueryOperation(query: queryLast)
-//                                        opLast.resultsLimit = 1
-//                                        opLast.queuePriority = .veryLow
-//                                        opLast.recordFetchedBlock = { record in
-//                                            if let l = record["date"] as? Date {
-//                                                last = l
-//                                            } else {
-//                                                print("Station '\(station.tradingName)', has no last")
-//                                            }
-//                                        }
-//                                        let opComplete = BlockOperation(block: {
-//                                            if first != nil && last != nil {
-//                                                station.dateRange = first ... Self.calendar.date(byAdding: .day, value: 7, to: last)!
-//                                            }
-//                                        })
-//                                        opComplete.queuePriority = .veryLow
-//                                        opComplete.addDependency(opFirst)
-//                                        opComplete.addDependency(opLast)
-//                                        finalOp.addDependency(opComplete)
-//                                        opFirst.queryCompletionBlock = { (cursor, error) in
-//                                            guard error == nil else {
-//                                                print("Query error: \(error!.localizedDescription)")
-//                                                switch error! {
-//                                                case let error as CKError:
-//                                                    let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double ?? 30.0
-//                                                    switch error.code {
-//                                                    case .networkFailure, .networkUnavailable, .internalError, .serverRejectedRequest:
-//                                                        // An error that is returned when the network is available but cannot be accessed.
-//                                                        // An error that is returned when the network is not available.
-//                                                        print("Error on cloud read: \(error.localizedDescription)")
-//                                                        fallthrough
-//
-//                                                    case .requestRateLimited:
-//                                                        // Transfers to and from the server are being rate limited for the client at this time.
-//                                                        print("rate limited")
-//                                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + retryAfter) {
-//                                                            let op = CKQueryOperation(query: queryFirst)
-//                                                            op.recordFetchedBlock = opFirst.recordFetchedBlock
-//                                                            op.queryCompletionBlock = opFirst.queryCompletionBlock
-//                                                            op.resultsLimit = 1
-//                                                            op.queuePriority = .veryLow
-//                                                            opComplete.addDependency(op)
-//                                                            do {
-//                                                                try FLOCloud.shared.publicDatabase().add(op)
-//                                                            } catch {
-//                                                                print("Database error: \(error.localizedDescription)")
-//                                                            }
-//                                                        }
-//
-//                                                    default:
-//                                                        print("Error on cloud read: \(error.localizedDescription)")
-//                                                    }
-//
-//                                                default:
-//                                                    print("Error on cloud read: \(error!.localizedDescription)")
-//                                                }
-//
-//                                                return
-//                                            }
-//                                        }
-//                                        opLast.queryCompletionBlock = { (cursor, error) in
-//                                            guard error == nil else {
-//                                                guard error == nil else {
-//                                                    print("Query error: \(error!.localizedDescription)")
-//                                                    switch error! {
-//                                                    case let error as CKError:
-//                                                        let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double ?? 30.0
-//                                                        switch error.code {
-//                                                        case .networkFailure, .networkUnavailable, .internalError, .serverRejectedRequest:
-//                                                            // An error that is returned when the network is available but cannot be accessed.
-//                                                            // An error that is returned when the network is not available.
-//                                                            print("Error on cloud read: \(error.localizedDescription)")
-//                                                            fallthrough
-//
-//                                                        case .requestRateLimited:
-//                                                            // Transfers to and from the server are being rate limited for the client at this time.
-//                                                            print("rate limited")
-//                                                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + retryAfter) {
-//                                                                let op = CKQueryOperation(query: queryLast)
-//                                                                op.recordFetchedBlock = opLast.recordFetchedBlock
-//                                                                op.queryCompletionBlock = opLast.queryCompletionBlock
-//                                                                op.resultsLimit = 1
-//                                                                op.queuePriority = .veryLow
-//                                                                opComplete.addDependency(op)
-//                                                                do {
-//                                                                    try FLOCloud.shared.publicDatabase().add(op)
-//                                                                } catch {
-//                                                                    print("Database error: \(error.localizedDescription)")
-//                                                                }
-//                                                            }
-//
-//                                                        default:
-//                                                            print("Error on cloud read: \(error.localizedDescription)")
-//                                                        }
-//
-//                                                    default:
-//                                                        print("Error on cloud read: \(error!.localizedDescription)")
-//                                                    }
-//                                                    return
-//                                                }
-//                                                return
-//                                            }
-//                                        }
-//                                        do {
-//                                            try FLOCloud.shared.publicDatabase().add(opFirst)
-//                                            try FLOCloud.shared.publicDatabase().add(opLast)
-//                                            OperationQueue.main.addOperation(opComplete)
-//                                        } catch {
-//                                            print("Database error: \(error.localizedDescription)")
-//                                        }
-//                                    }
-//                                    OperationQueue.main.addOperation(finalOp)
-//                                }
-                            })
-                        })
-                    })
-                })
-            })
-        }
-    }
 
     private lazy var progressView = self.storyboard!.instantiateViewController(withIdentifier: "progressView") as! ProgressViewController
     private var progressActive = false

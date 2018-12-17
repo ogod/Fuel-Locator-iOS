@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xo6-4m-A3c">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="mutedStandard" showsUserLocation="YES" showsPointsOfInterest="NO" showsScale="YES" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xo6-4m-A3c">
                                 <rect key="frame" x="0.0" y="44" width="375" height="768"/>
                                 <gestureRecognizers/>
                             </mapView>
@@ -1103,7 +1103,7 @@ Owen Godfrey</string>
         <image name="map_location_outline" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="wUF-gm-YpR"/>
+        <segue reference="9ml-8n-PWa"/>
         <segue reference="oRi-Ec-PyW"/>
     </inferredMetricsTieBreakers>
 </document>

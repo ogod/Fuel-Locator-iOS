@@ -501,6 +501,76 @@ class Region: FLODataEntity, Hashable {
             }
         }
     }
+
+    var initialiser: String {
+        get {
+            return "\(ident): Region(ident: \(ident), name: \"\(name)\")"
+        }
+    }
+
+    static let defaults: Dictionary<Int16, Region> = [
+        -1: Region(ident: -1, name: "Metropolitan Area"),
+        1:  Region(ident: 1,  name: "Boulder"),
+        50: Region(ident: 50, name: "Norseman"),
+        33: Region(ident: 33, name: "Cataby"),
+        44: Region(ident: 44, name: "Kellerberrin"),
+        18: Region(ident: 18, name: "Mandurah"),
+        8:  Region(ident: 8,  name: "Kalgoorlie"),
+        42: Region(ident: 42, name: "Jurien"),
+        55: Region(ident: 55, name: "Wubin"),
+        30: Region(ident: 30, name: "Bridgetown / Greenbushes"),
+        16: Region(ident: 16, name: "Bunbury"),
+        46: Region(ident: 46, name: "Meekatharra"),
+        9:  Region(ident: 9,  name: "Karratha"),
+        17: Region(ident: 17, name: "Geraldton"),
+        45: Region(ident: 45, name: "Kojonup"),
+        40: Region(ident: 40, name: "Exmouth"),
+        43: Region(ident: 43, name: "Kambalda"),
+        12: Region(ident: 12, name: "Northam"),
+        28: Region(ident: 28, name: "Augusta / Margaret River"),
+        53: Region(ident: 53, name: "Tammin"),
+        26: Region(ident: 26, name: "Metro : South of River"),
+        29: Region(ident: 29, name: "Busselton (Shire)"),
+        58: Region(ident: 58, name: "Meckering"),
+        7:  Region(ident: 7,  name: "Esperance"),
+        59: Region(ident: 59, name: "Wundowie"),
+        31: Region(ident: 31, name: "Donnybrook / Balingup"),
+        15: Region(ident: 15, name: "Albany"),
+        37: Region(ident: 37, name: "Denmark"),
+        36: Region(ident: 36, name: "Dalwallinu"),
+        51: Region(ident: 51, name: "Ravensthorpe"),
+        21: Region(ident: 21, name: "Greenough"),
+        54: Region(ident: 54, name: "Williams"),
+        24: Region(ident: 24, name: "Waroona"),
+        4:  Region(ident: 4,  name: "Carnarvon"),
+        49: Region(ident: 49, name: "Newman"),
+        13: Region(ident: 13, name: "Port Hedland"),
+        19: Region(ident: 19, name: "Capel"),
+        22: Region(ident: 22, name: "Harvey"),
+        2:  Region(ident: 2,  name: "Broome"),
+        25: Region(ident: 25, name: "Metro : North of River"),
+        48: Region(ident: 48, name: "Mt Barker"),
+        11: Region(ident: 11, name: "Narrogin"),
+        23: Region(ident: 23, name: "Murray"),
+        3:  Region(ident: 3,  name: "Busselton (Townsite)"),
+        5:  Region(ident: 5,  name: "Collie"),
+        34: Region(ident: 34, name: "Coolgardie"),
+        14: Region(ident: 14, name: "South Hedland"),
+        6:  Region(ident: 6,  name: "Dampier"),
+        56: Region(ident: 56, name: "York"),
+        47: Region(ident: 47, name: "Moora"),
+        57: Region(ident: 57, name: "Regans Ford"),
+        38: Region(ident: 38, name: "Derby"),
+        20: Region(ident: 20, name: "Dardanup"),
+        41: Region(ident: 41, name: "Fitzroy Crossing"),
+        39: Region(ident: 39, name: "Dongara"),
+        10: Region(ident: 10, name: "Kununurra"),
+        32: Region(ident: 32, name: "Manjimup"),
+        35: Region(ident: 35, name: "Cunderdin"),
+        27: Region(ident: 27, name: "Metro : East/Hills")
+        ]
+
+    static let retrievalNotificationName = Notification.Name(rawValue: "Region.RetrievalNotification")
 }
 
 extension Region {

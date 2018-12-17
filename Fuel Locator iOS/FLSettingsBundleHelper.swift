@@ -49,11 +49,11 @@ class FLSettingsBundleHelper {
     }
 
     @objc static func settingsChanged(not: Notification) {
-        print(not.description)
         if not.name == UserDefaults.didChangeNotification {
             if FLOCloud.shared.isEnabled {
                 FLOCloud.shared.changeSubscription()
             }
+            MapViewController.instance?.refreshAnnotations()
         }
     }
 

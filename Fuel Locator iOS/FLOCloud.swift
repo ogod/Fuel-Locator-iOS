@@ -30,6 +30,7 @@ class FLOCloud: NSObject {
     }
 
     private let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLOCloud")
+    static let enabledNotificationName = Notification.Name(rawValue: "FLOCLoud.EnabledNotification")
 
     var subscriptionIslocallyCached: Bool = false
     var sharedDBChangeToken: CKServerChangeToken? = nil
@@ -159,6 +160,16 @@ class FLOCloud: NSObject {
             } else {
                 self.isEnabled = true
                 callBack(true)
+                NotificationCenter.default.post(Notification(name: FLOCloud.enabledNotificationName))
+                let operation = CKModifyBadgeOperation(badgeValue: 0)
+                operation.modifyBadgeCompletionBlock = {(error) in
+                    guard error == nil else {
+                        os_log("Could not reset application badge: ", log: self.logger, type: .fault)
+                        return
+                    }
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                }
+                CKContainer.default().add(operation)
             }
         }
     }
@@ -442,7 +453,7 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                                                      predicate: pred,
                                                      options: [.firesOnRecordCreation])
         let risingInfo = CKSubscription.NotificationInfo()
-        risingInfo.title = "Fuel Price Rise Added"
+        risingInfo.title = "Fuel Price Changed"
         risingInfo.subtitle = subTitle
         risingInfo.alertLocalizationKey = body
         risingInfo.alertLocalizationArgs = args

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CloudKit
 import UserNotifications
 import Armchair
 import os.log
@@ -22,13 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var armchairTimer: Timer? = nil
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Armchair.appID("1389830186")
 //        Armchair.debugEnabled(true)
         Armchair.significantEventsUntilPrompt(5)
         Armchair.usesUntilPrompt(7)
         locationManager.requestWhenInUseAuthorization()
-        application.applicationIconBadgeNumber = 0
         FLSettingsBundleHelper.registerSettings()
         FLOCloud.shared.setupNotifications()
         FLOCloud.shared.setupSubscription(application: application)
@@ -36,6 +37,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(notification)
         }
         return true
+    }
+
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        application.applicationIconBadgeNumber = 1
+        completionHandler(UIBackgroundFetchResult.noData)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -60,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         armchairTimer?.invalidate()
         FLSettingsBundleHelper.checkSettings()
         FLSettingsBundleHelper.setVersion()
+        application.applicationIconBadgeNumber = 0
         let status = MapViewController.instance?.status ?? .uninitialised
         switch  status {
         case .ready:

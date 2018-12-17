@@ -208,6 +208,27 @@ class Product: FLODataEntity, Hashable {
             }
         }
     }
+
+    var initialiser: String {
+        get {
+            return "\(ident): Product(ident: \(ident), name: \"\(name)\")"
+        }
+    }
+
+    static let defaults: Dictionary<Int16, Product> = [
+        11: Product(ident: 11, name: "Brand Diesel"),
+        7:  Product(ident: 7,  name: "B20 diesel"),
+        8:  Product(ident: 8,  name: "E10"),
+        1:  Product(ident: 1,  name: "ULP"),
+        6:  Product(ident: 6,  name: "98 RON"),
+        9:  Product(ident: 9,  name: "P100"),
+        5:  Product(ident: 5,  name: "LPG"),
+        4:  Product(ident: 4,  name: "Diesel"),
+        10: Product(ident: 10, name: "E85"),
+        2:  Product(ident: 2,  name: "PULP")
+        ]
+
+    static let retrievalNotificationName = Notification.Name(rawValue: "Product.RetrievalNotification")
 }
 
 extension Product {

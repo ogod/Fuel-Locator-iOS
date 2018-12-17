@@ -202,6 +202,10 @@ class PriceOnDay: FLODataEntity, Hashable {
             // try! managedObjectContext!.save()
         }
     }
+
+    static let defaults: Dictionary<String, PriceOnDay> = [:]
+
+    static let retrievalNotificationName = Notification.Name(rawValue: "Price.RetrievalNotification")
 }
 
 extension PriceOnDay {

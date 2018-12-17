@@ -27,28 +27,30 @@ class ClusterMarkerAnnotationView: MKMarkerAnnotationView {
                 return
             }
             switch annot.category {
-            case 1:
+            case .bottom10:
                 markerTintColor = UIColor(named: "per10")
-            case 2:
+            case .bottom20:
                 markerTintColor = UIColor(named: "per20")
-            case 3:
+            case .bottom30:
                 markerTintColor = UIColor(named: "per30")
-            case 4:
+            case .bottom40:
                 markerTintColor = UIColor(named: "per40")
-            case 5:
+            case .bottom50:
                 markerTintColor = UIColor(named: "per50")
-            case 6:
+            case .top50:
                 markerTintColor = UIColor(named: "per60")
-            case 7:
+            case .top40:
                 markerTintColor = UIColor(named: "per70")
-            case 8:
+            case .top30:
                 markerTintColor = UIColor(named: "per80")
-            case 9:
+            case .top20:
                 markerTintColor = UIColor(named: "per90")
-            case 10:
+            case .top10:
                 markerTintColor = UIColor(named: "per100")
-            default:
-                markerTintColor = UIColor.lightGray
+            case .none:
+                markerTintColor = UIColor(named: "per00")
+            case .uncatergorizable:
+                markerTintColor = UIColor(named: "perNone")
             }
         }
     }

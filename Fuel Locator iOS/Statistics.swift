@@ -280,6 +280,10 @@ class Statistics: FLODataEntity, Hashable {
 //            }
         }
     }
+
+    static let defaults: Dictionary<Int16, Statistics> = [:]
+
+    static let retrievalNotificationName = Notification.Name(rawValue: "Statistics.RetrievalNotification")
 }
 
 extension Statistics {

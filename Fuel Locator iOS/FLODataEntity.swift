@@ -27,11 +27,18 @@ protocol FLODataEntity: Hashable {
 
     static var all: FLODataEntityAll<Key, Value> { get }
 
+    static var defaults: Dictionary<Key, Value> { get }
+
+    static var retrievalNotificationName: Notification.Name { get }
+
+    var initialiser: String { get }
+
     var key: Key { get }
 }
 
 class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
     private var _all: [K: V] = [:]
+    private(set) var hasData = false
     var queue = FLOCloud.shared.queue
     var lock: pthread_rwlock_t
 
@@ -49,18 +56,18 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
 
     subscript(_ ident: K) -> V? {
         guard pthread_rwlock_tryrdlock(&lock) == 0  else {
-            return nil
+            return V.defaults[ident as! V.Key] as? V
         }
         defer { pthread_rwlock_unlock(&lock) }
         guard _all.keys.contains(ident)  else {
-            return nil
+            return V.defaults[ident as! V.Key] as? V
         }
         return _all[ident]
     }
 
     var values: Dictionary<K, V>.Values! {
         guard pthread_rwlock_tryrdlock(&lock) == 0  else {
-            return nil
+            return V.defaults.values as? Dictionary<K, V>.Values
         }
         defer { pthread_rwlock_unlock(&lock) }
         return _all.values
@@ -68,15 +75,16 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
 
     var keys: Dictionary<K, V>.Keys! {
         guard pthread_rwlock_tryrdlock(&lock) == 0  else {
-            return nil
+            return V.defaults.keys as? Dictionary<K, V>.Keys
         }
         defer { pthread_rwlock_unlock(&lock) }
         return _all.keys
     }
 
-    func retrieve(_ block: @escaping (Bool, Error?)->Void) {
+    func retrieve(_ block: ((Bool, Error?)->Void)? = nil) {
         FLOCloud.shared.queue.async {
             pthread_rwlock_wrlock(&self.lock)
+            self.hasData = false
             V.fetchAll({ (sts, err) in
                 FLOCloud.shared.queue.async {
                     guard err == nil else {
@@ -85,16 +93,29 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
                         print(err!)
                         DispatchQueue.main.async {
                             pthread_rwlock_unlock(&self.lock)
-                            block(false, err)
+                            block?(false, err)
                         }
                         return
                     }
                     self._all = sts.reduce(into: [K: V](), { (dict, element) -> Void in
                         dict[element.key as! K] = (element as! V)
                     })
+                    self.hasData = true
+
+//                    print("Retrieved \(String(describing: V.self).split(separator: ".")[0])")
+
+//                    if V.self == Brand.self || V.self == Product.self || V.self == Suburb.self || V.self == Region.self || V.self == Station.self {
+//                        print("    static let defaults: Dictionary<\(K.self), \(V.self)> = [")
+//                        for (_, v) in self._all {
+//                            print("        \(v.initialiser),")
+//                        }
+//                        print("    ]")
+//                    }
+
                     DispatchQueue.main.async {
                         pthread_rwlock_unlock(&self.lock)
-                        block(true, nil)
+                        V.notify()
+                        block?(true, nil)
                     }
                 }
             })
@@ -175,16 +196,14 @@ extension FLODataEntity {
                     case .networkFailure, .networkUnavailable, .internalError, .serviceUnavailable:
                         // An error that is returned when the network is available but cannot be accessed.
                         // An error that is returned when the network is not available.
-                        let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.upload.networkFailure")
-                        os_log("Error on cloud read: %@", log: logger, type: .error, error.localizedDescription)
+//                        let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.upload.networkFailure")
+//                        os_log("Error on cloud read: %@", log: logger, type: .error, error.localizedDescription)
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + (retryAfter ?? pow(2.0, Double(attempt)))) {
-                            os_log("Mark 0 : Enter", log: logger, type: .debug)
                             try! self.upload(toDatabase: database, attempt: attempt+1, completion: completion)
-                            os_log("Mark 0 : Exit", log: logger, type: .debug)
                         }
 
                     case .unknownItem:
-                        // The recordedsystem fields point to a record that doesn't exist, perhaps because it has been deleted
+                        // The recorded system fields point to a record that doesn't exist, perhaps because it has been deleted
                         DispatchQueue.main.async {
                             guard self.systemFields != nil else {
                                 completion?(err, false)
@@ -472,5 +491,15 @@ extension FLODataEntity {
             }
         }
         database.add(operation)
+    }
+
+    var initialiser: String {
+        get {
+            return ""
+        }
+    }
+
+    static func notify() {
+        NotificationCenter.default.post(Notification(name: retrievalNotificationName))
     }
 }

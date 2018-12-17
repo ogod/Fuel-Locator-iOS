@@ -20,30 +20,30 @@ class Brand: FLODataEntity, Hashable {
     }
 
     enum Known: Int16 {
-        case ampol = 2
-        case betterChoice = 3
-        case boc = 4
         case bp = 5
         case caltex = 6
+        case colesExpress = 20
+        case pumaEnergy = 26
+        case caltexWoolworths = 19
+        case sevenEleven = 29
+        case united = 23
+        case shell = 14
+        case vibe = 27
         case gull = 7
-        case kleenheat = 8
-        case kwikfuel = 9
+        case betterChoice = 3
         case liberty = 10
         case mobil = 11
-        case peak = 13
-        case shell = 14
-        case independent = 15
-        case wesco = 16
-        case caltexWoolworths = 19
-        case colesExpress = 20
-        case blackWhite = 21
-        case fuelsWest = 22
-        case united = 23
         case eagle = 24
+        case kleenheat = 8
+        case peak = 13
+        case boc = 4
         case fastfuel24_7 = 25
-        case pumaEnergy = 26
-        case vibe = 27
-        case sevenEleven = 29
+        case kwikfuel = 9
+        case wesco = 16
+        case ampol = 2
+        case fuelsWest = 22
+        case blackWhite = 21
+        case independent = 15
 
         var name: String! {
             switch self {
@@ -359,6 +359,41 @@ class Brand: FLODataEntity, Hashable {
             }
         }
     }
+
+    var initialiser: String {
+        get {
+            return "\(ident): Brand(ident: \(ident), name: \"\(name)\", discount: \(discount))"
+        }
+    }
+
+    static let defaults: Dictionary<Int16, Brand> = [
+        19: Brand(ident: 19, name: "Caltex Woolworths", discount: 4),
+        23: Brand(ident: 23, name: "United", discount: 4),
+        10: Brand(ident: 10, name: "Liberty", discount: 4),
+        14: Brand(ident: 14, name: "Shell", discount: 4),
+        4:  Brand(ident: 4,  name: "BOC", discount: 4),
+        13: Brand(ident: 13, name: "Peak", discount: 4),
+        27: Brand(ident: 27, name: "Vibe", discount: 4),
+        20: Brand(ident: 20, name: "Coles Express", discount: 4),
+        29: Brand(ident: 29, name: "7-Eleven", discount: 4),
+        25: Brand(ident: 25, name: "FastFuel 24/7", discount: 4),
+        3:  Brand(ident: 3,  name: "Better Choice", discount: 4),
+        16: Brand(ident: 16, name: "Wesco", discount: 4),
+        8:  Brand(ident: 8,  name: "Kleenheat", discount: 4),
+        21: Brand(ident: 21, name: "Black & White", discount: 4),
+        6:  Brand(ident: 6,  name: "Caltex", discount: 4),
+        24: Brand(ident: 24, name: "Eagle", discount: 4),
+        26: Brand(ident: 26, name: "Puma", discount: 4),
+        22: Brand(ident: 22, name: "Fuels West", discount: 4),
+        9:  Brand(ident: 9,  name: "Kwikfuel", discount: 4),
+        7:  Brand(ident: 7,  name: "Gull", discount: 4),
+        15: Brand(ident: 15, name: "Independent", discount: 4),
+        11: Brand(ident: 11, name: "Mobil", discount: 4),
+        2:  Brand(ident: 2,  name: "Ampol", discount: 4),
+        5:  Brand(ident: 5,  name: "BP", discount: 4)
+        ]
+
+    static let retrievalNotificationName = Notification.Name(rawValue: "Brand.RetrievalNotification")
 }
 
 extension Brand {
