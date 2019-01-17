@@ -32,30 +32,34 @@ class GraphBand {
     var fillAreas = [UIBezierPath]()
     var fadeOutAreas = [UIBezierPath]()
 
-    private static let calendar = Calendar.current
-    private static let referenceDate: Date = GraphBand.calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "Australia/Perth"),
-                                                                                          year: 2001,
-                                                                                          month: 1,
-                                                                                          day: 1,
-                                                                                          hour: 0,
-                                                                                          minute: 0,
-                                                                                          second: 0,
-                                                                                          nanosecond: 0))!
-        private static let secondsInDay: TimeInterval = 86400
+    static let calendar = Calendar.current
+    static let referenceDate: Date = GraphBand.calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "Australia/Perth"),
+                                                                                  year: 2001,
+                                                                                  month: 1,
+                                                                                  day: 1,
+                                                                                  hour: 0,
+                                                                                  minute: 0,
+                                                                                  second: 0,
+                                                                                  nanosecond: 0))!
+    static let secondsInDay: TimeInterval = 86400
 
     /// The x value for a given date. A unit represents 1 day.
     ///
     /// - Parameter date: the date that defines the x value
     /// - Returns: the x value
-    private func xValue(_ date: Date) -> CGFloat {
+    static func xValue(_ date: Date) -> CGFloat {
         return CGFloat(date.timeIntervalSince(GraphBand.referenceDate) / GraphBand.secondsInDay)
+    }
+
+    static func date(_ x: CGFloat) -> Date {
+        return Date(timeInterval: TimeInterval(x) * GraphBand.secondsInDay, since: GraphBand.referenceDate)
     }
 
     /// The y value for a given fuel price. A unit represents 1c, with a tenth cent resolution.
     ///
     /// - Parameter value: The fuel price
     /// - Returns: the y value
-    private func yValue(_ value: Int16) -> CGFloat {
+    static func yValue(_ value: Int16) -> CGFloat {
         return CGFloat(value) / 10.0
     }
 
@@ -63,7 +67,7 @@ class GraphBand {
     ///
     /// - Parameter value: The values to convert
     /// - Returns: The resultant tupple of points
-    private func point(_ value: PriceBandValue) -> PriceBandPoint {
+    static func point(_ value: PriceBandValue) -> PriceBandPoint {
         return (high: CGPoint(x: xValue(value.date), y: yValue(value.high)),
                 low: CGPoint(x: xValue(value.date), y: yValue(value.low)))
     }
@@ -102,7 +106,7 @@ class GraphBand {
                 return
             }
             if let value = values[date] {
-                points.append(point(value))
+                points.append(GraphBand.point(value))
             } else {
                 guard points.count > 0 else {
                     return
@@ -224,8 +228,8 @@ class GraphBand {
                     fillAreas.append(area)
                     fadeOutAreas.append(fadeOutArea)
                 }
-                xStart = min(xStart, xValue(startDate))
-                xEnd = max(xEnd, xValue(endDate))
+                xStart = min(xStart, GraphBand.xValue(startDate))
+                xEnd = max(xEnd, GraphBand.xValue(endDate))
                 yHeight = max(yHeight, points.map({$0.high.y}).max()!)
             }
         }

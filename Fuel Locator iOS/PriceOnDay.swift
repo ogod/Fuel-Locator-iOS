@@ -68,7 +68,7 @@ class PriceOnDay: FLODataEntity, Hashable {
                 completionBlock(price, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Price fetch (with block): \(error)")
         }
     }
 
@@ -86,7 +86,7 @@ class PriceOnDay: FLODataEntity, Hashable {
                 completionBlock(prices, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Price fetch: \(error)")
         }
     }
 

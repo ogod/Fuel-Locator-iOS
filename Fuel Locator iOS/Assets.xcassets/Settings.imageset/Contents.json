@@ -2,16 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Settings.png",
+      "filename" : "sprocket-2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Settings@2x.png",
+      "filename" : "sprocket-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "sprocket.png",
       "scale" : "3x"
     }
   ],

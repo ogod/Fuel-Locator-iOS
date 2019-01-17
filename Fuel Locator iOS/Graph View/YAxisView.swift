@@ -32,8 +32,6 @@ class YAxisView: UIView {
             return
         }
 
-        print("Draw y axis")
-
         let yScale: CGFloat = bounds.height / max(graphView.yHeight, 1)
         let transform = CGAffineTransform(scaleX: 1, y: -yScale).translatedBy(x: 0, y: -graphView.yHeight)
 

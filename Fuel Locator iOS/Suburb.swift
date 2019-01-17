@@ -133,7 +133,7 @@ class Suburb: FLODataEntity, Hashable {
                 completionBlock(sub, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Suburb fetch (with block): \(error)")
         }
     }
 
@@ -147,7 +147,7 @@ class Suburb: FLODataEntity, Hashable {
                 completionBlock(subs, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Suburb fetch: \(error)")
         }
     }
 

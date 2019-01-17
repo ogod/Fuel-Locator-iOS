@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import WebKit
 
 class AboutViewController: UIViewController {
 
     @IBOutlet var versionLabel: UILabel!
+    @IBOutlet weak var webView: WKWebView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +25,10 @@ class AboutViewController: UIViewController {
         if versionLabel.text == "Version" {
             versionLabel.text = ""
         }
+        let url = Bundle.main.url(forResource: "Fuel Locator Documentation", withExtension: "html")!
+        let imagesURL = url.deletingLastPathComponent()
+        print(url.absoluteString)
+        webView.loadFileURL(url, allowingReadAccessTo: imagesURL)
     }
 
     override func didReceiveMemoryWarning() {

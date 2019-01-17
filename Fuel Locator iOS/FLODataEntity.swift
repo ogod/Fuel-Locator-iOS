@@ -90,7 +90,6 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
                     guard err == nil else {
                         let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.retrieve")
                         os_log("Error on retrieval: %@", log: logger, type: .error, err!.localizedDescription)
-                        print(err!)
                         DispatchQueue.main.async {
                             pthread_rwlock_unlock(&self.lock)
                             block?(false, err)
@@ -418,6 +417,9 @@ extension FLODataEntity {
                          accumulator: [CKRecord] = [CKRecord](),
                          completion: ((_ error: Error?, _ records: [CKRecord]?) -> Void)? = nil) {
         var results = Array<CKRecord>(accumulator)
+        guard query != nil || cursor0 != nil else {
+            return
+        }
         let operation = query != nil ? CKQueryOperation(query: query!) : CKQueryOperation(cursor: cursor0!)
         operation.recordFetchedBlock = { (record) in
             results.append(record)

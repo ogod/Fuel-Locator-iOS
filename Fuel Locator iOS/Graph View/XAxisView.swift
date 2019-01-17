@@ -12,10 +12,16 @@ class XAxisView: UIView {
 
     var graphView: GraphView!
 
-    static let form: DateFormatter = {
+    static let extForm: DateFormatter = {
         let f = DateFormatter()
         f.timeZone = TimeZone(identifier: "Australia/Perth")
         f.dateFormat = "EEE, dd MMM yy"
+        return f
+    }()
+    static let compactForm: DateFormatter = {
+        let f = DateFormatter()
+        f.timeZone = TimeZone(identifier: "Australia/Perth")
+        f.dateFormat = "dd/MM/yy"
         return f
     }()
     static let pStyle: NSParagraphStyle = {
@@ -39,8 +45,6 @@ class XAxisView: UIView {
             return
         }
 
-        print("Draw x axis")
-
         let xScale: CGFloat = (frame.width) / max(graphView.xEnd - graphView.xStart + 2, 1)
 
         let c = UIGraphicsGetCurrentContext()!
@@ -54,6 +58,7 @@ class XAxisView: UIView {
                                                                 year: 2001,
                                                                 month: 1,
                                                                 day: 1))!
+        let form = bounds.height > 100 ? XAxisView.extForm : XAxisView.compactForm
 
         for y in graphView.xStride {
             guard graphView.xStart ... graphView.xEnd ~= y else {
@@ -61,7 +66,7 @@ class XAxisView: UIView {
             }
             let pText = CGPoint(x: 0, y: y).applying(transform)
             let date = XAxisView.cal.date(byAdding: .day, value: Int(y), to: startDate)!
-            let text = NSAttributedString(string: XAxisView.form.string(from: date), attributes: Int(y) % 7 == 0 ? XAxisView.attrDark : XAxisView.attr)
+            let text = NSAttributedString(string: form.string(from: date), attributes: Int(y) % 7 == 0 ? XAxisView.attrDark : XAxisView.attr)
             let h = YAxisView.font.lineHeight
             var rect = text.boundingRect(with: CGSize(width: 1000, height: YAxisView.font.lineHeight),
                                         options: NSStringDrawingOptions.truncatesLastVisibleLine, context: nil).offsetBy(dx: pText.x, dy: pText.y - h/2)

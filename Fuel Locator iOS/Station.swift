@@ -123,7 +123,7 @@ class Station: FLODataEntity, Hashable {
                 completionBlock(stat, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Station fetch (with block): \(error)")
         }
     }
 
@@ -137,7 +137,7 @@ class Station: FLODataEntity, Hashable {
                 completionBlock(stats, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Station fetch: \(error)")
         }
     }
 

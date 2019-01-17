@@ -31,7 +31,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var clipTopConstraint: NSLayoutConstraint!
 
     @IBAction func done(_ segue: UIStoryboardSegue) {
-        print(segue)
+//        print(segue)
     }
 
     enum Status {
@@ -101,7 +101,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             guard globalProduct != nil else {
                 return
             }
-            Self.defaults.set(globalProduct.ident, forKey: "Product.lastUsed")
+            Self.defaults.set(globalProduct.ident, forKey: FLSettingsBundleHelper.Keys.productLastUsed.rawValue)
             refresh()
             guard globalDate != nil && FLOCloud.shared.isEnabled else {
                 return
@@ -178,21 +178,31 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         let center = NotificationCenter.default
         observers.append(center.addObserver(forName: FLOCloud.enabledNotificationName, object: nil, queue: nil, using: { (notification) in
-            print("Now enabled")
-            Brand.all.retrieve()
+//            print("Now enabled")
+//            Brand.all.retrieve()
             Product.all.retrieve()
             Region.all.retrieve()
+            Suburb.all.retrieve()
+            self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
+            self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+            MainThread.sync {
+                self.productPicker.reloadAllComponents()
+                if let i = self.products.index(of: self.globalProduct) {
+                    self.productPicker.selectRow(i, inComponent: 0, animated: true)
+                }
+            }
         }))
         observers.append(center.addObserver(forName: Product.retrievalNotificationName, object: nil, queue: nil) { (notification) in
             self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
-            self.productPicker.reloadAllComponents()
-            if let i = self.products.index(of: self.globalProduct) {
-                self.productPicker.selectRow(i, inComponent: 0, animated: true)
+            MainThread.sync {
+                self.productPicker.reloadAllComponents()
+                if let i = self.products.index(of: self.globalProduct) {
+                    self.productPicker.selectRow(i, inComponent: 0, animated: true)
+                }
             }
         })
         observers.append(center.addObserver(forName: Region.retrievalNotificationName, object: nil, queue: nil) { (notification) in
             self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
-            Suburb.all.retrieve()
         })
         observers.append(center.addObserver(forName: Suburb.retrievalNotificationName, object: nil, queue: nil) { (notification) in
             Station.all.retrieve()
@@ -221,21 +231,31 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         let center = NotificationCenter.default
         observers.append(center.addObserver(forName: FLOCloud.enabledNotificationName, object: nil, queue: nil, using: { (notification) in
-            print("Now enabled")
-            Brand.all.retrieve()
+//            print("Now enabled")
+//            Brand.all.retrieve()
             Product.all.retrieve()
             Region.all.retrieve()
+            Suburb.all.retrieve()
+            self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
+            self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+            MainThread.sync {
+                self.productPicker.reloadAllComponents()
+                if let i = self.products.index(of: self.globalProduct) {
+                    self.productPicker.selectRow(i, inComponent: 0, animated: true)
+                }
+            }
         }))
         observers.append(center.addObserver(forName: Product.retrievalNotificationName, object: nil, queue: nil) { (notification) in
             self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
-            self.productPicker.reloadAllComponents()
-            if let i = self.products.index(of: self.globalProduct) {
-                self.productPicker.selectRow(i, inComponent: 0, animated: true)
+            MainThread.sync {
+                self.productPicker.reloadAllComponents()
+                if let i = self.products.index(of: self.globalProduct) {
+                    self.productPicker.selectRow(i, inComponent: 0, animated: true)
+                }
             }
         })
         observers.append(center.addObserver(forName: Region.retrievalNotificationName, object: nil, queue: nil) { (notification) in
             self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
-            Suburb.all.retrieve()
         })
         observers.append(center.addObserver(forName: Suburb.retrievalNotificationName, object: nil, queue: nil) { (notification) in
             Station.all.retrieve()
@@ -286,25 +306,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let stationAnnotations = Set(self.mapView.annotations.compactMap({$0 as? StationAnnotation}))
             let annotatedStations = Set(stationAnnotations.compactMap({$0.station}))
 
-            // Add new annotations
-            let added = stations.subtracting(annotatedStations).map({StationAnnotation($0)})
+            let common: Set<StationAnnotation>
+            if stations.symmetricDifference(annotatedStations).isEmpty {
+                common = stationAnnotations
+            } else {
+                // Add new annotations
+                let added = stations.subtracting(annotatedStations).map({StationAnnotation($0)})
 
-            // Intersecting annotations
-            let intersect = Array(stationAnnotations.filter({stations.contains($0.station)}))
+                // Intersecting annotations
+                common = stationAnnotations.filter({stations.contains($0.station)})
 
-            // Annotations to be removed
-            let difference = Array(stationAnnotations.subtracting(intersect))
+                // Annotations to be removed
+                let subtracted = Array(stationAnnotations.subtracting(common))
 
-            self.mapView.addAnnotations(added)
-            self.mapView.removeAnnotations(difference)
+                self.mapView.addAnnotations(added)
+                self.mapView.removeAnnotations(subtracted)
+            }
 
             // Only if all annotations must be redrawn
             if redraw {
-                self.mapView.removeAnnotations(intersect)
-                for an in intersect {
+                self.mapView.removeAnnotations(Array(common))
+                for an in common {
                     an.refresh()
                 }
-                self.mapView.addAnnotations(intersect)
+                self.mapView.addAnnotations(Array(common))
             }
 
             // Refresh display
@@ -314,8 +339,37 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-        refresh()
-        refreshAnnotations()
+        defer {
+            refresh()
+            refreshAnnotations()
+        }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        if let date = appDelegate.overrideDate {
+            globalDate = date
+        }
+        if let productRef = appDelegate.overrideProduct {
+            globalProduct = Product.all[Product.ident(from: productRef.recordID)]
+        }
+        if let regionRef = appDelegate.overrideRegion {
+            let region = Region.all[Region.ident(from: regionRef.recordID)]
+            if region?.location != nil && globalRegion != region {
+                mapView.setRegion(MKCoordinateRegion(center: region!.location!.coordinate,
+                                                     latitudinalMeters: region!.radius?.doubleValue ?? 5000,
+                                                     longitudinalMeters: region!.radius?.doubleValue ?? 5000),
+                                  animated: true)
+            }
+        }
+        if let stationRef = appDelegate.overrideStation {
+            let station = Station.all[Station.tradingName(from: stationRef.recordID)]
+            if station?.coordinate != nil {
+                mapView.setRegion(MKCoordinateRegion(center: station!.coordinate,
+                                                     latitudinalMeters: 2000,
+                                                     longitudinalMeters: 2000),
+                                  animated: true)
+            }
+        }
     }
 
     /// Function to handle a callout accessory tap by activating a map route
@@ -425,10 +479,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let tomorrow = Self.calendar.date(byAdding: .day, value: 1, to: today)!
 
         globalDate = today
-        globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: "Product.lastUsed"))]
+        globalProduct = Product.all[Int16(UserDefaults.standard.integer(forKey: FLSettingsBundleHelper.Keys.productLastUsed.rawValue))]
 
         datePicker.date = MapViewController.instance!.globalDate
         datePicker.maximumDate = tomorrow
+
+        self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
+        MainThread.sync {
+            self.productPicker.reloadAllComponents()
+            if let i = self.products.index(of: self.globalProduct) {
+                self.productPicker.selectRow(i, inComponent: 0, animated: true)
+            }
+        }
+        self.regions = Region.all.values.sorted(by: { $0.ident < $1.ident })
 
         checkCloudCredentials()
     }
@@ -500,6 +563,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         present(alert, animated: true)
     }
 
+    @IBAction func showSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(settingsURL) else {
+            return
+        }
+        UIApplication.shared.open(settingsURL)
+    }
 
     private lazy var progressView = self.storyboard!.instantiateViewController(withIdentifier: "progressView") as! ProgressViewController
     private var progressActive = false

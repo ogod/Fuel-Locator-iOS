@@ -37,7 +37,6 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
         set {
             let xOffset = newValue.x.clamped(to: 0...1) * (graphScrollView.contentSize.width - graphScrollView.bounds.width)
             let yOffset = (1 - newValue.y).clamped(to: 0...1) * (graphScrollView.contentSize.height - graphScrollView.bounds.height)
-            print("\(newValue) - xOffset = \(xOffset), yOffset = \(yOffset)")
             guard !xOffset.isNaN && !yOffset.isNaN else {
                 return
             }
@@ -78,7 +77,7 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
         guard let product = MapViewController.instance?.globalProduct else {
             let alert = UIAlertController(title: "Failed to Identify Product",
                                           message: """
-                                                    I could not identify the current product to generate a statistical graph.
+                                                    Could not identify the current product to generate a statistical graph.
                                                     """,
                                           preferredStyle: .alert)
             let action = UIAlertAction(title: "Okay", style: .default, handler: { (action) in
@@ -92,7 +91,7 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
         guard let region = MapViewController.instance?.globalRegion else {
             let alert = UIAlertController(title: "Failed to Identify Region",
                                           message: """
-                                                    I could not identify the current region to generate a statistical graph.
+                                                    Could not identify the current region to generate a statistical graph.
                                                     Please expand the viewed area or move to a new region.
                                                     """,
                                           preferredStyle: .alert)

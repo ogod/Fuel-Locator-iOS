@@ -19,6 +19,21 @@ class FLOCloud: NSObject {
     static let shared: FLOCloud = FLOCloud("iCloud.com.nomdejoye.Fuel-Locator-OSX")
     static let calendar = Calendar.current
 
+    enum NotifField: String {
+        case dateCreated
+        case date
+        case region
+        case product
+        case station
+        case price
+        case priceRise
+        case priceChange
+        case priceString
+        case riseString
+        case percentString
+        case dateStr
+    }
+
     lazy var container = CKContainer(identifier: identifier)
     let queue = DispatchQueue(label: "Cloud Query Queue",
                               qos: .userInitiated,
@@ -37,6 +52,7 @@ class FLOCloud: NSObject {
     let notifCentre = UNUserNotificationCenter.current()
     var timer: Timer!
     var t0: Timer!
+    var isRemoving: Bool = false
 
     func setupNotifications() {
         notifCentre.delegate = self
@@ -161,15 +177,15 @@ class FLOCloud: NSObject {
                 self.isEnabled = true
                 callBack(true)
                 NotificationCenter.default.post(Notification(name: FLOCloud.enabledNotificationName))
-                let operation = CKModifyBadgeOperation(badgeValue: 0)
-                operation.modifyBadgeCompletionBlock = {(error) in
-                    guard error == nil else {
-                        os_log("Could not reset application badge: ", log: self.logger, type: .fault)
-                        return
-                    }
-                    UIApplication.shared.applicationIconBadgeNumber = 0
-                }
-                CKContainer.default().add(operation)
+//                let operation = CKModifyBadgeOperation(badgeValue: 0)
+//                operation.modifyBadgeCompletionBlock = {(error) in
+//                    guard error == nil else {
+//                        os_log("Could not reset application badge: %@", log: self.logger, type: .fault, error!.localizedDescription)
+//                        return
+//                    }
+//                    UIApplication.shared.applicationIconBadgeNumber = 0
+//                }
+//                CKContainer.default().add(operation)
             }
         }
     }
@@ -376,54 +392,141 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
     }
 
     func changeSubscription() {
-        removeSubscription()
+        guard isEnabled && !isRemoving else {
+            return
+        }
+        defer {
+            isRemoving = false
+        }
+        isRemoving = true
+        if let subscriptions = fetchSubscriptions(), subscriptions.count > 0 {
+            remove(subscriptions: subscriptions)
+        }
         setupSubscription()
-//        subscribe(priceChange: 0.05, product: .ulp, station: "Puma Como")
-//        subscribe(product: .ulp, station: "Puma Como")
-//        subscribe(priceChange: 0.05, product: .ulp, region: .metropolitanArea)
-//        subscribe(product: .ulp, region: .metropolitanArea)
     }
 
-    func removeSubscription() {
+    fileprivate func fetchSubscriptions() -> [CKSubscription]? {
         let group = DispatchGroup()
-        do {
-            try publicDatabase().fetchAllSubscriptions(completionHandler: { (subscriptions, error) in
-                defer { group.leave() }
-                guard error == nil else {
-                    os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error!.localizedDescription)
+        var subscriptions: [CKSubscription]? = nil
+        var attempt: Int = 1
+        var process: (([CKSubscription]?, Error?) -> Void)! = nil
+        process = { (subs: [CKSubscription]?, err: Error?) in
+            guard err == nil else {
+                guard attempt < 10 else {
+                    os_log("Error on subscription deletion, failed 10 times: %@", log: self.logger, type: .error, err!.localizedDescription)
+                    group.leave()
                     return
                 }
-                for sub in subscriptions ?? [] {
-                    do {
-                        try self.publicDatabase().delete(withSubscriptionID: sub.subscriptionID, completionHandler: { (str, error) in
-                            defer { group.leave() }
-                            guard error == nil else {
-                                os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error!.localizedDescription)
+                switch err! {
+                case let error as CKError:
+                    let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double
+                    switch error.code {
+                    case .networkFailure, .networkUnavailable, .internalError, .serviceUnavailable:
+                        // An error that is returned when the network is available but cannot be accessed.
+                        // An error that is returned when the network is not available.
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + (retryAfter ?? pow(2.0, Double(attempt)))) {
+                            attempt += 1
+                            do {
+                                try self.publicDatabase().fetchAllSubscriptions(completionHandler: process)
                                 return
+                            } catch {
+                                os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error.localizedDescription)
                             }
-                        })
-                        group.enter()
-                    } catch {
-                        os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error.localizedDescription)
+                        }
+
+                    default:
+                        os_log("Error on deleting subscription: %@", log: self.logger, type: .error, err!.localizedDescription)
                     }
+
+                default:
+                    os_log("Error on deleting subscription: %@", log: self.logger, type: .error, err!.localizedDescription)
                 }
-            })
+                group.leave()
+                return
+            }
+            subscriptions = subs
+            group.leave()
+        }
+        do {
             group.enter()
+            try publicDatabase().fetchAllSubscriptions(completionHandler: process)
         } catch {
             os_log("Error during subscription deletion: %@", log: logger, type: .error, error.localizedDescription)
+            group.leave()
         }
         group.wait()
+        return subscriptions
+    }
+
+    fileprivate func remove(subscriptions: [CKSubscription]) {
+        let group = DispatchGroup()
+        for sub in subscriptions {
+            group.enter()
+            do {
+                try self.publicDatabase().delete(withSubscriptionID: sub.subscriptionID, completionHandler: { (str, err) in
+                    self.hasRemoved(subscription: sub, group: group, str: str, err: err, attempt: 1)
+                })
+            } catch {
+                os_log("Error during subscription deletion: %@", log: logger, type: .error, error.localizedDescription)
+                group.leave()
+            }
+        }
+        group.wait()
+    }
+
+    fileprivate func hasRemoved(subscription: CKSubscription, group: DispatchGroup, str: String?, err: Error?, attempt: Int) {
+        guard err == nil else {
+            guard attempt < 10 else {
+                os_log("Error on subscription deletion, failed 10 times: %@", log: self.logger, type: .error, err!.localizedDescription)
+                group.leave()
+                return
+            }
+            switch err! {
+            case let error as CKError:
+                let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double
+                switch error.code {
+                case .networkFailure, .networkUnavailable, .internalError, .serviceUnavailable:
+                    // An error that is returned when the network is available but cannot be accessed.
+                    // An error that is returned when the network is not available.
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + (retryAfter ?? pow(2.0, Double(attempt)))) {
+                        do {
+                            try self.publicDatabase().delete(withSubscriptionID: subscription.subscriptionID, completionHandler: { (str, err) in
+                                self.hasRemoved(subscription: subscription, group: group, str: str, err: err, attempt: attempt + 1)
+                            })
+                            return
+                        } catch {
+                            os_log("Error during subscription deletion: %@", log: self.logger, type: .error, error.localizedDescription)
+                        }
+                    }
+
+                default:
+                    os_log("Error on deleting subscription: %@", log: self.logger, type: .error, err!.localizedDescription)
+                }
+
+            default:
+                os_log("Error on deleting subscription: %@", log: self.logger, type: .error, err!.localizedDescription)
+            }
+            group.leave()
+            return
+        }
+        group.leave()
     }
 
     fileprivate func subscribe(priceChange: Float = 0, product: Product.Known, region: Region.Known? = nil, station: String? = nil) {
         guard region != nil || station != nil else {
             return
         }
-        let defaults = UserDefaults.standard
+
         let pred: NSPredicate
         let subTitle: String
-        let body: String = "A price change of %1$@ cpl (%2$@ percent) for %3$@. The new price is %4$@ cpl."
-        let args: [String] = ["riseString", "percentString", "dateStr", "priceString"]
+        let body: String =  """
+                            Price %1$@ cpl for %3$@. (%2$@ %%)
+                            The new price will be %4$@ cpl.
+                            """
+        let args: [String] = [FLOCloud.NotifField.riseString.rawValue,
+                              FLOCloud.NotifField.percentString.rawValue,
+                              FLOCloud.NotifField.dateStr.rawValue,
+                              FLOCloud.NotifField.priceString.rawValue]
         if station != nil {
             if priceChange > 0 {
                 pred = NSPredicate(format: "priceChange >= %@ AND station == %@ AND product == %@",
@@ -435,7 +538,7 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                                    CKRecord.Reference(recordID: Station.recordId(from: station!), action: .deleteSelf),
                                    CKRecord.Reference(recordID: product.recordId, action: .deleteSelf))
             }
-            subTitle = "Product: \(product.fullName ?? "Unknown"), Station: \(station ?? "Unknown")"
+            subTitle = "Product: \(product.name ?? "Unknown"), Station: \(station ?? "Unknown")"
         } else {
             if priceChange > 0 {
                 pred = NSPredicate(format: "priceChange >= %@ AND region == %@ AND product == %@",
@@ -447,40 +550,75 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                                    CKRecord.Reference(recordID: region!.recordId, action: .deleteSelf),
                                    CKRecord.Reference(recordID: product.recordId, action: .deleteSelf))
             }
-            subTitle = "Product: \(product.fullName!), Region: \(region!.name)"
+            subTitle = "Product: \(product.name!), Region: \(region!.name)"
         }
         let risingSubscription = CKQuerySubscription(recordType: "GlobalNotification",
                                                      predicate: pred,
                                                      options: [.firesOnRecordCreation])
         let risingInfo = CKSubscription.NotificationInfo()
-        risingInfo.title = "Fuel Price Changed"
+        risingInfo.title = "Fuel Price Change"
         risingInfo.subtitle = subTitle
         risingInfo.alertLocalizationKey = body
         risingInfo.alertLocalizationArgs = args
         risingInfo.shouldSendContentAvailable = true
         risingInfo.shouldBadge = true
         risingInfo.soundName = "chords2.caf"
-        risingInfo.desiredKeys = ["region", "product", "date", "price", "priceRise"]
+        risingInfo.desiredKeys = [FLOCloud.NotifField.region.rawValue,
+                                  FLOCloud.NotifField.product.rawValue,
+                                  FLOCloud.NotifField.station.rawValue,
+                                  FLOCloud.NotifField.date.rawValue,
+                                  FLOCloud.NotifField.price.rawValue]
         risingSubscription.notificationInfo = risingInfo
+        publish(subscription: risingSubscription)
+    }
 
+    fileprivate func publish(subscription: CKQuerySubscription, attempt: Int = 1) {
         let group = DispatchGroup()
         do {
             group.enter()
-            try publicDatabase().save(risingSubscription, completionHandler: { (subscrip, error) in
+            try publicDatabase().save(subscription, completionHandler: { (subscrip, err) in
                 defer { group.leave() }
-                guard error == nil else {
-                    switch error! {
-                    case let err as CKError where err.code == .serverRejectedRequest:
-                        break
+                guard err == nil else {
+                    guard attempt < 10 else {
+                        os_log("Error on saving subscription, failed 10 times: %@", log: self.logger, type: .error, err!.localizedDescription)
+                        return
+                    }
+                    switch err! {
+                    case let error as CKError:
+                        let retryAfter = error.userInfo[CKErrorRetryAfterKey] as? Double
+                        switch error.code {
+                        case .requestRateLimited, .networkFailure, .networkUnavailable, .serviceUnavailable:
+                            // An error that is returned when the network is available but cannot be accessed.
+                            // An error that is returned when the network is not available.
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + (retryAfter ?? pow(2.0, Double(attempt)))) {
+                                self.publish(subscription: subscription, attempt: attempt + 1)
+                            }
+
+                            /*! CloudKit.framework encountered an error.  This is a non-recoverable error. */
+                        case .internalError:
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + (retryAfter ?? pow(2.0, Double(attempt)))) {
+                                self.publish(subscription: subscription, attempt: attempt + 1)
+                            }
+
+
+                            /*! The subscription is probably a duplicate and can be ignored as no retry will fix the problem */
+                        case .serverRejectedRequest:
+                            print("Server rejected request: \(error.localizedDescription)")
+                            break
+
+
+                        default:
+                            os_log("Error on saving subscription (1): %@", log: self.logger, type: .error, err!.localizedDescription)
+                        }
+
                     default:
-                        print(error!)
+                        os_log("Error on saving subscription (2): %@", log: self.logger, type: .error, err!.localizedDescription)
                     }
                     return
                 }
             })
         } catch {
             group.leave()
-            print(error)
         }
         group.wait()
     }

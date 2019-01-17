@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9pv-A4-QxB">
-    <device id="retina5_9" orientation="portrait">
+    <device id="ipad12_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,15 +15,15 @@
             <objects>
                 <viewController id="9pv-A4-QxB" customClass="MapViewController" customModule="Fuel_Locator_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="tsR-hK-woN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="mutedStandard" showsUserLocation="YES" showsPointsOfInterest="NO" showsScale="YES" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xo6-4m-A3c">
-                                <rect key="frame" x="0.0" y="44" width="375" height="768"/>
+                                <rect key="frame" x="0.0" y="20" width="1024" height="1346"/>
                                 <gestureRecognizers/>
                             </mapView>
                             <view opaque="NO" clipsSubviews="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="iyz-GJ-Qwx">
-                                <rect key="frame" x="23.666666666666657" y="44" width="328" height="446"/>
+                                <rect key="frame" x="348" y="20" width="328" height="446"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u9b-F4-Jr0">
                                         <rect key="frame" x="6" y="-8" width="316" height="448"/>
@@ -206,7 +206,7 @@ Cg
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PanelGrip" translatesAutoresizingMaskIntoConstraints="NO" id="kjG-PS-akE">
-                                                                <rect key="frame" x="82.999999999999986" y="50" width="66.000000000000014" height="12"/>
+                                                                <rect key="frame" x="83" y="50" width="66" height="12"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="66" id="6GH-R4-uNB"/>
                                                                 </constraints>
@@ -286,16 +286,33 @@ Cg
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Krd-Ca-3Ip">
-                                <rect key="frame" x="319" y="628" width="48" height="142"/>
+                                <rect key="frame" x="968" y="1176" width="48" height="182"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8XI-dL-yaR">
-                                        <rect key="frame" x="0.0" y="0.0" width="48" height="142"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="48" height="182"/>
                                         <subviews>
                                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iv9-55-WbR">
-                                                <rect key="frame" x="0.0" y="0.0" width="48" height="142"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="48" height="182"/>
                                                 <view key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1og-XS-7WK">
-                                                    <rect key="frame" x="0.0" y="0.0" width="48" height="142"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="48" height="182"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="veB-Rr-HIh">
+                                                            <rect key="frame" x="8" y="48" width="32" height="32"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="32" id="5aa-36-Bgp"/>
+                                                                <constraint firstAttribute="width" constant="32" id="rMh-cV-UCq"/>
+                                                            </constraints>
+                                                            <state key="normal" image="Settings"/>
+                                                            <connections>
+                                                                <action selector="showSettings" destination="9pv-A4-QxB" eventType="touchUpInside" id="0os-Ph-yRa"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="veB-Rr-HIh" firstAttribute="centerX" secondItem="1og-XS-7WK" secondAttribute="centerX" id="3of-OC-V1q"/>
+                                                        <constraint firstItem="veB-Rr-HIh" firstAttribute="centerY" secondItem="1og-XS-7WK" secondAttribute="centerY" constant="-27" id="GgA-zM-eOI"/>
+                                                    </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBoundary" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -334,7 +351,7 @@ Cg
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y3f-yX-zUA">
-                                                <rect key="frame" x="8" y="50" width="32" height="32"/>
+                                                <rect key="frame" x="8" y="94" width="32" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="32" id="DjK-qF-7wu"/>
                                                     <constraint firstAttribute="width" constant="32" id="nR2-33-MPy"/>
@@ -351,7 +368,7 @@ Cg
                                             <constraint firstItem="ovy-Bt-OUw" firstAttribute="centerX" secondItem="8XI-dL-yaR" secondAttribute="centerX" id="Ajw-2K-QVh"/>
                                             <constraint firstAttribute="bottom" secondItem="iv9-55-WbR" secondAttribute="bottom" id="CGl-ii-dOs"/>
                                             <constraint firstItem="Y3f-yX-zUA" firstAttribute="centerX" secondItem="8XI-dL-yaR" secondAttribute="centerX" id="HvX-4A-IMt"/>
-                                            <constraint firstItem="Y3f-yX-zUA" firstAttribute="centerY" secondItem="8XI-dL-yaR" secondAttribute="centerY" constant="-5" id="KKR-VP-oWC"/>
+                                            <constraint firstItem="Y3f-yX-zUA" firstAttribute="centerY" secondItem="8XI-dL-yaR" secondAttribute="centerY" constant="19" id="KKR-VP-oWC"/>
                                             <constraint firstItem="iv9-55-WbR" firstAttribute="leading" secondItem="8XI-dL-yaR" secondAttribute="leading" id="V7G-sL-Pkd"/>
                                             <constraint firstItem="ovy-Bt-OUw" firstAttribute="top" secondItem="8XI-dL-yaR" secondAttribute="top" constant="4" id="fnM-Mh-ADr"/>
                                             <constraint firstItem="iv9-55-WbR" firstAttribute="top" secondItem="8XI-dL-yaR" secondAttribute="top" id="gXX-7i-dYc"/>
@@ -370,7 +387,7 @@ Cg
                                     <constraint firstAttribute="width" constant="48" id="Lta-1e-15q"/>
                                     <constraint firstAttribute="trailing" secondItem="8XI-dL-yaR" secondAttribute="trailing" id="m6f-zd-ZzS"/>
                                     <constraint firstAttribute="bottom" secondItem="8XI-dL-yaR" secondAttribute="bottom" id="sly-dQ-EWW"/>
-                                    <constraint firstAttribute="height" constant="142" id="szB-Qq-mUE"/>
+                                    <constraint firstAttribute="height" constant="182" id="szB-Qq-mUE"/>
                                     <constraint firstItem="8XI-dL-yaR" firstAttribute="leading" secondItem="Krd-Ca-3Ip" secondAttribute="leading" id="wiB-1o-nWk"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -436,18 +453,18 @@ Cg
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="206.8359375" y="-892.09370424597353"/>
+            <point key="canvasLocation" x="206.1576354679803" y="-893.60000000000002"/>
         </scene>
         <!--Region Price Over Time-->
         <scene sceneID="vxi-Zq-yxB">
             <objects>
                 <viewController modalTransitionStyle="flipHorizontal" modalPresentationStyle="pageSheet" hidesBottomBarWhenPushed="YES" id="X3w-b8-CtY" customClass="GraphViewController" customModule="Fuel_Locator_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f6C-1T-n8m">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" minimumZoomScale="0.5" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="DSN-x1-p92">
-                                <rect key="frame" x="84" y="108" width="275" height="556"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="DSN-x1-p92">
+                                <rect key="frame" x="88" y="70" width="916" height="1128"/>
                                 <subviews>
                                     <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="4Y5-7z-aF8" customClass="GraphView" customModule="Fuel_Locator_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1134"/>
@@ -478,8 +495,8 @@ Cg
                                     <outlet property="delegate" destination="X3w-b8-CtY" id="jjb-8x-X35"/>
                                 </connections>
                             </scrollView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="Cv6-nq-hpl">
-                                <rect key="frame" x="84" y="672" width="275" height="120"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="Cv6-nq-hpl">
+                                <rect key="frame" x="88" y="1206" width="916" height="120"/>
                                 <subviews>
                                     <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="6eu-EA-twO" customClass="XAxisView" customModule="Fuel_Locator_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="1000" height="120"/>
@@ -493,7 +510,9 @@ Cg
                                     <constraint firstAttribute="bottom" secondItem="6eu-EA-twO" secondAttribute="bottom" id="EI3-9a-iuB"/>
                                     <constraint firstItem="6eu-EA-twO" firstAttribute="leading" secondItem="Cv6-nq-hpl" secondAttribute="leading" priority="250" id="KIy-WF-0dT"/>
                                     <constraint firstAttribute="trailing" secondItem="6eu-EA-twO" secondAttribute="trailing" priority="250" id="PA8-FL-pzg"/>
-                                    <constraint firstAttribute="height" constant="120" id="Q2V-LQ-Pxf"/>
+                                    <constraint firstAttribute="height" constant="120" id="Q2V-LQ-Pxf">
+                                        <variation key="heightClass=compact" constant="80"/>
+                                    </constraint>
                                     <constraint firstItem="6eu-EA-twO" firstAttribute="centerX" secondItem="Cv6-nq-hpl" secondAttribute="centerX" priority="250" id="Y7J-Iq-6xW"/>
                                     <constraint firstItem="6eu-EA-twO" firstAttribute="centerY" secondItem="Cv6-nq-hpl" secondAttribute="centerY" priority="250" id="h1h-C9-Ikb"/>
                                 </constraints>
@@ -501,8 +520,8 @@ Cg
                                     <outlet property="delegate" destination="X3w-b8-CtY" id="ei7-q5-6FV"/>
                                 </connections>
                             </scrollView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="SIZ-4C-5me">
-                                <rect key="frame" x="16" y="108" width="60" height="556"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="SIZ-4C-5me">
+                                <rect key="frame" x="20" y="70" width="60" height="1128"/>
                                 <subviews>
                                     <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ZMO-72-nOb" customClass="YAxisView" customModule="Fuel_Locator_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="1134"/>
@@ -528,16 +547,16 @@ Cg
                                 </connections>
                             </scrollView>
                             <activityIndicatorView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="alI-ce-HrE">
-                                <rect key="frame" x="169" y="387.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="493.5" y="654.5" width="37" height="37"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ecr-I2-2kT">
-                                <rect key="frame" x="198" y="763" width="47" height="29"/>
+                                <rect key="frame" x="522.5" y="1297" width="47" height="29"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="24"/>
                                 <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="exC-s8-Tal">
-                                <rect key="frame" x="-44" y="371.66666666666669" width="140" height="29"/>
+                                <rect key="frame" x="-40" y="619.5" width="140" height="29"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Fuel Price (c/l)">
                                         <attributes>
@@ -549,7 +568,7 @@ Cg
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoDark" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bMu-X6-2rI">
-                                <rect key="frame" x="20" y="726" width="32" height="32"/>
+                                <rect key="frame" x="20" y="1294" width="32" height="32"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="32" id="tmF-rk-b56"/>
@@ -646,254 +665,23 @@ Cg
             <objects>
                 <viewController id="Y5c-UQ-rtd" customClass="AboutViewController" customModule="Fuel_Locator_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GZ1-s2-tMQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" alpha="0.14999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fuel Location II Imprint" translatesAutoresizingMaskIntoConstraints="NO" id="cg0-es-r6l">
-                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="617"/>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jst-UQ-Dzu">
-                                <rect key="frame" x="16" y="108" width="343" height="663"/>
+                            <wkWebView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G6v-ix-Gzl">
+                                <rect key="frame" x="20" y="70" width="335" height="556"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="Fuel Locator">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="24" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">Copyright © 2018 by Owen Godfrey
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">
-Data is provided by the FuelWatch website (http://fuelwatch.wa.gov.au), copyright © 2011 by the Western Australian Department of Mines, Industry Regulation and Safety. This data is publicly accessible, and this app depends upon this site for its data. The author offers no warranty about the future or correctness of this website or the data it offers.
-
-Fuel stations and brands publish their names and brands freely to the website and these are used for informational purposes only. The names and symbols of the fuel brands are trademarked by the owners and are only used under terms of fair dealing (Copyright Act 1968) for the purpose of reporting prices.
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="10" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">Thanks for using Fuel Locator!
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="This app is designed to be as intuitive as possible. On the map, stations with a">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="red">
-                                        <attributes>
-                                            <color key="NSColor" red="0.85541999999999996" green="0.040009999999999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="colour have the 10% worst prices and stations with an">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="aqua">
-                                        <attributes>
-                                            <color key="NSColor" red="0.02438175423768808" green="0.60004736028201211" blue="0.73336999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">colour have the 10% best prices. Between those two extremes are eight other price bands representing 10% bands each, and they vary slowly between</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="green">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.71186000000000005" blue="0.22009999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="and">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="orange">
-                                        <attributes>
-                                            <color key="NSColor" red="0.78059999999999996" green="0.51048000000000004" blue="0.01503" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=", ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="with the">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="yellow">
-                                        <attributes>
-                                            <color key="NSColor" red="0.78556000000000004" green="0.79813000000000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">bands representing the median break point prices.
-Fuel prices are presented for particular day and fuel product. To select a different day or fuel type, tap on the label at the top of the map. You will also be given the opportunity to change map display and to select what brands to apply fuel price discounts to. (Discounts are approximated for each brand, and are generally assumed to be 4c per litre, although this may change in the future.)
-The history view allows you to view fuel price changes over the previous several years so that you can gain a balanced side of how much you should reasonably be paying for fuel now.The statistics will vary depending on the region that you are currently viewing on the map, such as the Pilbra, Wheatbelt, Peel and Metropolitan Areas. A </string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="violet">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.13084999999999999" blue="0.76698" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">line also indicates the 14-day average of those fuel prices.
-If you have any comments or suggestions, drop us a line through reviews on the app store, or by direct email through the address you will find in the app store.
-Once again, thanks for using Fuel Locator!
-Owen Godfrey</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0011299999999999999" green="0.34974" blue="0.61334999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue-Thin"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="6" paragraphSpacingBefore="6" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                                <wkWebViewConfiguration key="configuration" allowsAirPlayForMediaPlayback="NO" allowsPictureInPictureMediaPlayback="NO">
+                                    <dataDetectorTypes key="dataDetectorTypes"/>
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences" javaScriptEnabled="NO" minimumFontSize="14"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mk6-Hf-x0F">
-                                <rect key="frame" x="172" y="779" width="31" height="13"/>
+                                <rect key="frame" x="172" y="634" width="31" height="13"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="13" id="Fzy-as-dVh"/>
                                 </constraints>
@@ -904,15 +692,15 @@ Owen Godfrey</string>
                         </subviews>
                         <color key="backgroundColor" red="0.60324339038892139" green="0.7371324544478699" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Jst-UQ-Dzu" firstAttribute="top" secondItem="PAU-jQ-Qjd" secondAttribute="top" constant="20" id="9Me-P2-qZe"/>
+                            <constraint firstItem="G6v-ix-Gzl" firstAttribute="centerX" secondItem="GZ1-s2-tMQ" secondAttribute="centerX" id="6dL-QY-Sw4"/>
+                            <constraint firstItem="G6v-ix-Gzl" firstAttribute="top" secondItem="PAU-jQ-Qjd" secondAttribute="top" constant="20" id="Dlc-6M-ZiK"/>
                             <constraint firstItem="cg0-es-r6l" firstAttribute="leading" secondItem="GZ1-s2-tMQ" secondAttribute="leading" id="G9F-Ib-U4k"/>
                             <constraint firstItem="cg0-es-r6l" firstAttribute="top" secondItem="PAU-jQ-Qjd" secondAttribute="top" id="XnS-Yq-Ddg"/>
+                            <constraint firstItem="G6v-ix-Gzl" firstAttribute="leading" secondItem="PAU-jQ-Qjd" secondAttribute="leading" constant="20" id="YDe-9r-gvl"/>
                             <constraint firstAttribute="trailing" secondItem="cg0-es-r6l" secondAttribute="trailing" id="jsj-yP-wRZ"/>
                             <constraint firstItem="cg0-es-r6l" firstAttribute="centerX" secondItem="mk6-Hf-x0F" secondAttribute="centerX" id="kb2-Yl-nif"/>
                             <constraint firstItem="cg0-es-r6l" firstAttribute="bottom" secondItem="PAU-jQ-Qjd" secondAttribute="bottom" id="kwp-Fp-3tv"/>
-                            <constraint firstItem="Jst-UQ-Dzu" firstAttribute="centerX" secondItem="mk6-Hf-x0F" secondAttribute="centerX" id="orG-O8-8kr"/>
-                            <constraint firstItem="mk6-Hf-x0F" firstAttribute="top" secondItem="Jst-UQ-Dzu" secondAttribute="bottom" constant="8" symbolic="YES" id="s5Z-hd-2HI"/>
-                            <constraint firstItem="Jst-UQ-Dzu" firstAttribute="leading" secondItem="GZ1-s2-tMQ" secondAttribute="leadingMargin" id="x8F-oU-G8r"/>
+                            <constraint firstItem="mk6-Hf-x0F" firstAttribute="top" secondItem="G6v-ix-Gzl" secondAttribute="bottom" constant="8" id="xTK-n6-Nck"/>
                             <constraint firstAttribute="bottom" secondItem="mk6-Hf-x0F" secondAttribute="bottom" constant="20" symbolic="YES" id="yil-Cj-uy2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PAU-jQ-Qjd"/>
@@ -927,33 +715,34 @@ Owen Godfrey</string>
                     </navigationItem>
                     <connections>
                         <outlet property="versionLabel" destination="mk6-Hf-x0F" id="5ZA-ZK-1cD"/>
+                        <outlet property="webView" destination="G6v-ix-Gzl" id="yKU-Xa-TeY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sWp-g6-UeB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1902" y="-132"/>
+            <point key="canvasLocation" x="1901.9704433497539" y="-132"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="0Tl-TV-YQX">
             <objects>
                 <viewController storyboardIdentifier="progressView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="IZX-0X-65u" customClass="ProgressViewController" customModule="Fuel_Locator_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mr1-EO-0Ek">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8zl-vX-cVh">
-                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                                <rect key="frame" x="0.0" y="20" width="1024" height="1346"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="f50-Ax-zap">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fuel Location II Imprint" translatesAutoresizingMaskIntoConstraints="NO" id="xvj-5G-4zC">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
                                         </imageView>
                                         <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JfB-0v-TDI">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="bhF-Wj-yLj">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </view>
                                             <vibrancyEffect>
@@ -975,7 +764,7 @@ Owen Godfrey</string>
                                 <blurEffect style="regular"/>
                             </visualEffectView>
                             <progressView contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="mwc-5t-PMU">
-                                <rect key="frame" x="12.666666666666657" y="402" width="350" height="9"/>
+                                <rect key="frame" x="337" y="679" width="350" height="9"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="KBb-GG-wtz"/>
@@ -985,13 +774,13 @@ Owen Godfrey</string>
                                 <color key="trackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </progressView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kVe-LZ-ocL">
-                                <rect key="frame" x="107" y="353.66666666666669" width="161" height="40.333333333333314"/>
+                                <rect key="frame" x="431.5" y="630.5" width="161" height="40.5"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g8n-xS-cwT">
-                                        <rect key="frame" x="0.0" y="0.0" width="161" height="40.333333333333336"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="161" height="40.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please wait…" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CkW-Qk-J7N">
-                                                <rect key="frame" x="8" y="4" width="145" height="32.333333333333336"/>
+                                                <rect key="frame" x="8" y="4" width="145" height="32.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="highlightedColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1062,7 +851,7 @@ Owen Godfrey</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" modalPresentationStyle="pageSheet" id="myA-D7-jsl" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1fZ-aR-hZB">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1080,7 +869,7 @@ Owen Godfrey</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" modalPresentationStyle="formSheet" hidesBottomBarWhenPushed="YES" id="vBB-yv-j4u" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hq7-oX-nWu">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1094,16 +883,17 @@ Owen Godfrey</string>
         </scene>
     </scenes>
     <resources>
-        <image name="Fuel Location II Imprint" width="2976" height="2976"/>
-        <image name="Graph" width="72" height="72"/>
+        <image name="Fuel Location II Imprint" width="1984" height="1984"/>
+        <image name="Graph" width="48" height="48"/>
         <image name="PanelGrip" width="33" height="12"/>
-        <image name="PanelMaskTab" width="96.666664123535156" height="50.666667938232422"/>
-        <image name="PanelMaskTop" width="200" height="50.666667938232422"/>
-        <image name="map_location" width="96" height="96"/>
-        <image name="map_location_outline" width="96" height="96"/>
+        <image name="PanelMaskTab" width="96.5" height="50.5"/>
+        <image name="PanelMaskTop" width="200" height="50.5"/>
+        <image name="Settings" width="61.439998626708984" height="61.439998626708984"/>
+        <image name="map_location" width="32" height="32"/>
+        <image name="map_location_outline" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="9ml-8n-PWa"/>
-        <segue reference="oRi-Ec-PyW"/>
+        <segue reference="gVu-3o-shg"/>
     </inferredMetricsTieBreakers>
 </document>

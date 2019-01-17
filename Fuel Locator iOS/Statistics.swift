@@ -90,7 +90,7 @@ class Statistics: FLODataEntity, Hashable {
                 completionBlock(stats, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Statistics fetch (with block): \(error)")
         }
     }
 
@@ -107,7 +107,7 @@ class Statistics: FLODataEntity, Hashable {
                 completionBlock(stats, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Statistics fetch: \(error)")
         }
     }
 
@@ -123,7 +123,7 @@ class Statistics: FLODataEntity, Hashable {
                 completionBlock(stats, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Statistics fetch historic values: \(error)")
         }
     }
 

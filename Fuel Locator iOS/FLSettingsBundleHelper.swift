@@ -63,9 +63,10 @@ class FLSettingsBundleHelper {
         case notificationStation = "notification.station"
         case notificationPriceChange = "notification.priceChange"
         case productLastUsed = "Product.lastUsed"
-        case versionNumber = "versionNumber"
-        case buildNumber = "buildNumber"
-        case mapType = "mapType"
+        case badgeNumber
+        case versionNumber
+        case buildNumber
+        case mapType
     }
 
     static func checkSettings() {

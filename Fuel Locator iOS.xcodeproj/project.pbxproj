@@ -36,6 +36,12 @@
 		777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777F0E2920C573E40064FF0E /* YAxisView.swift */; };
 		777F0E3A20C6E5080064FF0E /* Armchair.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; };
 		777F0E3B20C6E5080064FF0E /* Armchair.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		778D878121EF2BCB0051B948 /* Fuel Locator Documentation.html in Resources */ = {isa = PBXBuildFile; fileRef = 778D878021EF2BA90051B948 /* Fuel Locator Documentation.html */; };
+		778D878821EF2C160051B948 /* image002.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878321EF2BD70051B948 /* image002.jpg */; };
+		778D878921EF2C160051B948 /* image003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878421EF2BD70051B948 /* image003.jpg */; };
+		778D878A21EF2C160051B948 /* image001.png in Resources */ = {isa = PBXBuildFile; fileRef = 778D878521EF2BD70051B948 /* image001.png */; };
+		778D878B21EF2C160051B948 /* image004.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878621EF2BD70051B948 /* image004.jpg */; };
+		778D878C21EF2C160051B948 /* image005.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878721EF2BD70051B948 /* image005.jpg */; };
 		7794B15420D4FA4E00505746 /* chords2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 7794B15020D4FA4D00505746 /* chords2.caf */; };
 		77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47AF20BDB15B006E50FF /* GraphView.swift */; };
 		77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47B120BE531D006E50FF /* ProgressViewController.swift */; };
@@ -166,6 +172,12 @@
 		777F0E2720C573CC0064FF0E /* XAxisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XAxisView.swift; sourceTree = "<group>"; };
 		777F0E2920C573E40064FF0E /* YAxisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YAxisView.swift; sourceTree = "<group>"; };
 		777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Armchair.xcodeproj; path = ../../Armchair/Armchair.xcodeproj; sourceTree = "<group>"; };
+		778D878021EF2BA90051B948 /* Fuel Locator Documentation.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "Fuel Locator Documentation.html"; sourceTree = "<group>"; };
+		778D878321EF2BD70051B948 /* image002.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image002.jpg; sourceTree = "<group>"; };
+		778D878421EF2BD70051B948 /* image003.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image003.jpg; sourceTree = "<group>"; };
+		778D878521EF2BD70051B948 /* image001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image001.png; sourceTree = "<group>"; };
+		778D878621EF2BD70051B948 /* image004.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image004.jpg; sourceTree = "<group>"; };
+		778D878721EF2BD70051B948 /* image005.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image005.jpg; sourceTree = "<group>"; };
 		7794B15020D4FA4D00505746 /* chords2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chords2.caf; sourceTree = "<group>"; };
 		7794B15520D552F000505746 /* Fuel Locator Information.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Fuel Locator Information.rtf"; sourceTree = "<group>"; };
 		77BC47AF20BDB15B006E50FF /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
@@ -258,22 +270,24 @@
 		775C55CB2099BD7500540B5B /* Fuel Locator iOS */ = {
 			isa = PBXGroup;
 			children = (
-				775C5604209EDB1000540B5B /* Data */,
-				775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */,
+				775C55D22099BD7500540B5B /* Main.storyboard */,
+				775C55D72099BD9200540B5B /* LaunchScreen.storyboard */,
+				775C55D52099BD9200540B5B /* Assets.xcassets */,
 				775C55CC2099BD7500540B5B /* AppDelegate.swift */,
 				7794B15020D4FA4D00505746 /* chords2.caf */,
 				7794B15520D552F000505746 /* Fuel Locator Information.rtf */,
-				77FA294620BB8168007EE0F1 /* Map View */,
-				77FA294820BB8249007EE0F1 /* Graph View */,
-				775C55D22099BD7500540B5B /* Main.storyboard */,
-				775C55D52099BD9200540B5B /* Assets.xcassets */,
-				775C55D72099BD9200540B5B /* LaunchScreen.storyboard */,
-				7710E21920E74EAD00FE3C80 /* Settings.bundle */,
+				775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */,
 				77FAC1FA20D589100059DA08 /* AboutViewController.swift */,
 				7710E21E20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift */,
 				775C55DA2099BD9200540B5B /* Info.plist */,
 				776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */,
 				7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */,
+				778D878021EF2BA90051B948 /* Fuel Locator Documentation.html */,
+				778D878221EF2BD60051B948 /* FuelLocatorDocumentation.fld */,
+				775C5604209EDB1000540B5B /* Data */,
+				77FA294620BB8168007EE0F1 /* Map View */,
+				77FA294820BB8249007EE0F1 /* Graph View */,
+				7710E21920E74EAD00FE3C80 /* Settings.bundle */,
 				7735EDDB20F4A31B0050ECCD /* Utility Classes */,
 				777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */,
 			);
@@ -336,6 +350,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		778D878221EF2BD60051B948 /* FuelLocatorDocumentation.fld */ = {
+			isa = PBXGroup;
+			children = (
+				778D878321EF2BD70051B948 /* image002.jpg */,
+				778D878421EF2BD70051B948 /* image003.jpg */,
+				778D878521EF2BD70051B948 /* image001.png */,
+				778D878621EF2BD70051B948 /* image004.jpg */,
+				778D878721EF2BD70051B948 /* image005.jpg */,
+			);
+			path = FuelLocatorDocumentation.fld;
+			sourceTree = "<group>";
+		};
 		77FA294620BB8168007EE0F1 /* Map View */ = {
 			isa = PBXGroup;
 			children = (
@@ -370,6 +396,7 @@
 			buildPhases = (
 				775C55C52099BD7500540B5B /* Sources */,
 				775C55C62099BD7500540B5B /* Frameworks */,
+				776FD71521D0C9CA0005E1A4 /* Search Tags */,
 				77F2EB4020AC33A300772B4B /* Increment Build */,
 				77F2EB4320AC345600772B4B /* Increment Version */,
 				7742572920B81DEE00D21B48 /* Insert verion to Launch Screen */,
@@ -438,6 +465,9 @@
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1010;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
@@ -523,11 +553,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				778D878A21EF2C160051B948 /* image001.png in Resources */,
 				7794B15420D4FA4E00505746 /* chords2.caf in Resources */,
+				778D878B21EF2C160051B948 /* image004.jpg in Resources */,
+				778D878921EF2C160051B948 /* image003.jpg in Resources */,
 				775C55D92099BD9200540B5B /* LaunchScreen.storyboard in Resources */,
+				778D878821EF2C160051B948 /* image002.jpg in Resources */,
 				7710E21A20E74EAD00FE3C80 /* Settings.bundle in Resources */,
 				775C55D62099BD9200540B5B /* Assets.xcassets in Resources */,
+				778D878121EF2BCB0051B948 /* Fuel Locator Documentation.html in Resources */,
 				775C55D42099BD7500540B5B /* Main.storyboard in Resources */,
+				778D878C21EF2C160051B948 /* image005.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +597,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#   Output version & build numbers into a label on LaunchScreen.storyboard\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nversionNumber=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleShortVersionString\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nsed -i bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $versionNumber Build: $buildNumber\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"";
+		};
+		776FD71521D0C9CA0005E1A4 /* Search Tags */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Search Tags";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\nERRORTAG=\"ERROR:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" -type f \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$|($ERRORTAG).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\" | perl -p -e \"s/($ERRORTAG)/ error: \\$1/\"\n";
+			showEnvVarsInLog = 0;
 		};
 		77F2EB4020AC33A300772B4B /* Increment Build */ = {
 			isa = PBXShellScriptBuildPhase;

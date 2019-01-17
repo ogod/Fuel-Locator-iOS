@@ -25,7 +25,14 @@ class Region: FLODataEntity, Hashable {
         self.ident = ident
         self.name = name
     }
-    
+
+    convenience init(ident: Int16, name: String, latitude: Double, longitude: Double, radius: Double) {
+        self.init(ident: ident, name: name)
+        self.latitude = latitude as NSNumber
+        self.longitude = longitude as NSNumber
+        self.radius = radius as NSNumber
+    }
+
     enum Known: Int16 {
         case metropolitanArea = -1
         case northOfRiver = 25
@@ -406,7 +413,7 @@ class Region: FLODataEntity, Hashable {
                 completionBlock(reg, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Region fetch (with block): \(error)")
         }
     }
 
@@ -420,7 +427,7 @@ class Region: FLODataEntity, Hashable {
                 completionBlock(regions, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Region fetch: \(error)")
         }
     }
 
@@ -504,70 +511,74 @@ class Region: FLODataEntity, Hashable {
 
     var initialiser: String {
         get {
-            return "\(ident): Region(ident: \(ident), name: \"\(name)\")"
+            if latitude == nil || longitude == nil || radius == nil {
+                return "\(ident): Region(ident: \(ident), name: \"\(name)\")"
+            } else {
+                return "\(ident): Region(ident: \(ident), name: \"\(name)\", latitude: \(latitude!.doubleValue), longitude: \(longitude!.doubleValue), radius: \(radius!.doubleValue))"
+            }
         }
     }
 
     static let defaults: Dictionary<Int16, Region> = [
-        -1: Region(ident: -1, name: "Metropolitan Area"),
-        1:  Region(ident: 1,  name: "Boulder"),
-        50: Region(ident: 50, name: "Norseman"),
-        33: Region(ident: 33, name: "Cataby"),
-        44: Region(ident: 44, name: "Kellerberrin"),
-        18: Region(ident: 18, name: "Mandurah"),
-        8:  Region(ident: 8,  name: "Kalgoorlie"),
-        42: Region(ident: 42, name: "Jurien"),
-        55: Region(ident: 55, name: "Wubin"),
-        30: Region(ident: 30, name: "Bridgetown / Greenbushes"),
-        16: Region(ident: 16, name: "Bunbury"),
-        46: Region(ident: 46, name: "Meekatharra"),
-        9:  Region(ident: 9,  name: "Karratha"),
-        17: Region(ident: 17, name: "Geraldton"),
-        45: Region(ident: 45, name: "Kojonup"),
-        40: Region(ident: 40, name: "Exmouth"),
-        43: Region(ident: 43, name: "Kambalda"),
-        12: Region(ident: 12, name: "Northam"),
-        28: Region(ident: 28, name: "Augusta / Margaret River"),
-        53: Region(ident: 53, name: "Tammin"),
-        26: Region(ident: 26, name: "Metro : South of River"),
-        29: Region(ident: 29, name: "Busselton (Shire)"),
-        58: Region(ident: 58, name: "Meckering"),
-        7:  Region(ident: 7,  name: "Esperance"),
-        59: Region(ident: 59, name: "Wundowie"),
-        31: Region(ident: 31, name: "Donnybrook / Balingup"),
-        15: Region(ident: 15, name: "Albany"),
-        37: Region(ident: 37, name: "Denmark"),
-        36: Region(ident: 36, name: "Dalwallinu"),
-        51: Region(ident: 51, name: "Ravensthorpe"),
-        21: Region(ident: 21, name: "Greenough"),
-        54: Region(ident: 54, name: "Williams"),
-        24: Region(ident: 24, name: "Waroona"),
-        4:  Region(ident: 4,  name: "Carnarvon"),
-        49: Region(ident: 49, name: "Newman"),
-        13: Region(ident: 13, name: "Port Hedland"),
-        19: Region(ident: 19, name: "Capel"),
-        22: Region(ident: 22, name: "Harvey"),
-        2:  Region(ident: 2,  name: "Broome"),
-        25: Region(ident: 25, name: "Metro : North of River"),
-        48: Region(ident: 48, name: "Mt Barker"),
-        11: Region(ident: 11, name: "Narrogin"),
-        23: Region(ident: 23, name: "Murray"),
-        3:  Region(ident: 3,  name: "Busselton (Townsite)"),
-        5:  Region(ident: 5,  name: "Collie"),
-        34: Region(ident: 34, name: "Coolgardie"),
-        14: Region(ident: 14, name: "South Hedland"),
-        6:  Region(ident: 6,  name: "Dampier"),
-        56: Region(ident: 56, name: "York"),
-        47: Region(ident: 47, name: "Moora"),
-        57: Region(ident: 57, name: "Regans Ford"),
-        38: Region(ident: 38, name: "Derby"),
-        20: Region(ident: 20, name: "Dardanup"),
-        41: Region(ident: 41, name: "Fitzroy Crossing"),
-        39: Region(ident: 39, name: "Dongara"),
-        10: Region(ident: 10, name: "Kununurra"),
-        32: Region(ident: 32, name: "Manjimup"),
-        35: Region(ident: 35, name: "Cunderdin"),
-        27: Region(ident: 27, name: "Metro : East/Hills")
+        54: Region(ident: 54, name: "Williams", latitude: -33.028103, longitude: 116.879206, radius: 5000.0),
+        35: Region(ident: 35, name: "Cunderdin", latitude: -31.652038, longitude: 117.232004, radius: 5000.0),
+        21: Region(ident: 21, name: "Greenough", latitude: -28.844604000000004, longitude: 114.7300835, radius: 26903.150177619147),
+        29: Region(ident: 29, name: "Busselton (Shire)", latitude: -33.661596625, longitude: 115.191095625, radius: 14484.803084711277),
+        49: Region(ident: 49, name: "Newman", latitude: -23.375385333333334, longitude: 119.74471283333335, radius: 5000.0),
+        20: Region(ident: 20, name: "Dardanup", latitude: -33.347548333333336, longitude: 115.74232799999999, radius: 10872.367711197236),
+        2: Region(ident: 2, name: "Broome", latitude: -17.956006571428574, longitude: 122.23100557142857, radius: 5000.0),
+        26: Region(ident: 26, name: "Metro : South of River", latitude: -32.10457923516925, longitude: 115.85931749588352, radius: 44047.4559739961),
+        32: Region(ident: 32, name: "Manjimup", latitude: -34.57573445357143, longitude: 116.25810914285714, radius: 68275.8190351985),
+        38: Region(ident: 38, name: "Derby", latitude: -17.313909666666667, longitude: 123.64283333333333, radius: 5000.0),
+        16: Region(ident: 16, name: "Bunbury", latitude: -33.34074265079364, longitude: 115.67755204761906, radius: 7718.230096382874),
+        12: Region(ident: 12, name: "Northam", latitude: -31.654200333333335, longitude: 116.672584, radius: 5000.0),
+        45: Region(ident: 45, name: "Kojonup", latitude: -33.835258, longitude: 117.16021, radius: 5000.0),
+        51: Region(ident: 51, name: "Ravensthorpe", latitude: -33.581312, longitude: 120.048818, radius: 5000.0),
+        37: Region(ident: 37, name: "Denmark", latitude: -34.96104233333333, longitude: 117.35291799999999, radius: 5000.0),
+        31: Region(ident: 31, name: "Donnybrook / Balingup", latitude: -33.702832666666666, longitude: 115.91241591666667, radius: 21889.296835021294),
+        1: Region(ident: 1, name: "Boulder", latitude: -30.7831158, longitude: 121.4657708, radius: 5000.0),
+        23: Region(ident: 23, name: "Murray", latitude: -32.621161055555554, longitude: 115.86413522222223, radius: 26269.392012856963),
+        7: Region(ident: 7, name: "Esperance", latitude: -33.846405299999994, longitude: 121.88752085714285, radius: 5000.0),
+        25: Region(ident: 25, name: "Metro : North of River", latitude: -31.83978581904762, longitude: 115.81779462777779, radius: 40871.898948146096),
+        43: Region(ident: 43, name: "Kambalda", latitude: -31.208105500000002, longitude: 121.651743, radius: 6070.776871419579),
+        58: Region(ident: 58, name: "Meckering", latitude: -31.63242, longitude: 117.006301, radius: 5000.0),
+        42: Region(ident: 42, name: "Jurien", latitude: -30.3057475, longitude: 115.0387335, radius: 5000.0),
+        50: Region(ident: 50, name: "Norseman", latitude: -32.188634, longitude: 121.778694, radius: 5000.0),
+        3: Region(ident: 3, name: "Busselton (Townsite)", latitude: -33.65781645833333, longitude: 115.32080358333334, radius: 7951.710597460472),
+        30: Region(ident: 30, name: "Bridgetown / Greenbushes", latitude: -33.90375, longitude: 116.09793316666666, radius: 12111.48801588454),
+        24: Region(ident: 24, name: "Waroona", latitude: -32.86102233333334, longitude: 115.790268, radius: 17378.511313405492),
+        22: Region(ident: 22, name: "Harvey", latitude: -33.150884833333336, longitude: 115.79647541666667, radius: 20552.430544648894),
+        28: Region(ident: 28, name: "Augusta / Margaret River", latitude: -34.02248409523809, longitude: 115.10296885714286, radius: 37755.648686868546),
+        44: Region(ident: 44, name: "Kellerberrin", latitude: -31.633149, longitude: 117.7267344, radius: 5000.0),
+        41: Region(ident: 41, name: "Fitzroy Crossing", latitude: -18.20106725, longitude: 125.57107024999999, radius: 5000.0),
+        47: Region(ident: 47, name: "Moora", latitude: -30.639021333333332, longitude: 116.00819966666666, radius: 5000.0),
+        48: Region(ident: 48, name: "Mt Barker", latitude: -34.628447333333334, longitude: 117.66393766666667, radius: 5000.0),
+        56: Region(ident: 56, name: "York", latitude: -31.8921365, longitude: 116.768338, radius: 5000.0),
+        11: Region(ident: 11, name: "Narrogin", latitude: -32.9337085, longitude: 117.1779625, radius: 5000.0),
+        33: Region(ident: 33, name: "Cataby", latitude: -30.744478, longitude: 115.5492495, radius: 5000.0),
+        8: Region(ident: 8, name: "Kalgoorlie", latitude: -30.750553888888895, longitude: 121.47048344444445, radius: 5000.0),
+        59: Region(ident: 59, name: "Wundowie", latitude: -31.806159, longitude: 116.3372595, radius: 6831.38450991653),
+        15: Region(ident: 15, name: "Albany", latitude: -34.85097420434783, longitude: 117.99824197391305, radius: 74800.3390515784),
+        40: Region(ident: 40, name: "Exmouth", latitude: -21.934815, longitude: 114.126983, radius: 5000.0),
+        17: Region(ident: 17, name: "Geraldton", latitude: -28.6553725, longitude: 115.06672206538461, radius: 50451.42072334734),
+        53: Region(ident: 53, name: "Tammin", latitude: -31.640374, longitude: 117.491034, radius: 5000.0),
+        57: Region(ident: 57, name: "Regans Ford", latitude: -30.983045, longitude: 115.702039, radius: 5000.0),
+        46: Region(ident: 46, name: "Meekatharra", latitude: -26.595215800000002, longitude: 118.495069775, radius: 5000.0),
+        14: Region(ident: 14, name: "South Hedland", latitude: -20.4052775, longitude: 118.598494, radius: 2538.72633591527),
+        6: Region(ident: 6, name: "Dampier", latitude: -20.665198, longitude: 116.706964, radius: 5000.0),
+        39: Region(ident: 39, name: "Dongara", latitude: -29.251995666666666, longitude: 114.94400999999999, radius: 5000.0),
+        34: Region(ident: 34, name: "Coolgardie", latitude: -30.9546275, longitude: 121.16575499999999, radius: 5000.0),
+        13: Region(ident: 13, name: "Port Hedland", latitude: -20.372652016666667, longitude: 118.60100801666664, radius: 9093.141677563071),
+        18: Region(ident: 18, name: "Mandurah", latitude: -32.5404824875, longitude: 115.71233025625001, radius: 17520.21756978068),
+        5: Region(ident: 5, name: "Collie", latitude: -33.358850333333336, longitude: 116.15167233333332, radius: 5000.0),
+        9: Region(ident: 9, name: "Karratha", latitude: -20.752608416666664, longitude: 116.81469583333333, radius: 5000.0),
+        27: Region(ident: 27, name: "Metro : East/Hills", latitude: -31.911701517857143, longitude: 116.07443905654762, radius: 35885.9627658278),
+        55: Region(ident: 55, name: "Wubin", latitude: -30.10664, longitude: 116.631805, radius: 5000.0),
+        10: Region(ident: 10, name: "Kununurra", latitude: -15.785064285714284, longitude: 128.74442557142856, radius: 5000.0),
+        36: Region(ident: 36, name: "Dalwallinu", latitude: -30.274373, longitude: 116.663595, radius: 5000.0),
+        -1: Region(ident: -1, name: "Metropolitan Area", latitude: -31.963147972731843, longitude: 115.87512869723679, radius: 60162.468620822096),
+        19: Region(ident: 19, name: "Capel", latitude: -33.46549516666666, longitude: 115.60012216666667, radius: 15611.907892551319),
+        4: Region(ident: 4, name: "Carnarvon", latitude: -24.869948399999995, longitude: 113.6944805, radius: 5000.0),
         ]
 
     static let retrievalNotificationName = Notification.Name(rawValue: "Region.RetrievalNotification")

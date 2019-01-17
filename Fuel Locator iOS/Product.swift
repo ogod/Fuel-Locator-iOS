@@ -134,7 +134,7 @@ class Product: FLODataEntity, Hashable {
                 completionBlock(product, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Product fetch (with block): \(error)")
         }
     }
 
@@ -148,7 +148,7 @@ class Product: FLODataEntity, Hashable {
                 completionBlock(products, error)
             }
         } catch {
-            print(error)
+            print("Error while submitting Product fetch: \(error)")
         }
     }
 
