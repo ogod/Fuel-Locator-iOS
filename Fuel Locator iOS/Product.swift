@@ -32,10 +32,11 @@ class Product: FLODataEntity, Hashable {
         case unknown = 0
         case ulp = 1
         case premiumUnleaded = 2
+        case lrp = 3
         case diesel = 4
         case lpg = 5
         case ron98  = 6
-        case b20Diesel = 7
+        case b20 = 7
         case e10 = 8
         case p100 = 9
         case e85 = 10
@@ -49,14 +50,16 @@ class Product: FLODataEntity, Hashable {
                 return "ulp"
             case .premiumUnleaded:
                 return "pulp"
+            case .lrp:
+                return "lrp"
             case .diesel:
                 return "diesel"
             case .lpg:
                 return "lpg"
             case .ron98:
                 return "98ron"
-            case .b20Diesel:
-                return "b20diesel"
+            case .b20:
+                return "b20"
             case .e10:
                 return "e10"
             case .p100:
@@ -75,13 +78,15 @@ class Product: FLODataEntity, Hashable {
                 return "Unleaded (91)"
             case .premiumUnleaded:
                 return "Premium Unleaded (95)"
+            case .lrp:
+                return "Lead Replacement Petrol (96)"
             case .diesel:
                 return "Diesel"
             case .lpg:
                 return "LPG"
             case .ron98:
                 return "Ultra-premium Unleaded (98)"
-            case .b20Diesel:
+            case .b20:
                 return "20% Biodiesel"
             case .e10:
                 return "10% Ethenol Petrol"
@@ -151,6 +156,8 @@ class Product: FLODataEntity, Hashable {
             print("Error while submitting Product fetch: \(error)")
         }
     }
+
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Product>, Error?) -> Void) {}
 
     static var all = FLODataEntityAll<Int16, Product>()
 
@@ -225,7 +232,8 @@ class Product: FLODataEntity, Hashable {
         5:  Product(ident: 5,  name: "LPG"),
         4:  Product(ident: 4,  name: "Diesel"),
         10: Product(ident: 10, name: "E85"),
-        2:  Product(ident: 2,  name: "PULP")
+        2:  Product(ident: 2,  name: "PULP"),
+        3:  Product(ident: 3,  name: "LRP")
         ]
 
     static let retrievalNotificationName = Notification.Name(rawValue: "Product.RetrievalNotification")

@@ -33,7 +33,16 @@ class Station: FLODataEntity, Hashable {
         case earliest
     }
 
-    init(tradingName: String, brand: Brand, address: String?, latitude: Double, longitude: Double, phone: String?, stationDescription: String?, siteFeatures: Array<String>? = nil, suburb: Suburb? = nil) {
+    init(tradingName: String,
+         brand: Brand,
+         address: String?,
+         latitude: Double,
+         longitude: Double,
+         phone: String?,
+         stationDescription: String?,
+         siteFeatures: Array<String>? = nil,
+         suburb: Suburb? = nil)
+    {
         self.tradingName = tradingName
         self.brand = brand
         self.address = address
@@ -42,6 +51,7 @@ class Station: FLODataEntity, Hashable {
         self.phone = phone
         self.stationDescription = stationDescription
         self.siteFeatures = siteFeatures
+        self.suburb = suburb
     }
 
     init(record: CKRecord) {
@@ -140,6 +150,8 @@ class Station: FLODataEntity, Hashable {
             print("Error while submitting Station fetch: \(error)")
         }
     }
+
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Station>, Error?) -> Void) {}
 
     static var all = FLODataEntityAll<String, Station>()
 

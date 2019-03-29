@@ -90,6 +90,33 @@ class PriceOnDay: FLODataEntity, Hashable {
         }
     }
 
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<PriceOnDay>, Error?) -> Void) {
+        let st = PriceOnDay.calendar.date(bySettingHour: 0, minute: 0, second: 0, of: MapViewController.instance!.globalDate)!
+        let en = PriceOnDay.calendar.date(byAdding: .day, value: 1, to: st)!
+        let prodRef = CKRecord.Reference(recordID: MapViewController.instance!.globalProduct.recordID, action: .none)
+        let recs = stations.map({ station in CKRecord.Reference(recordID: PriceOnDay.recordID(date: MapViewController.instance!.globalDate,
+                                                                                              product: MapViewController.instance!.globalProduct,
+                                                                                              station: station),
+                                                                action: .none)})
+        let predicate: NSPredicate
+        if stations.count > 0 {
+            predicate = NSPredicate(format: "date >= %@ && date < %@ && product == %@ && station IN %@",
+                                    st as NSDate, en as NSDate, prodRef, recs)
+        } else {
+            predicate = NSPredicate(format: "date >= %@ && date < %@ && product == %@",
+                                    st as NSDate, en as NSDate, prodRef)
+        }
+        let query = CKQuery(recordType: "FWPrice", predicate: predicate)
+        do {
+            PriceOnDay.download(fromDatabase: try FLOCloud.shared.publicDatabase(), withQuery: query) { (error, records) in
+                let prices = Set<PriceOnDay>(records?.map({ try? PriceOnDay(record: $0) }).filter({$0 != nil}).map({$0!}) ?? [])
+                completionBlock(prices, error)
+            }
+        } catch {
+            print("Error while submitting Price fetch: \(error)")
+        }
+    }
+
     static var all = FLODataEntityAll<String, PriceOnDay>()
 
     var key: String {

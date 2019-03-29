@@ -151,6 +151,8 @@ class Suburb: FLODataEntity, Hashable {
         }
     }
 
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Suburb>, Error?) -> Void) {}
+
     static var all = FLODataEntityAll<String, Suburb>()
 
     var key: String {
@@ -2097,6 +2099,18 @@ class Suburb: FLODataEntity, Hashable {
                                       longitude: 115.0387335,
                                       radius: 2295.83764492239,
                                       region: [Region.all[42]!]),
+        "SOUTHERN+CROSS":      Suburb(ident: "SOUTHERN+CROSS",
+                                      name: "Southern Cross",
+                                      latitude: -31.56611111,
+                                      longitude: 119.45777778,
+                                      radius: 3000,
+                                      region: [Region.all[60]!]),
+        "MUNGLINUP":           Suburb(ident: "MUNGLINUP",
+                                      name: "Munglinup",
+                                      latitude: -33.70806,
+                                      longitude: 120.865,
+                                      radius: 3000,
+                                      region: [Region.all[51]!]),
         ]
 
     static let retrievalNotificationName = Notification.Name(rawValue: "Suburb.RetrievalNotification")

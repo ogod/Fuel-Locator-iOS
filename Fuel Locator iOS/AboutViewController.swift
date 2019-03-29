@@ -27,7 +27,6 @@ class AboutViewController: UIViewController {
         }
         let url = Bundle.main.url(forResource: "Fuel Locator Documentation", withExtension: "html")!
         let imagesURL = url.deletingLastPathComponent()
-        print(url.absoluteString)
         webView.loadFileURL(url, allowingReadAccessTo: imagesURL)
     }
 

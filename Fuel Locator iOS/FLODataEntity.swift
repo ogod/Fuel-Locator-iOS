@@ -25,6 +25,8 @@ protocol FLODataEntity: Hashable {
 
     static func fetchAll(_ completionBlock: @escaping (Set<Value>, Error?) -> Void)
 
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Value>, Error?) -> Void)
+
     static var all: FLODataEntityAll<Key, Value> { get }
 
     static var defaults: Dictionary<Key, Value> { get }
@@ -101,15 +103,45 @@ class FLODataEntityAll<K: Hashable, V: FLODataEntity>: NSObject {
                     })
                     self.hasData = true
 
-//                    print("Retrieved \(String(describing: V.self).split(separator: ".")[0])")
+                    //                    print("Retrieved \(String(describing: V.self).split(separator: ".")[0])")
 
-//                    if V.self == Brand.self || V.self == Product.self || V.self == Suburb.self || V.self == Region.self || V.self == Station.self {
-//                        print("    static let defaults: Dictionary<\(K.self), \(V.self)> = [")
-//                        for (_, v) in self._all {
-//                            print("        \(v.initialiser),")
-//                        }
-//                        print("    ]")
-//                    }
+                    //                    if V.self == Brand.self || V.self == Product.self || V.self == Suburb.self || V.self == Region.self || V.self == Station.self {
+                    //                        print("    static let defaults: Dictionary<\(K.self), \(V.self)> = [")
+                    //                        for (_, v) in self._all {
+                    //                            print("        \(v.initialiser),")
+                    //                        }
+                    //                        print("    ]")
+                    //                    }
+
+                    DispatchQueue.main.async {
+                        pthread_rwlock_unlock(&self.lock)
+                        V.notify()
+                        block?(true, nil)
+                    }
+                }
+            })
+        }
+    }
+
+    func retrieve(with stations: [Station], _ block: ((Bool, Error?)->Void)? = nil) {
+        FLOCloud.shared.queue.async {
+            pthread_rwlock_wrlock(&self.lock)
+            self.hasData = false
+            V.fetchAll(with: stations, { (sts, err) in
+                FLOCloud.shared.queue.async {
+                    guard err == nil else {
+                        let logger = OSLog(subsystem: "com.nomdejoye.Fuel-Locator-OSX", category: "FLODataEntity.retrieve")
+                        os_log("Error on retrieval: %@", log: logger, type: .error, err!.localizedDescription)
+                        DispatchQueue.main.async {
+                            pthread_rwlock_unlock(&self.lock)
+                            block?(false, err)
+                        }
+                        return
+                    }
+                    self._all = sts.reduce(into: [K: V](), { (dict, element) -> Void in
+                        dict[element.key as! K] = (element as! V)
+                    })
+                    self.hasData = true
 
                     DispatchQueue.main.async {
                         pthread_rwlock_unlock(&self.lock)

@@ -300,6 +300,8 @@ class Brand: FLODataEntity, Hashable {
         }
     }
 
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Brand>, Error?) -> Void) {}
+
     static var all: FLODataEntityAll<Int16, Brand> = FLODataEntityAll<Int16, Brand>() 
 
     var key: Int16 {

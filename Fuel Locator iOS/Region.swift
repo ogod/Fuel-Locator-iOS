@@ -93,6 +93,7 @@ class Region: FLODataEntity, Hashable {
         case wubin = 55
         case wundowie = 59
         case york = 56
+        case yilgarn = 60
 
         var identifier: String {
             switch self {
@@ -214,6 +215,8 @@ class Region: FLODataEntity, Hashable {
                 return "wundowie"
             case .york:
                 return "york"
+            case .yilgarn:
+                return "yilgarn"
             }
         }
         var name: String {
@@ -336,6 +339,8 @@ class Region: FLODataEntity, Hashable {
                 return "Wundowie"
             case .york:
                 return "York"
+            case.yilgarn:
+                return "Yilgarn"
             }
         }
         var recordId: CKRecord.ID {
@@ -430,6 +435,8 @@ class Region: FLODataEntity, Hashable {
             print("Error while submitting Region fetch: \(error)")
         }
     }
+
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Region>, Error?) -> Void) {}
 
     var key: Int16 {
         return ident
@@ -579,6 +586,7 @@ class Region: FLODataEntity, Hashable {
         -1: Region(ident: -1, name: "Metropolitan Area", latitude: -31.963147972731843, longitude: 115.87512869723679, radius: 60162.468620822096),
         19: Region(ident: 19, name: "Capel", latitude: -33.46549516666666, longitude: 115.60012216666667, radius: 15611.907892551319),
         4: Region(ident: 4, name: "Carnarvon", latitude: -24.869948399999995, longitude: 113.6944805, radius: 5000.0),
+        60: Region(ident: 60, name: "Yilgarn", latitude: -31.56611111, longitude: 119.45777778, radius: 150000.0),
         ]
 
     static let retrievalNotificationName = Notification.Name(rawValue: "Region.RetrievalNotification")

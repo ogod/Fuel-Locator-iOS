@@ -104,10 +104,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         case .inactive:
-            overrideDate = userInfo[FLOCloud.NotifField.date.rawValue] as? Date
-            overrideProduct = userInfo[FLOCloud.NotifField.product.rawValue] as? CKRecord.Reference
-            overrideStation = userInfo[FLOCloud.NotifField.station.rawValue] as? CKRecord.Reference
-            overrideRegion = userInfo[FLOCloud.NotifField.region.rawValue] as? CKRecord.Reference
+            guard let ck = userInfo["ck"] as? [String: AnyObject],
+                let qry = ck["qry"] as? [String: AnyObject],
+                let af = qry["af"] as? [String: AnyObject] else {
+                    break
+            }
+            if let offset = af[FLOCloud.NotifField.date.rawValue] as? TimeInterval {
+                let ref = calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "Australia/Perth"),
+                                                             year: 2001,
+                                                             month: 1,
+                                                             day: 1))!
+                let date = Date(timeInterval: offset, since: ref)
+                overrideDate = date
+            }
+            if let productRef = af[FLOCloud.NotifField.product.rawValue] as? String {
+                overrideProduct = CKRecord.Reference(recordID: CKRecord.ID(recordName: productRef), action: .deleteSelf)
+            }
+            if let regionRef = af[FLOCloud.NotifField.region.rawValue] as? String {
+                overrideRegion = CKRecord.Reference(recordID: CKRecord.ID(recordName: regionRef), action: .deleteSelf)
+            }
+            if let stationRef = af[FLOCloud.NotifField.station.rawValue] as? String {
+                overrideStation = CKRecord.Reference(recordID: CKRecord.ID(recordName: stationRef), action: .deleteSelf)
+            }
         }
     }
 

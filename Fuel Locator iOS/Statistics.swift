@@ -111,10 +111,18 @@ class Statistics: FLODataEntity, Hashable {
         }
     }
 
-    class func fetchHistoric(_ product: Product, _ region: Region, _ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {
+    static func fetchAll(with stations: [Station], _ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {}
+
+    class func fetchHistoric(_ product: Product, _ region: Region, _ dateRange: PartialRangeFrom<Date>? = nil, _ completionBlock: @escaping (Set<Statistics>, Error?) -> Void) {
         let pRef = CKRecord.Reference(recordID: product.recordID, action: .none)
         let rRef = CKRecord.Reference(recordID: region.recordID, action: .none)
-        let predicate = NSPredicate(format: "product == %@ AND region == %@", pRef, rRef)
+        let predicate: NSPredicate
+        if dateRange != nil {
+            predicate = NSPredicate(format: "product == %@ AND region == %@ AND date >= %@",
+                                    pRef, rRef, dateRange!.lowerBound as NSDate)
+        } else {
+            predicate = NSPredicate(format: "product == %@ AND region == %@", pRef, rRef)
+        }
         let query = CKQuery(recordType: "FWStatistics", predicate: predicate)
 
         do {

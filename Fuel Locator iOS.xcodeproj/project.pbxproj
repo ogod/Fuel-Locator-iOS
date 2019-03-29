@@ -42,6 +42,7 @@
 		778D878A21EF2C160051B948 /* image001.png in Resources */ = {isa = PBXBuildFile; fileRef = 778D878521EF2BD70051B948 /* image001.png */; };
 		778D878B21EF2C160051B948 /* image004.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878621EF2BD70051B948 /* image004.jpg */; };
 		778D878C21EF2C160051B948 /* image005.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878721EF2BD70051B948 /* image005.jpg */; };
+		778D879021F0C24F0051B948 /* image002.png in Resources */ = {isa = PBXBuildFile; fileRef = 778D878F21F0C24E0051B948 /* image002.png */; };
 		7794B15420D4FA4E00505746 /* chords2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 7794B15020D4FA4D00505746 /* chords2.caf */; };
 		77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47AF20BDB15B006E50FF /* GraphView.swift */; };
 		77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47B120BE531D006E50FF /* ProgressViewController.swift */; };
@@ -178,6 +179,7 @@
 		778D878521EF2BD70051B948 /* image001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image001.png; sourceTree = "<group>"; };
 		778D878621EF2BD70051B948 /* image004.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image004.jpg; sourceTree = "<group>"; };
 		778D878721EF2BD70051B948 /* image005.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image005.jpg; sourceTree = "<group>"; };
+		778D878F21F0C24E0051B948 /* image002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image002.png; sourceTree = "<group>"; };
 		7794B15020D4FA4D00505746 /* chords2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chords2.caf; sourceTree = "<group>"; };
 		7794B15520D552F000505746 /* Fuel Locator Information.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Fuel Locator Information.rtf"; sourceTree = "<group>"; };
 		77BC47AF20BDB15B006E50FF /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
@@ -283,7 +285,7 @@
 				776E944220A08804008AB0FC /* Fuel-Locator-iOS-Bridging-Header.h */,
 				7742572A20BA51D000D21B48 /* WA_STATE_POLYGON_shp.geojson */,
 				778D878021EF2BA90051B948 /* Fuel Locator Documentation.html */,
-				778D878221EF2BD60051B948 /* FuelLocatorDocumentation.fld */,
+				778D878221EF2BD60051B948 /* FuelLocatorDocumentationImages */,
 				775C5604209EDB1000540B5B /* Data */,
 				77FA294620BB8168007EE0F1 /* Map View */,
 				77FA294820BB8249007EE0F1 /* Graph View */,
@@ -350,16 +352,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		778D878221EF2BD60051B948 /* FuelLocatorDocumentation.fld */ = {
+		778D878221EF2BD60051B948 /* FuelLocatorDocumentationImages */ = {
 			isa = PBXGroup;
 			children = (
 				778D878321EF2BD70051B948 /* image002.jpg */,
+				778D878F21F0C24E0051B948 /* image002.png */,
 				778D878421EF2BD70051B948 /* image003.jpg */,
 				778D878521EF2BD70051B948 /* image001.png */,
 				778D878621EF2BD70051B948 /* image004.jpg */,
 				778D878721EF2BD70051B948 /* image005.jpg */,
 			);
-			path = FuelLocatorDocumentation.fld;
+			path = FuelLocatorDocumentationImages;
 			sourceTree = "<group>";
 		};
 		77FA294620BB8168007EE0F1 /* Map View */ = {
@@ -561,6 +564,7 @@
 				778D878821EF2C160051B948 /* image002.jpg in Resources */,
 				7710E21A20E74EAD00FE3C80 /* Settings.bundle in Resources */,
 				775C55D62099BD9200540B5B /* Assets.xcassets in Resources */,
+				778D879021F0C24F0051B948 /* image002.png in Resources */,
 				778D878121EF2BCB0051B948 /* Fuel Locator Documentation.html in Resources */,
 				775C55D42099BD7500540B5B /* Main.storyboard in Resources */,
 				778D878C21EF2C160051B948 /* image005.jpg in Resources */,

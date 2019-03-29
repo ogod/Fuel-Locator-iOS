@@ -61,6 +61,7 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
         graphWidthConstraint.constant = width
         graphHeightConstraint.constant = height
         relativeOffset = r
+        graphView.graphSize = CGSize(width: width, height: height)
         graphView.setNeedsDisplay()
         xAxisView.setNeedsDisplay()
         yAxisView.setNeedsDisplay()
@@ -110,7 +111,10 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
             "\(product.name) in \(region.name)"
         self.xAxisView.graphView = self.graphView
         self.yAxisView.graphView = self.graphView
-        Statistics.fetchHistoric(product, region) { (statistics, error) in
+        let calendar = Calendar.current
+        let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        let lastYear = Calendar.current.date(byAdding: .year, value: -1, to: today)!
+        Statistics.fetchHistoric(product, region, lastYear...) { (statistics, error) in
             guard error == nil else {
                 let alert = UIAlertController(title: "Failed to Load Statisics",
                                               message: """
@@ -132,6 +136,29 @@ class GraphViewController: UIViewController, UIScrollViewDelegate {
             self.relativeOffset = CGPoint(x: 1, y: 1)
             self.activityIndicator.stopAnimating()
             self.view.setNeedsLayout()
+            Statistics.fetchHistoric(product, region) { (statistics, error) in
+                guard error == nil else {
+                    let alert = UIAlertController(title: "Failed to Load Statisics",
+                                                  message: """
+                        I could not load the statistics for the product and region.
+                        \(error!.localizedDescription)
+                        """,
+                        preferredStyle: .alert)
+                    let action = UIAlertAction(title: "Okay", style: .default, handler: { (action) in
+                        self.dismiss(animated: true)
+                    })
+                    alert.addAction(action)
+                    alert.preferredAction = action
+                    self.present(alert, animated: true)
+                    return
+                }
+                self.graphView.generateBands(fromStatistics: statistics)
+                self.graphView.ready = true
+                self.setupContentSizes()
+                self.relativeOffset = CGPoint(x: 1, y: 1)
+                self.activityIndicator.stopAnimating()
+                self.view.setNeedsLayout()
+            }
         }
     }
 

@@ -38,6 +38,7 @@ class GraphView: UIView {
     }
     var height: CGFloat { return max(yHeight, 812) }
     var width: CGFloat { return (xEnd - xStart + 2) * xScale }
+    var graphSize: CGSize?
 
     /// Defines the stride of the x axis based on current parameters
     var xStride: StrideTo<CGFloat> {
@@ -76,6 +77,28 @@ class GraphView: UIView {
         return MajorDateSequence(first: GraphBand.date(xStart),
                                  last: GraphBand.date(xEnd),
                                  matching: cd)
+    }
+
+    override class var layerClass: AnyClass {
+        get {
+            return CATiledLayer.self
+        }
+    }
+
+    var tiledLayer: CATiledLayer {
+        return self.layer as! CATiledLayer
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        tiledLayer.levelsOfDetail = 4
+        tiledLayer.tileSize = CGSize(width: 1024, height: 1024)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        tiledLayer.levelsOfDetail = 4
+        tiledLayer.tileSize = CGSize(width: 1024, height: 1024)
     }
 
     static let formatters: [String: DateFormatter] = [
@@ -151,7 +174,7 @@ class GraphView: UIView {
     /// Defines the stride of the y axis
     var yStride: StrideTo<CGFloat> {
         let strideBy: CGFloat
-        switch yHeight * 200 / bounds.height {
+        switch yHeight * 200 / (graphSize?.height ?? minHeight) {
         case 200..<CGFloat.greatestFiniteMagnitude:
             strideBy = 50
         case 80..<200:
@@ -177,7 +200,7 @@ class GraphView: UIView {
     /// Defines the minor stride of the y axis
     var yMinorStride: StrideTo<CGFloat> {
         let strideBy: CGFloat
-        switch yHeight * 200 / bounds.height {
+        switch yHeight * 200 / (graphSize?.height ?? minHeight) {
         case 200..<CGFloat.greatestFiniteMagnitude:
             strideBy = 10
         case 80..<200:
@@ -224,7 +247,7 @@ class GraphView: UIView {
         if value.truncatingRemainder(dividingBy: 100) == 0 {
             return .critical
         }
-        switch yHeight * 200 / bounds.height {
+        switch yHeight * 200 / (graphSize?.height ?? minHeight) {
         case 200..<CGFloat.greatestFiniteMagnitude:
             return (value/10).truncatingRemainder(dividingBy: 5) == 0 ? .major : .minor
         case 80..<200:
@@ -335,9 +358,12 @@ class GraphView: UIView {
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
+        guard graphSize != nil else {
+            return
+        }
 
-        let xScale: CGFloat = bounds.width / (xEnd - xStart + 2)
-        let yScale: CGFloat = bounds.height / max(yHeight, 1)
+        let xScale: CGFloat = graphSize!.width / (xEnd - xStart + 2)
+        let yScale: CGFloat = graphSize!.height / max(yHeight, 1)
         let transform = CGAffineTransform(scaleX: xScale, y: -yScale).translatedBy(x: -xStart + 1, y: -yHeight)
         let startDate = XAxisView.cal.date(from: DateComponents(calendar: XAxisView.cal,
                                                                 timeZone: XAxisView.timeZone,
@@ -394,7 +420,7 @@ class GraphView: UIView {
                     let gradientEnd2 = CGPoint(x: GraphBand.xValue(date), y: y).applying(transform)
                     let size = CGSize(width: rectEnd.x - origin.x, height: rectEnd.y - origin.y)
                     let rect = CGRect(origin: origin, size: size)
-                    let scRect = rect.intersection(bounds)
+                    let scRect = rect.intersection(CGRect(origin: CGPoint.zero, size: graphSize!))
                     UIRectClip(scRect)
                     context.drawLinearGradient(gradient, start: origin, end: gradientEnd1, options: [.drawsAfterEndLocation])
                     context.drawLinearGradient(gradient, start: origin, end: gradientEnd2, options: [.drawsAfterEndLocation])

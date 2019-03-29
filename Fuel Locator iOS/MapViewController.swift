@@ -137,36 +137,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     /// This method polls the visible annotations as to a concensus of what region is being viewed. First majority wins.
     /// If the region has no visible annotations, nil is returned.
     var globalRegion: Region! {
-        let mapRegion = mapView.region
-        let mapLocation = CLLocation(latitude: mapRegion.center.latitude, longitude: mapRegion.center.longitude)
-        let dist = mapLocation.distance(from: CLLocation(latitude: mapLocation.coordinate.latitude + mapRegion.span.latitudeDelta,
-                                                         longitude: mapLocation.coordinate.longitude + mapRegion.span.longitudeDelta))
+        let visibleMapRect = mapView.visibleMapRect
+        let stations = mapView.annotations(in: visibleMapRect).compactMap({ ($0 as? StationAnnotation)?.station })
+        let statRegs = Set<Region>(stations.compactMap({$0.suburb?.region}).flatMap({$0}))
 
-        let regions = Region.all.values.filter({$0.location != nil && mapLocation.distance(from: $0.location!) < ($0.radius?.doubleValue ?? 0) + dist})
-        guard regions.count > 1 else {
-            return regions.first
-        }
-        let allAnnotations = Array(mapView.annotations(in: mapView.visibleMapRect))
-        let stationAnnotions = allAnnotations.compactMap({$0 as? MKClusterAnnotation}).flatMap({$0.memberAnnotations}).compactMap({$0 as? StationAnnotation}) +
-            allAnnotations.compactMap({$0 as? StationAnnotation})
-        let stations = stationAnnotions.map({$0.station})
-        let statRegs = stations.compactMap({$0.suburb?.region}).flatMap({$0})
+        /*
+         * Once we know what regions appear on the map, the question is which region best identifies what we are looking at.
+         * For the metropolitan area, we have regions North, South and East, or the enclosing region Metro, but other regions
+         * May have to be assessed differently. Default to the region with the
+         */
 
-        var counts = Array<Int>(repeating: 0, count: regions.count)
-        var currentHighestCountIndex = -1
-        for i in 0 ..< regions.count {
-            for r in statRegs {
-                if r == regions[i] {
-                    counts[i] += 1
-                }
-            }
-            if currentHighestCountIndex == -1 {
-                currentHighestCountIndex = i
-            } else if counts[i] >= counts[currentHighestCountIndex] {
-                currentHighestCountIndex = i
-            }
+        let regs = statRegs.filter({ region in stations.allSatisfy({ station in
+            station.suburb?.region?.contains(region) ?? true
+        })}).sorted(by: { (l, r) in (l.radius?.doubleValue ?? Double.infinity) < (r.radius?.doubleValue ?? Double.infinity) })
+        if let region = regs.first {
+            return region
         }
-        return currentHighestCountIndex == -1 ? nil : regions[currentHighestCountIndex]
+
+        let countRegs = statRegs.map({ reg in (region: reg, count: stations.filter({ st in st.suburb?.region?.contains(reg) ?? false }).count )})
+        if let region = countRegs.sorted(by: { r1, r2 in r1.count > r2.count}).first?.region {
+            return region
+        }
+
+        let mapRegs = Region.all.values.filter({ reg in reg.location != nil && visibleMapRect.contains(MKMapPoint(reg.location!.coordinate)) })
+        return mapRegs.sorted(by: { r1, r2 in r1.ident < r2.ident }).first
     }
 
     var observers: Array<NSObjectProtocol> = []
@@ -341,7 +335,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         defer {
             refresh()
-            refreshAnnotations()
+            DispatchQueue.global().async {
+                let mapRect = mapView.visibleMapRect
+                let stations = Station.all.values.filter({ (station) -> Bool in
+                    guard station.latitude != 0 && station.longitude != 0 else {
+                        return false
+                    }
+                    let location = CLLocationCoordinate2D(latitude: station.latitude, longitude: station.longitude)
+                    return mapRect.contains(MKMapPoint(location))
+                })
+                PriceOnDay.all.retrieve(with: stations) { success, error in
+                    self.refreshAnnotations()
+                }
+            }
         }
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
