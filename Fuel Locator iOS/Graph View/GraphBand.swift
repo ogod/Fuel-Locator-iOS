@@ -171,34 +171,34 @@ class GraphBand {
                     let pn2 = points[n-2]
                     let pn1 = points[n-1]
 
-                    fadeInHighLine.move(to: CGPoint(x: p1.high.x,
-                                                    y: p1.high.y - (p2.high.y - p1.high.y) / 3.0))
+                    fadeInHighLine.move(to: CGPoint(x: p1.high.x - (p2.high.x - p1.high.x) / 3.0,
+                                                    y: p1.high.y))
                     fadeInHighLine.addLine(to: p1.high)
                     highLine.move(to: p1.high)
                     for p in points.dropFirst() {
                         highLine.addLine(to: p.high)
                     }
                     fadeOutHighLine.move(to: pn1.high)
-                    fadeOutHighLine.addLine(to: CGPoint(x: pn1.high.x,
-                                                        y: pn1.high.y - (pn2.high.y - pn1.high.y) / 3.0))
+                    fadeOutHighLine.addLine(to: CGPoint(x: pn1.high.x - (pn2.high.x - pn1.high.x) / 3.0,
+                                                        y: pn1.high.y))
 
                     fadeInLowLine.move(to: CGPoint(x: p1.low.x - (p2.low.x - p1.low.x) / 3.0,
-                                                    y: p1.low.y - (p2.low.y - p1.low.y) / 3.0))
+                                                    y: p1.low.y))
                     fadeInLowLine.addLine(to: p1.low)
                     lowLine.move(to: p1.low)
                     for p in points.dropFirst() {
                         lowLine.addLine(to: p.low)
                     }
                     fadeOutLowLine.move(to: pn1.low)
-                    fadeOutLowLine.addLine(to: CGPoint(x: pn1.low.x,
-                                                        y: pn1.low.y - (pn2.low.y - pn1.low.y) / 3.0))
+                    fadeOutLowLine.addLine(to: CGPoint(x: pn1.low.x - (pn2.low.x - pn1.low.x) / 3.0,
+                                                        y: pn1.low.y))
 
-                    fadeInArea.move(to: CGPoint(x: p1.high.x,
-                                                y: p1.high.y - (p2.high.y - p1.high.y) / 3.0))
+                    fadeInArea.move(to: CGPoint(x: p1.high.x - (p2.high.x - p1.high.x) / 3.0,
+                                                y: p1.high.y))
                     fadeInArea.addLine(to: CGPoint(x: p1.high.x, y: p1.high.y))
                     fadeInArea.addLine(to: CGPoint(x: p1.low.x, y: p1.low.y))
-                    fadeInArea.addLine(to: CGPoint(x: p1.low.x,
-                                                  y: p1.low.y - (p2.low.y - p1.low.y) / 3.0))
+                    fadeInArea.addLine(to: CGPoint(x: p1.low.x - (p2.low.x - p1.low.x) / 3.0,
+                                                  y: p1.low.y))
                     fadeInArea.close()
 
                     area.move(to: p1.high)
@@ -211,10 +211,10 @@ class GraphBand {
                     area.close()
 
                     fadeOutArea.move(to: CGPoint(x: pn1.high.x, y: pn1.high.y))
-                    fadeOutArea.addLine(to: CGPoint(x: pn1.high.x,
-                                                    y: pn1.high.y - (pn2.high.y - pn1.high.y) / 3.0))
-                    fadeOutArea.addLine(to: CGPoint(x: pn1.low.x,
-                                                   y: pn1.low.y - (pn2.low.y - pn1.low.y) / 3.0))
+                    fadeOutArea.addLine(to: CGPoint(x: pn1.high.x - (pn2.high.x - pn1.high.x) / 3.0,
+                                                    y: pn1.high.y))
+                    fadeOutArea.addLine(to: CGPoint(x: pn1.low.x - (pn2.low.x - pn1.low.x) / 3.0,
+                                                   y: pn1.low.y))
                     fadeOutArea.addLine(to: CGPoint(x: pn1.low.x, y: pn1.low.y))
                     fadeOutArea.close()
 

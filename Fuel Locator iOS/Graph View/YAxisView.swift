@@ -25,7 +25,7 @@ class YAxisView: UIView {
     static let font = UIFont(name: "HelveticaNeue-Thin", size: 12)!
     static let attr: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font,
                                                      NSAttributedString.Key.paragraphStyle: pStyle,
-                                                     NSAttributedString.Key.foregroundColor: UIColor.gray]
+                                                     NSAttributedString.Key.foregroundColor: UIColor.black]
 
     override func draw(_ rect: CGRect) {
         guard graphView?.ready ?? false else {

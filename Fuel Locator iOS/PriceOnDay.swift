@@ -11,7 +11,13 @@ import CloudKit
 import os
 
 class PriceOnDay: FLODataEntity, Hashable {
-    var hashValue: Int { return date.hashValue ^ (product.hashValue << 8) ^ (station.hashValue << 16)}
+
+//    var hashValue: Int { return date.hashValue ^ (product.hashValue << 8) ^ (station.hashValue << 16)}
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(date)
+        hasher.combine(product)
+        hasher.combine(station)
+    }
 
     static func == (lhs: PriceOnDay, rhs: PriceOnDay) -> Bool {
         return PriceOnDay.calendar.isDate(lhs.date, inSameDayAs: rhs.date) && lhs.product == rhs.product && lhs.station == rhs.station
@@ -129,7 +135,7 @@ class PriceOnDay: FLODataEntity, Hashable {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
         let str = recordID.recordName
-        let index = str.index(after: str.index(of: ":")!)
+        let index = str.index(after: str.firstIndex(of: ":")!)
         let part = String(str[index...]).split(separator: "|")
         let date = f.date(from: String(part[0]))!
         let product: Product = Product.all[Int16(String(part[1]))!]!

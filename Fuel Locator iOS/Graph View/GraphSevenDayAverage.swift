@@ -128,10 +128,6 @@ class GraphSevenDayAverage {
                     let fadeOutLine = UIBezierPath()
 
                     let n = points.count
-                    let p1 = points[0]
-                    let p2 = points[1]
-                    let pn2 = points[n-2]
-                    let pn1 = points[n-1]
 
                     var v: [CGPoint] = points
                     for i in 0 ..< n {
@@ -139,17 +135,23 @@ class GraphSevenDayAverage {
                     }
                     points = v
 
-                    fadeInLine.move(to: CGPoint(x: p1.x - (p2.x - p1.x) / 3.0,
-                                                y: p1.y - (p2.y - p1.y) / 3.0))
-                    fadeInLine.addLine(to: p1)
-                    line.move(to: points.first!)
+                    line.move(to: points[0])
                     for i in 0 ..< n-1 {
                         line.addQuadCurve(to: avPoint(points[i], points[i+1]), controlPoint: points[i])
                     }
                     line.addLine(to: points.last!)
+
+                    let p1 = points[0]
+                    let p2 = points[1]
+                    let pn2 = points[n-2]
+                    let pn1 = points[n-1]
+
+                    fadeInLine.move(to: CGPoint(x: p1.x - (p2.x - p1.x) / 3.0,
+                                                y: p1.y))
+                    fadeInLine.addLine(to: p1)
                     fadeOutLine.move(to: pn1)
                     fadeOutLine.addLine(to: CGPoint(x: pn1.x - (pn2.x - pn1.x) / 3.0,
-                                                    y: pn1.y - (pn2.y - pn1.y) / 3.0))
+                                                    y: pn1.y))
 
                     fadeInLines.append(fadeInLine)
                     lines.append(line)

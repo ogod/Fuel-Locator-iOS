@@ -13,7 +13,11 @@ import os.log
 
 class Station: FLODataEntity, Hashable {
     typealias `Self` = Station
-    var hashValue: Int { return tradingName.hashValue }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tradingName)
+    }
+//    var hashValue: Int { return tradingName.hashValue }
 
     static func == (lhs: Station, rhs: Station) -> Bool {
         return lhs.tradingName == rhs.tradingName
@@ -161,7 +165,7 @@ class Station: FLODataEntity, Hashable {
 
     class func tradingName(from recordID: CKRecord.ID) -> String {
         let str = recordID.recordName
-        let index = str.index(after: str.index(of: ":")!)
+        let index = str.index(after: str.firstIndex(of: ":")!)
         return String(str[index...])
     }
 

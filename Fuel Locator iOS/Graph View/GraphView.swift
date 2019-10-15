@@ -488,13 +488,14 @@ class GraphView: UIView {
 
                 let context = UIGraphicsGetCurrentContext()!
                 let gradient = CGGradient(colorsSpace: CGColorSpace(name: CGColorSpace.genericRGBLinear),
-                                          colors: [UIColor.clear.cgColor, colour.withAlphaComponent(0.5).cgColor] as CFArray,
+                                          colors: [UIColor.clear.cgColor, colour.cgColor] as CFArray,
                                           locations: nil)!
 
                 for a in band.fadeInAreas {
                     let a1 = UIBezierPath(cgPath: a.cgPath)
                     a1.apply(transform)
                     context.saveGState()
+                    context.setAlpha(0.5)
                     a1.addClip()
                     let r = a1.bounds
                     context.drawLinearGradient(gradient,
@@ -512,6 +513,7 @@ class GraphView: UIView {
                     let a1 = UIBezierPath(cgPath: a.cgPath)
                     a1.apply(transform)
                     context.saveGState()
+                    context.setAlpha(0.5)
                     a1.addClip()
                     let r = a1.bounds
                     context.drawLinearGradient(gradient,

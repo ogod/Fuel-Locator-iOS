@@ -19,7 +19,10 @@ class Region: FLODataEntity, Hashable {
         return lhs.ident == rhs.ident
     }
 
-    var hashValue: Int { return Int(ident) }
+//    var hashValue: Int { return Int(ident) }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ident)
+    }
 
     init(ident: Int16, name: String) {
         self.ident = ident
@@ -444,7 +447,7 @@ class Region: FLODataEntity, Hashable {
 
     class func ident(from recordID: CKRecord.ID) -> Int16 {
         let str = recordID.recordName
-        let index = str.index(after: str.index(of: ":")!)
+        let index = str.index(after: str.firstIndex(of: ":")!)
         return Int16(String(str[index...]))!
     }
 

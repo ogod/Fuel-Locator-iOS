@@ -113,7 +113,7 @@ class FLOCloud: NSObject {
     }
 
     func handleRemoteNotification(userInfo: [String : Any]) {
-        let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
+        let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)!
         if (notification.subscriptionID == "shared-changes") {
             fetchSharedChanges {
 //                completionHandler(NSBackgroundFetchResult.newData)
@@ -284,13 +284,13 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
             return
         }
         do {
-        	try Product.download(withRecordID: productRef.recordID) { (error, rec) in
+            try Product.download(withRecordID: productRef.recordID) { (error, rec) in
                 guard error == nil else {
                     os_log("Product download failed : %@", log: self.logger, type: .info, error!.localizedDescription)
                     return
                 }
                 guard let record = rec else {
-                    os_log("Product downlad failed", log: self.logger, type: .info)
+                    os_log("Product download failed", log: self.logger, type: .info)
                     return
                 }
                 let product = Product(record: record)
@@ -309,8 +309,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                             let station = Station(record: record)
                             if let suburb = station.suburb {
                                 let reg = MKCoordinateRegion.init(center: suburb.location.coordinate,
-                                                                              latitudinalMeters: suburb.radius!.doubleValue,
-                                                                              longitudinalMeters: suburb.radius!.doubleValue)
+                                                                  latitudinalMeters: suburb.radius!.doubleValue,
+                                                                  longitudinalMeters: suburb.radius!.doubleValue)
                                 MapViewController.instance?.mapView.region = reg
                             }
                         })
@@ -331,8 +331,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                             let region = Region(record: record)
                             if let location = region.location {
                                 let reg = MKCoordinateRegion.init(center: location.coordinate,
-                                                                             latitudinalMeters: region.radius!.doubleValue,
-                                                                             longitudinalMeters: region.radius!.doubleValue)
+                                                                  latitudinalMeters: region.radius!.doubleValue,
+                                                                  longitudinalMeters: region.radius!.doubleValue)
                                 MapViewController.instance?.mapView.region = reg
                             }
                         })
@@ -342,9 +342,9 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                 }
             }
         } catch {
-            os_log("Database failed : %@", log: logger, type: .info, error.localizedDescription)
+            os_log("Database failed : %@", log: self.logger, type: .info, error.localizedDescription)
         }
-        os_log("Notification: %@", log: logger, type: .info, notification.description)
+        os_log("Notification: %@", log: self.logger, type: .info, notification.description)
     }
 
     // Sent to the delegate when the Notification Center has decided not to present your notification, for example when your application is front most.
@@ -363,7 +363,9 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.sound, .alert])
-        MapViewController.instance?.refreshData()
+        DispatchQueue.main.async {
+            MapViewController.instance?.refreshData()
+        }
     }
 
     public func setupSubscription(application: UIApplication) {
@@ -520,8 +522,8 @@ extension FLOCloud: UNUserNotificationCenterDelegate {
         let pred: NSPredicate
         let subTitle: String
         let body: String =  """
-                            Price %1$@ cpl for %3$@. (%2$@ %%)
-                            The new price will be %4$@ cpl.
+                            Price %1$@ ¢/l for %3$@. (%2$@ percent)
+                            The new price will be %4$@ ¢/l.
                             """
         let args: [String] = [FLOCloud.NotifField.riseString.rawValue,
                               FLOCloud.NotifField.percentString.rawValue,

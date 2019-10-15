@@ -13,7 +13,11 @@ import CloudKit
 import os.log
 
 class Suburb: FLODataEntity, Hashable {
-    var hashValue: Int { return ident.hashValue }
+
+//    var hashValue: Int { return ident.hashValue }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ident)
+    }
 
     static func == (lhs: Suburb, rhs: Suburb) -> Bool {
         return lhs.ident == rhs.ident
@@ -161,7 +165,7 @@ class Suburb: FLODataEntity, Hashable {
 
     class func ident(from recordID: CKRecord.ID) -> String {
         let str = recordID.recordName
-        let index = str.index(after: str.index(of: ":")!)
+        let index = str.index(after: str.firstIndex(of: ":")!)
         return String(str[index...])
     }
 

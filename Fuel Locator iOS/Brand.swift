@@ -13,37 +13,43 @@ import os.log
 let FWBrandUpdateNotificationKey = "FuelWatchBrandUpdateNotification"
 
 class Brand: FLODataEntity, Hashable {
-    var hashValue: Int { return Int(ident) }
+
+//    var hashValue: Int { return Int(ident) }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ident)
+    }
 
     static func == (lhs: Brand, rhs: Brand) -> Bool {
         return lhs.ident == rhs.ident
     }
 
     enum Known: Int16 {
+        case ampol = 2
+        case betterChoice = 3
+        case boc = 4
         case bp = 5
         case caltex = 6
-        case colesExpress = 20
-        case pumaEnergy = 26
-        case caltexWoolworths = 19
-        case sevenEleven = 29
-        case united = 23
-        case shell = 14
-        case vibe = 27
         case gull = 7
-        case betterChoice = 3
+        case kleenheat = 8
+        case kwikfuel = 9
         case liberty = 10
         case mobil = 11
-        case eagle = 24
-        case kleenheat = 8
         case peak = 13
-        case boc = 4
-        case fastfuel24_7 = 25
-        case kwikfuel = 9
-        case wesco = 16
-        case ampol = 2
-        case fuelsWest = 22
-        case blackWhite = 21
+        case shell = 14
         case independent = 15
+        case wesco = 16
+        case caltexWoolworths = 19
+        case colesExpress = 20
+        case blackWhite = 21
+        case fuelsWest = 22
+        case united = 23
+        case eagle = 24
+        case fastfuel24_7 = 25
+        case pumaEnergy = 26
+        case vibe = 27
+        case sevenEleven = 29
+        case metroPetroleum = 30
+        case waFuels = 31
 
         var name: String! {
             switch self {
@@ -95,6 +101,10 @@ class Brand: FLODataEntity, Hashable {
                 return "vibe"
             case .sevenEleven:
                 return "sevenEleven"
+            case .metroPetroleum:
+                return "metroPetroleum"
+            case .waFuels:
+                return "waFuels"
             }
         }
         var key: String {
@@ -310,7 +320,7 @@ class Brand: FLODataEntity, Hashable {
 
     class func ident(from recordID: CKRecord.ID) -> Int16 {
         let str = recordID.recordName
-        let index = str.index(after: str.index(of: ":")!)
+        let index = str.index(after: str.firstIndex(of: ":")!)
         return Int16(String(str[index...]))!
     }
 
@@ -369,30 +379,32 @@ class Brand: FLODataEntity, Hashable {
     }
 
     static let defaults: Dictionary<Int16, Brand> = [
-        19: Brand(ident: 19, name: "Caltex Woolworths", discount: 4),
-        23: Brand(ident: 23, name: "United", discount: 4),
-        10: Brand(ident: 10, name: "Liberty", discount: 4),
-        14: Brand(ident: 14, name: "Shell", discount: 4),
-        4:  Brand(ident: 4,  name: "BOC", discount: 4),
-        13: Brand(ident: 13, name: "Peak", discount: 4),
-        27: Brand(ident: 27, name: "Vibe", discount: 4),
-        20: Brand(ident: 20, name: "Coles Express", discount: 4),
-        29: Brand(ident: 29, name: "7-Eleven", discount: 4),
-        25: Brand(ident: 25, name: "FastFuel 24/7", discount: 4),
-        3:  Brand(ident: 3,  name: "Better Choice", discount: 4),
-        16: Brand(ident: 16, name: "Wesco", discount: 4),
-        8:  Brand(ident: 8,  name: "Kleenheat", discount: 4),
-        21: Brand(ident: 21, name: "Black & White", discount: 4),
-        6:  Brand(ident: 6,  name: "Caltex", discount: 4),
-        24: Brand(ident: 24, name: "Eagle", discount: 4),
-        26: Brand(ident: 26, name: "Puma", discount: 4),
-        22: Brand(ident: 22, name: "Fuels West", discount: 4),
-        9:  Brand(ident: 9,  name: "Kwikfuel", discount: 4),
-        7:  Brand(ident: 7,  name: "Gull", discount: 4),
-        15: Brand(ident: 15, name: "Independent", discount: 4),
-        11: Brand(ident: 11, name: "Mobil", discount: 4),
-        2:  Brand(ident: 2,  name: "Ampol", discount: 4),
-        5:  Brand(ident: 5,  name: "BP", discount: 4)
+        Brand.Known.caltexWoolworths.rawValue:  Brand(ident: Brand.Known.caltexWoolworths.rawValue, name: "Caltex Woolworths", discount: 4),
+        Brand.Known.united.rawValue:            Brand(ident: Brand.Known.united.rawValue,           name: "United", discount: 4),
+        Brand.Known.liberty.rawValue:           Brand(ident: Brand.Known.liberty.rawValue,          name: "Liberty", discount: 4),
+        Brand.Known.shell.rawValue:             Brand(ident: Brand.Known.shell.rawValue,            name: "Shell", discount: 4),
+        Brand.Known.boc.rawValue:               Brand(ident: Brand.Known.boc.rawValue,              name: "BOC", discount: 4),
+        Brand.Known.peak.rawValue:              Brand(ident: Brand.Known.peak.rawValue,             name: "Peak", discount: 4),
+        Brand.Known.vibe.rawValue:              Brand(ident: Brand.Known.vibe.rawValue,             name: "Vibe", discount: 4),
+        Brand.Known.colesExpress.rawValue:      Brand(ident: Brand.Known.colesExpress.rawValue,     name: "Coles Express", discount: 4),
+        Brand.Known.sevenEleven.rawValue:       Brand(ident: Brand.Known.sevenEleven.rawValue,      name: "7-Eleven", discount: 4),
+        Brand.Known.fastfuel24_7.rawValue:      Brand(ident: Brand.Known.fastfuel24_7.rawValue,     name: "FastFuel 24/7", discount: 4),
+        Brand.Known.betterChoice.rawValue:      Brand(ident: Brand.Known.betterChoice.rawValue,     name: "Better Choice", discount: 4),
+        Brand.Known.wesco.rawValue:             Brand(ident: Brand.Known.wesco.rawValue,            name: "Wesco", discount: 4),
+        Brand.Known.kleenheat.rawValue:         Brand(ident: Brand.Known.kleenheat.rawValue,        name: "Kleenheat", discount: 4),
+        Brand.Known.blackWhite.rawValue:        Brand(ident: Brand.Known.blackWhite.rawValue,       name: "Black & White", discount: 4),
+        Brand.Known.caltex.rawValue:            Brand(ident: Brand.Known.caltex.rawValue,           name: "Caltex", discount: 4),
+        Brand.Known.eagle.rawValue:             Brand(ident: Brand.Known.eagle.rawValue,            name: "Eagle", discount: 4),
+        Brand.Known.pumaEnergy.rawValue:        Brand(ident: Brand.Known.pumaEnergy.rawValue,       name: "Puma", discount: 4),
+        Brand.Known.fuelsWest.rawValue:         Brand(ident: Brand.Known.fuelsWest.rawValue,        name: "Fuels West", discount: 4),
+        Brand.Known.kwikfuel.rawValue:          Brand(ident: Brand.Known.kwikfuel.rawValue,         name: "Kwikfuel", discount: 4),
+        Brand.Known.gull.rawValue:              Brand(ident: Brand.Known.gull.rawValue,             name: "Gull", discount: 4),
+        Brand.Known.independent.rawValue:       Brand(ident: Brand.Known.independent.rawValue,      name: "Independent", discount: 4),
+        Brand.Known.mobil.rawValue:             Brand(ident: Brand.Known.mobil.rawValue,            name: "Mobil", discount: 4),
+        Brand.Known.ampol.rawValue:             Brand(ident: Brand.Known.ampol.rawValue,            name: "Ampol", discount: 4),
+        Brand.Known.bp.rawValue:                Brand(ident: Brand.Known.bp.rawValue,               name: "BP", discount: 4),
+        Brand.Known.metroPetroleum.rawValue:    Brand(ident: Brand.Known.metroPetroleum.rawValue,   name: "Metro Petroleum", discount: 4),
+        Brand.Known.waFuels.rawValue:           Brand(ident: Brand.Known.waFuels.rawValue,          name: "WA Fuels", discount: 4),
         ]
 
     static let retrievalNotificationName = Notification.Name(rawValue: "Brand.RetrievalNotification")

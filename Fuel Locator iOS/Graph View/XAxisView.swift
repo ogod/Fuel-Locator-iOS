@@ -33,10 +33,10 @@ class XAxisView: UIView {
     static let fontDark = UIFont(name: "HelveticaNeue-Thin", size: 12)!
     static let attr: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font,
                                                      NSAttributedString.Key.paragraphStyle: pStyle,
-                                                     NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+                                                     NSAttributedString.Key.foregroundColor: UIColor.darkGray]
     static let attrDark: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: fontDark,
                                                           NSAttributedString.Key.paragraphStyle: pStyle,
-                                                          NSAttributedString.Key.foregroundColor: UIColor.gray]
+                                                          NSAttributedString.Key.foregroundColor: UIColor.black]
     static let cal = Calendar.current
     static let timeZone = TimeZone(identifier: "Australia/Perth")
 

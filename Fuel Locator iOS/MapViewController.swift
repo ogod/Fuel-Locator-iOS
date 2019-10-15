@@ -29,6 +29,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var tabMaskPanel: UIView!
     @IBOutlet weak var clippingView: UIView!
     @IBOutlet weak var clipTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var calloutView: UIView!
 
     @IBAction func done(_ segue: UIStoryboardSegue) {
 //        print(segue)
@@ -181,7 +182,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
             MainThread.sync {
                 self.productPicker.reloadAllComponents()
-                if let i = self.products.index(of: self.globalProduct) {
+                if let i = self.products.firstIndex(of: self.globalProduct) {
                     self.productPicker.selectRow(i, inComponent: 0, animated: true)
                 }
             }
@@ -190,7 +191,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
             MainThread.sync {
                 self.productPicker.reloadAllComponents()
-                if let i = self.products.index(of: self.globalProduct) {
+                if let i = self.products.firstIndex(of: self.globalProduct) {
                     self.productPicker.selectRow(i, inComponent: 0, animated: true)
                 }
             }
@@ -234,7 +235,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
             MainThread.sync {
                 self.productPicker.reloadAllComponents()
-                if let i = self.products.index(of: self.globalProduct) {
+                if let i = self.products.firstIndex(of: self.globalProduct) {
                     self.productPicker.selectRow(i, inComponent: 0, animated: true)
                 }
             }
@@ -243,7 +244,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
             MainThread.sync {
                 self.productPicker.reloadAllComponents()
-                if let i = self.products.index(of: self.globalProduct) {
+                if let i = self.products.firstIndex(of: self.globalProduct) {
                     self.productPicker.selectRow(i, inComponent: 0, animated: true)
                 }
             }
@@ -461,6 +462,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if UserDefaults.standard.bool(forKey: "PreviouslyUsed") && false {
+            calloutView.isHidden = true
+        } else {
+            calloutView.isHidden = false
+            UserDefaults.standard.set(true, forKey: "PreviouslyUsed")
+        }
+
         locationManager.delegate = self
         mapView.showsUserLocation = true
         mapView.setRegion(initialRegion, animated: true)
@@ -493,7 +501,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.products = Product.all.values.sorted(by: { $0.ident < $1.ident })
         MainThread.sync {
             self.productPicker.reloadAllComponents()
-            if let i = self.products.index(of: self.globalProduct) {
+            if let i = self.products.firstIndex(of: self.globalProduct) {
                 self.productPicker.selectRow(i, inComponent: 0, animated: true)
             }
         }
@@ -596,7 +604,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         UIView.animate(withDuration: 0.5) {
             self.progressView.view.alpha = 1
         }
-        NSLayoutConstraint.activate([self.progressView.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+    NSLayoutConstraint.activate([self.progressView.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
                                      self.progressView.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
                                      self.progressView.view.topAnchor.constraint(equalTo: self.view.topAnchor),
                                      self.progressView.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)])
@@ -666,6 +674,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     @IBAction func detectTap(_ recogniser: UITapGestureRecognizer) {
+        if !calloutView.isHidden {
+            UIView.animate(withDuration: 2.0, delay: 0,
+                           options: .curveEaseIn,
+                           animations: {
+                            self.calloutView.isHidden = true
+            })
+        }
+
         let range = foldedPanelHeight - self.pullDownPanelView.frame.height - 8 ... -8 // Range for pull-down view offset, folded ... unfolded
         let position = ((self.panelConstraint.constant - range.lowerBound) / (range.upperBound - range.lowerBound))  // 0 ==> folded, 1 ==> unfolded
         let outerSize = CGSize(width: self.clippingView.frame.width, height: position > 0.5 ? self.foldedPanelHeight : self.pullDownPanelView.frame.height)
@@ -749,6 +765,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             } else {
                 resetFoldupTimer()
             }
+
+        @unknown default:
+            fatalError("Unknown gesture detected")
         }
     }
 }

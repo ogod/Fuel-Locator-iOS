@@ -15,7 +15,12 @@ class Statistics: FLODataEntity, Hashable {
         return calendar.isDate(lhs.date, inSameDayAs: rhs.date) && lhs.product == rhs.product && lhs.region == rhs.region
     }
 
-    var hashValue: Int { return date.hashValue ^ (product.hashValue << 8) ^ ((region?.hashValue ?? 0) << 16)}
+//    var hashValue: Int { return date.hashValue ^ (product.hashValue << 8) ^ ((region?.hashValue ?? 0) << 16)}
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(date)
+        hasher.combine(product)
+        hasher.combine(region)
+    }
 
 
     init(date: Date, product: Product, region: Region) {
@@ -148,7 +153,7 @@ class Statistics: FLODataEntity, Hashable {
         f.dateFormat = "yyyy-MM-dd"
 //        let part = String(recordID.recordName.substring(from: recordID.recordName.index(after: recordID.recordName.index(of: ":")!))).split(separator: "|")
         let str = recordID.recordName
-        let index = str.index(after: str.index(of: ":")!)
+        let index = str.index(after: str.firstIndex(of: ":")!)
         let part = String(str[index...]).split(separator: "|")
         let date = f.date(from: String(part[0]))!
 //        let product = Product.fetch(withIdent: Int16(String(part[1]))!)!

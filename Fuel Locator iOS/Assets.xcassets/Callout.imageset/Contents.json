@@ -1,0 +1,56 @@
+{
+  "images" : [
+    {
+      "resizing" : {
+        "mode" : "3-part-vertical",
+        "center" : {
+          "mode" : "stretch",
+          "height" : 1
+        },
+        "cap-insets" : {
+          "top" : 85,
+          "bottom" : 6
+        }
+      },
+      "idiom" : "universal",
+      "filename" : "Callout-2.png",
+      "scale" : "1x"
+    },
+    {
+      "resizing" : {
+        "mode" : "3-part-vertical",
+        "center" : {
+          "mode" : "stretch",
+          "height" : 1
+        },
+        "cap-insets" : {
+          "top" : 167,
+          "bottom" : 11
+        }
+      },
+      "idiom" : "universal",
+      "filename" : "Callout-1.png",
+      "scale" : "2x"
+    },
+    {
+      "resizing" : {
+        "mode" : "3-part-vertical",
+        "center" : {
+          "mode" : "stretch",
+          "height" : 1
+        },
+        "cap-insets" : {
+          "top" : 244,
+          "bottom" : 8
+        }
+      },
+      "idiom" : "universal",
+      "filename" : "Callout.png",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

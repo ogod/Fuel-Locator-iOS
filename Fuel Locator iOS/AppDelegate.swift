@@ -47,6 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FLSettingsBundleHelper.registerSettings()
         FLOCloud.shared.setupNotifications()
         FLOCloud.shared.setupSubscription(application: application)
+        if let notification = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] {
+            print(notification)
+        }
         return true
     }
 
@@ -65,44 +68,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             incrementBadgeCounter()
         }
+        print("Remote notification received")
         switch UIApplication.shared.applicationState {
         case .active, .background:
             if let mapController = MapViewController.instance, mapController.mapView != nil {
                 guard let ck = userInfo["ck"] as? [String: AnyObject],
-                        let qry = ck["qry"] as? [String: AnyObject],
-                        let af = qry["af"] as? [String: AnyObject] else {
-                    break
+                    let qry = ck["qry"] as? [String: AnyObject],
+                    let af = qry["af"] as? [String: AnyObject] else {
+                        break
                 }
-                if let offset = af[FLOCloud.NotifField.date.rawValue] as? TimeInterval {
-                    let ref = calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "Australia/Perth"),
-                                                                 year: 2001,
-                                                                 month: 1,
-                                                                 day: 1))!
-                    let date = Date(timeInterval: offset, since: ref)
-                    mapController.globalDate = date
-                }
-                if let productRef = af[FLOCloud.NotifField.product.rawValue] as? String {
-                    mapController.globalProduct = Product.all[Product.ident(from: CKRecord.ID(recordName: productRef))]
-                }
-                if let regionRef = af[FLOCloud.NotifField.region.rawValue] as? String {
-                    let region = Region.all[Region.ident(from: CKRecord.ID(recordName: regionRef))]
-                    if region?.location != nil && mapController.globalRegion != region {
-                        mapController.mapView.setRegion(MKCoordinateRegion(center: region!.location!.coordinate,
-                                                                           latitudinalMeters: region!.radius?.doubleValue ?? 5000,
-                                                                           longitudinalMeters: region!.radius?.doubleValue ?? 5000),
-                                                        animated: true)
+                DispatchQueue.main.async {
+                    if let offset = af[FLOCloud.NotifField.date.rawValue] as? TimeInterval {
+                        let ref = self.calendar.date(from: DateComponents(timeZone: TimeZone(identifier: "Australia/Perth"),
+                                                                          year: 2001,
+                                                                          month: 1,
+                                                                          day: 1))!
+                        let date = Date(timeInterval: offset, since: ref)
+                        mapController.globalDate = date
                     }
-                }
-                if let stationRef = af[FLOCloud.NotifField.station.rawValue] as? CKRecord.Reference {
-                    let station = Station.all[Station.tradingName(from: stationRef.recordID)]
-                    if station?.coordinate != nil {
-                        mapController.mapView.setRegion(MKCoordinateRegion(center: station!.coordinate,
-                                                                           latitudinalMeters: 2000,
-                                                                           longitudinalMeters: 2000),
-                                                        animated: true)
+                    if let productRef = af[FLOCloud.NotifField.product.rawValue] as? String {
+                        mapController.globalProduct = Product.all[Product.ident(from: CKRecord.ID(recordName: productRef))]
+                    }
+                    if let regionRef = af[FLOCloud.NotifField.region.rawValue] as? String {
+                        let region = Region.all[Region.ident(from: CKRecord.ID(recordName: regionRef))]
+                        if region?.location != nil && mapController.globalRegion != region {
+                            mapController.mapView.setRegion(MKCoordinateRegion(center: region!.location!.coordinate,
+                                                                               latitudinalMeters: region!.radius?.doubleValue ?? 5000,
+                                                                               longitudinalMeters: region!.radius?.doubleValue ?? 5000),
+                                                            animated: true)
+                        }
+                    }
+                    if let stationRef = af[FLOCloud.NotifField.station.rawValue] as? CKRecord.Reference {
+                        let station = Station.all[Station.tradingName(from: stationRef.recordID)]
+                        if station?.coordinate != nil {
+                            mapController.mapView.setRegion(MKCoordinateRegion(center: station!.coordinate,
+                                                                               latitudinalMeters: 2000,
+                                                                               longitudinalMeters: 2000),
+                                                            animated: true)
+                        }
                     }
                 }
             }
+            break
         case .inactive:
             guard let ck = userInfo["ck"] as? [String: AnyObject],
                 let qry = ck["qry"] as? [String: AnyObject],
@@ -126,6 +133,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let stationRef = af[FLOCloud.NotifField.station.rawValue] as? String {
                 overrideStation = CKRecord.Reference(recordID: CKRecord.ID(recordName: stationRef), action: .deleteSelf)
             }
+        @unknown default:
+            fatalError("unknown application state")
         }
     }
 

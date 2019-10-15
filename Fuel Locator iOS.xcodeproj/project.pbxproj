@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		770469142333DD4A00607D58 /* Armchair.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; };
+		770469152333DD4A00607D58 /* Armchair.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7710E21A20E74EAD00FE3C80 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7710E21920E74EAD00FE3C80 /* Settings.bundle */; };
 		7710E21F20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7710E21E20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift */; };
 		7735EDE020F4A3550050ECCD /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7735EDDF20F4A3550050ECCD /* Utility.swift */; };
@@ -19,6 +21,7 @@
 		775C55EF2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775C55EE2099BD9300540B5B /* Fuel_Locator_iOSUITests.swift */; };
 		775C55FE2099D53200540B5B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775C55FD2099D53200540B5B /* MapKit.framework */; };
 		775C56012099D57100540B5B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775C56002099D57100540B5B /* CloudKit.framework */; };
+		776991CD22F5B3DB0062EABE /* FLCachedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776991CC22F5B3D70062EABE /* FLCachedTests.swift */; };
 		776E942C209EE690008AB0FC /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9424209EE659008AB0FC /* Region.swift */; };
 		776E942D209EE690008AB0FC /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9425209EE673008AB0FC /* Station.swift */; };
 		776E942E209EE690008AB0FC /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E9426209EE67E008AB0FC /* Statistics.swift */; };
@@ -34,8 +37,6 @@
 		776E945120A32A60008AB0FC /* ClusterMarkerAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776E945020A32A60008AB0FC /* ClusterMarkerAnnotationView.swift */; };
 		777F0E2820C573CE0064FF0E /* XAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777F0E2720C573CC0064FF0E /* XAxisView.swift */; };
 		777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777F0E2920C573E40064FF0E /* YAxisView.swift */; };
-		777F0E3A20C6E5080064FF0E /* Armchair.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; };
-		777F0E3B20C6E5080064FF0E /* Armchair.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 777F0E3320C6E4430064FF0E /* Armchair.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		778D878121EF2BCB0051B948 /* Fuel Locator Documentation.html in Resources */ = {isa = PBXBuildFile; fileRef = 778D878021EF2BA90051B948 /* Fuel Locator Documentation.html */; };
 		778D878821EF2C160051B948 /* image002.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878321EF2BD70051B948 /* image002.jpg */; };
 		778D878921EF2C160051B948 /* image003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778D878421EF2BD70051B948 /* image003.jpg */; };
@@ -46,6 +47,18 @@
 		7794B15420D4FA4E00505746 /* chords2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 7794B15020D4FA4D00505746 /* chords2.caf */; };
 		77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47AF20BDB15B006E50FF /* GraphView.swift */; };
 		77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BC47B120BE531D006E50FF /* ProgressViewController.swift */; };
+		77DECDF722C239FC00A010DE /* FLCachedSuburb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDEA22C239F600A010DE /* FLCachedSuburb.swift */; };
+		77DECDF822C239FC00A010DE /* FLOCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDEB22C239F800A010DE /* FLOCache.xcdatamodeld */; };
+		77DECDF922C239FC00A010DE /* FLCachedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDED22C239F900A010DE /* FLCachedPrice.swift */; };
+		77DECDFA22C239FC00A010DE /* FLCachedStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDEE22C239F900A010DE /* FLCachedStatistics.swift */; };
+		77DECDFC22C239FC00A010DE /* FLCachedRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF022C239FA00A010DE /* FLCachedRegion.swift */; };
+		77DECDFD22C239FC00A010DE /* FLCachedEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF122C239FB00A010DE /* FLCachedEntity.swift */; };
+		77DECDFE22C239FC00A010DE /* FLCachedBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF222C239FB00A010DE /* FLCachedBrand.swift */; };
+		77DECDFF22C239FC00A010DE /* FLCachePersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF322C239FB00A010DE /* FLCachePersistentContainer.swift */; };
+		77DECE0022C239FC00A010DE /* FLCachedStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF422C239FB00A010DE /* FLCachedStation.swift */; };
+		77DECE0122C239FC00A010DE /* FLCachedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF522C239FB00A010DE /* FLCachedProtocol.swift */; };
+		77DECE0222C239FC00A010DE /* FLCachedProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DECDF622C239FC00A010DE /* FLCachedProduct.swift */; };
+		77E4A6DB224E46DE007C48D6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 77E4A6DA224E46DD007C48D6 /* Default-568h@2x.png */; };
 		77EBD6BA20D218FC00FD6605 /* GraphSevenDayAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */; };
 		77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294920BB829A007EE0F1 /* GraphViewController.swift */; };
 		77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA294B20BB82D8007EE0F1 /* GraphBand.swift */; };
@@ -95,16 +108,20 @@
 			remoteGlobalIDString = E6F6159419C9FFDA00C0B51C;
 			remoteInfo = ArmchairLocalizableMac;
 		};
-		777F0E3C20C6E5090064FF0E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 777F0E2B20C6E41D0064FF0E /* Armchair.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
-			remoteInfo = Armchair;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		770469162333DD4A00607D58 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				770469152333DD4A00607D58 /* Armchair.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7740DB1720F5B70700488BD3 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -113,17 +130,6 @@
 			files = (
 			);
 			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		777F0E3E20C6E5090064FF0E /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				777F0E3B20C6E5080064FF0E /* Armchair.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -156,6 +162,7 @@
 		775C55FD2099D53200540B5B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		775C55FF2099D56300540B5B /* Fuel Locator iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Fuel Locator iOS.entitlements"; sourceTree = "<group>"; };
 		775C56002099D57100540B5B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		776991CC22F5B3D70062EABE /* FLCachedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLCachedTests.swift; sourceTree = "<group>"; };
 		776E9424209EE659008AB0FC /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		776E9425209EE673008AB0FC /* Station.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		776E9426209EE67E008AB0FC /* Statistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
@@ -184,6 +191,18 @@
 		7794B15520D552F000505746 /* Fuel Locator Information.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Fuel Locator Information.rtf"; sourceTree = "<group>"; };
 		77BC47AF20BDB15B006E50FF /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		77BC47B120BE531D006E50FF /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		77DECDEA22C239F600A010DE /* FLCachedSuburb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedSuburb.swift; path = "Price Cache/FLCachedSuburb.swift"; sourceTree = "<group>"; };
+		77DECDEC22C239F800A010DE /* FLOCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FLOCache.xcdatamodel; sourceTree = "<group>"; };
+		77DECDED22C239F900A010DE /* FLCachedPrice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedPrice.swift; path = "Price Cache/FLCachedPrice.swift"; sourceTree = "<group>"; };
+		77DECDEE22C239F900A010DE /* FLCachedStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedStatistics.swift; path = "Price Cache/FLCachedStatistics.swift"; sourceTree = "<group>"; };
+		77DECDF022C239FA00A010DE /* FLCachedRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedRegion.swift; path = "Price Cache/FLCachedRegion.swift"; sourceTree = "<group>"; };
+		77DECDF122C239FB00A010DE /* FLCachedEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedEntity.swift; path = "Price Cache/FLCachedEntity.swift"; sourceTree = "<group>"; };
+		77DECDF222C239FB00A010DE /* FLCachedBrand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedBrand.swift; path = "Price Cache/FLCachedBrand.swift"; sourceTree = "<group>"; };
+		77DECDF322C239FB00A010DE /* FLCachePersistentContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachePersistentContainer.swift; path = "Price Cache/FLCachePersistentContainer.swift"; sourceTree = "<group>"; };
+		77DECDF422C239FB00A010DE /* FLCachedStation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedStation.swift; path = "Price Cache/FLCachedStation.swift"; sourceTree = "<group>"; };
+		77DECDF522C239FB00A010DE /* FLCachedProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedProtocol.swift; path = "Price Cache/FLCachedProtocol.swift"; sourceTree = "<group>"; };
+		77DECDF622C239FC00A010DE /* FLCachedProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FLCachedProduct.swift; path = "Price Cache/FLCachedProduct.swift"; sourceTree = "<group>"; };
+		77E4A6DA224E46DD007C48D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		77EBD6B920D218FC00FD6605 /* GraphSevenDayAverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSevenDayAverage.swift; sourceTree = "<group>"; };
 		77FA294920BB829A007EE0F1 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		77FA294B20BB82D8007EE0F1 /* GraphBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphBand.swift; sourceTree = "<group>"; };
@@ -197,7 +216,7 @@
 			files = (
 				775C55FE2099D53200540B5B /* MapKit.framework in Frameworks */,
 				775C56012099D57100540B5B /* CloudKit.framework in Frameworks */,
-				777F0E3A20C6E5080064FF0E /* Armchair.framework in Frameworks */,
+				770469142333DD4A00607D58 /* Armchair.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +268,7 @@
 		775C55C02099BD7500540B5B = {
 			isa = PBXGroup;
 			children = (
+				77E4A6DA224E46DD007C48D6 /* Default-568h@2x.png */,
 				775C55CB2099BD7500540B5B /* Fuel Locator iOS */,
 				775C55E22099BD9300540B5B /* Fuel Locator iOSTests */,
 				775C55ED2099BD9300540B5B /* Fuel Locator iOSUITests */,
@@ -300,6 +320,7 @@
 			isa = PBXGroup;
 			children = (
 				775C55E32099BD9300540B5B /* Fuel_Locator_iOSTests.swift */,
+				776991CC22F5B3D70062EABE /* FLCachedTests.swift */,
 				775C55E52099BD9300540B5B /* Info.plist */,
 			);
 			path = "Fuel Locator iOSTests";
@@ -337,6 +358,7 @@
 				776E9425209EE673008AB0FC /* Station.swift */,
 				776E9426209EE67E008AB0FC /* Statistics.swift */,
 				776E9429209EE68E008AB0FC /* PriceOnDay.swift */,
+				778F590A22ACECC2001AEF4F /* Price Cache */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -363,6 +385,24 @@
 				778D878721EF2BD70051B948 /* image005.jpg */,
 			);
 			path = FuelLocatorDocumentationImages;
+			sourceTree = "<group>";
+		};
+		778F590A22ACECC2001AEF4F /* Price Cache */ = {
+			isa = PBXGroup;
+			children = (
+				77DECDF222C239FB00A010DE /* FLCachedBrand.swift */,
+				77DECDED22C239F900A010DE /* FLCachedPrice.swift */,
+				77DECDF622C239FC00A010DE /* FLCachedProduct.swift */,
+				77DECDF022C239FA00A010DE /* FLCachedRegion.swift */,
+				77DECDF422C239FB00A010DE /* FLCachedStation.swift */,
+				77DECDEE22C239F900A010DE /* FLCachedStatistics.swift */,
+				77DECDEA22C239F600A010DE /* FLCachedSuburb.swift */,
+				77DECDF522C239FB00A010DE /* FLCachedProtocol.swift */,
+				77DECDF122C239FB00A010DE /* FLCachedEntity.swift */,
+				77DECDF322C239FB00A010DE /* FLCachePersistentContainer.swift */,
+				77DECDEB22C239F800A010DE /* FLOCache.xcdatamodeld */,
+			);
+			name = "Price Cache";
 			sourceTree = "<group>";
 		};
 		77FA294620BB8168007EE0F1 /* Map View */ = {
@@ -404,13 +444,12 @@
 				77F2EB4320AC345600772B4B /* Increment Version */,
 				7742572920B81DEE00D21B48 /* Insert verion to Launch Screen */,
 				775C55C72099BD7500540B5B /* Resources */,
-				777F0E3E20C6E5090064FF0E /* Embed Frameworks */,
 				7740DB1720F5B70700488BD3 /* Embed App Extensions */,
+				770469162333DD4A00607D58 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				777F0E3D20C6E5090064FF0E /* PBXTargetDependency */,
 			);
 			name = "Fuel Locator iOS";
 			productName = "Fuel Locator iOS";
@@ -466,7 +505,7 @@
 				TargetAttributes = {
 					775C55C82099BD7500540B5B = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -484,12 +523,12 @@
 					};
 					775C55DE2099BD9300540B5B = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						TestTargetID = 775C55C82099BD7500540B5B;
 					};
 					775C55E92099BD9300540B5B = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						TestTargetID = 775C55C82099BD7500540B5B;
 					};
 				};
@@ -565,6 +604,7 @@
 				7710E21A20E74EAD00FE3C80 /* Settings.bundle in Resources */,
 				775C55D62099BD9200540B5B /* Assets.xcassets in Resources */,
 				778D879021F0C24F0051B948 /* image002.png in Resources */,
+				77E4A6DB224E46DE007C48D6 /* Default-568h@2x.png in Resources */,
 				778D878121EF2BCB0051B948 /* Fuel Locator Documentation.html in Resources */,
 				775C55D42099BD7500540B5B /* Main.storyboard in Resources */,
 				778D878C21EF2C160051B948 /* image005.jpg in Resources */,
@@ -658,31 +698,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77DECDFA22C239FC00A010DE /* FLCachedStatistics.swift in Sources */,
 				776E942E209EE690008AB0FC /* Statistics.swift in Sources */,
 				775C55CD2099BD7500540B5B /* AppDelegate.swift in Sources */,
+				77DECE0222C239FC00A010DE /* FLCachedProduct.swift in Sources */,
 				776E944F20A3235B008AB0FC /* StationMarkerAnnotationView.swift in Sources */,
 				77FA294C20BB82D8007EE0F1 /* GraphBand.swift in Sources */,
+				77DECDFF22C239FC00A010DE /* FLCachePersistentContainer.swift in Sources */,
+				77DECDF722C239FC00A010DE /* FLCachedSuburb.swift in Sources */,
 				77EBD6BA20D218FC00FD6605 /* GraphSevenDayAverage.swift in Sources */,
 				776E943620A014D6008AB0FC /* FLOCloud.swift in Sources */,
 				77FAC1FB20D589100059DA08 /* AboutViewController.swift in Sources */,
 				777F0E2820C573CE0064FF0E /* XAxisView.swift in Sources */,
 				776E9431209EE690008AB0FC /* PriceOnDay.swift in Sources */,
+				77DECDF822C239FC00A010DE /* FLOCache.xcdatamodeld in Sources */,
 				775C55CF2099BD7500540B5B /* MapViewController.swift in Sources */,
 				776E9432209EE690008AB0FC /* Product.swift in Sources */,
 				776E942C209EE690008AB0FC /* Region.swift in Sources */,
 				776E945120A32A60008AB0FC /* ClusterMarkerAnnotationView.swift in Sources */,
+				77DECDFC22C239FC00A010DE /* FLCachedRegion.swift in Sources */,
+				77DECE0022C239FC00A010DE /* FLCachedStation.swift in Sources */,
 				776E943820A03843008AB0FC /* FLOError.swift in Sources */,
 				776E9430209EE690008AB0FC /* Suburb.swift in Sources */,
 				776E942F209EE690008AB0FC /* Brand.swift in Sources */,
 				776E942D209EE690008AB0FC /* Station.swift in Sources */,
+				77DECDFD22C239FC00A010DE /* FLCachedEntity.swift in Sources */,
 				777F0E2A20C573E40064FF0E /* YAxisView.swift in Sources */,
 				776E9434209EE935008AB0FC /* FLODataEntity.swift in Sources */,
 				77BC47B220BE531E006E50FF /* ProgressViewController.swift in Sources */,
 				7735EDE020F4A3550050ECCD /* Utility.swift in Sources */,
+				77DECE0122C239FC00A010DE /* FLCachedProtocol.swift in Sources */,
 				77FA294A20BB829A007EE0F1 /* GraphViewController.swift in Sources */,
 				776E944D20A32287008AB0FC /* StationAnnotation.swift in Sources */,
 				7710E21F20E77B5C00FE3C80 /* FLSettingsBundleHelper.swift in Sources */,
+				77DECDFE22C239FC00A010DE /* FLCachedBrand.swift in Sources */,
 				77BC47B020BDB15B006E50FF /* GraphView.swift in Sources */,
+				77DECDF922C239FC00A010DE /* FLCachedPrice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +742,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				775C55E42099BD9300540B5B /* Fuel_Locator_iOSTests.swift in Sources */,
+				776991CD22F5B3DB0062EABE /* FLCachedTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,11 +766,6 @@
 			isa = PBXTargetDependency;
 			target = 775C55C82099BD7500540B5B /* Fuel Locator iOS */;
 			targetProxy = 775C55EB2099BD9300540B5B /* PBXContainerItemProxy */;
-		};
-		777F0E3D20C6E5090064FF0E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Armchair;
-			targetProxy = 777F0E3C20C6E5090064FF0E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -867,7 +914,6 @@
 		775C55F42099BD9300540B5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Fuel Locator iOS/Fuel Locator iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -880,7 +926,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fuel Locator iOS/Fuel-Locator-iOS-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -888,7 +934,6 @@
 		775C55F52099BD9300540B5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Fuel Locator iOS/Fuel Locator iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -901,7 +946,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fuel Locator iOS/Fuel-Locator-iOS-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -921,7 +966,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fuel Locator iOS.app/Fuel Locator iOS";
 			};
@@ -942,7 +987,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fuel Locator iOS.app/Fuel Locator iOS";
 			};
@@ -962,7 +1007,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Fuel Locator iOS";
 			};
@@ -982,7 +1027,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nomdejoye.Fuel-Locator-iOSUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Fuel Locator iOS";
 			};
@@ -1028,6 +1073,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		77DECDEB22C239F800A010DE /* FLOCache.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				77DECDEC22C239F800A010DE /* FLOCache.xcdatamodel */,
+			);
+			currentVersion = 77DECDEC22C239F800A010DE /* FLOCache.xcdatamodel */;
+			name = FLOCache.xcdatamodeld;
+			path = "Price Cache/FLOCache.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 775C55C12099BD7500540B5B /* Project object */;
 }
